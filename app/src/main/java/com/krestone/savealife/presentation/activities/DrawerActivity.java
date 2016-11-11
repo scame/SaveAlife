@@ -1,11 +1,11 @@
 package com.krestone.savealife.presentation.activities;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,10 +48,20 @@ public class DrawerActivity extends AppCompatActivity {
         setContentView(R.layout.drawer_activity);
 
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        setupToolbar();
         navigationView.setNavigationItemSelectedListener(this::selectDrawerItem);
+        setupDrawerToggle();
     }
 
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupDrawerToggle() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+    }
 
     private boolean selectDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
@@ -81,13 +91,20 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void replaceFragment(String fragmentTag, Fragment fragment) {
