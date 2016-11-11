@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">SaveAlife</string>
     <string name="facebook_app_id">259962217739741</string>
+    <string name="dashboard_item">Dashboard</string>
+    <string name="map_item">Map</string>
+    <string name="chats_item">Chats</string>
+    <string name="contacts_item">Contacts</string>
+    <string name="settings_item">Settings</string>
 </resources>
