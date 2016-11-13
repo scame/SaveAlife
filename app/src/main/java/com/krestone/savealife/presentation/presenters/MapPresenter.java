@@ -11,4 +11,6 @@ public interface MapPresenter<T> extends Presenter<T> {
     }
 
     void requestLastKnownLocation();
+
+    void requestLocationUpdates();
 }

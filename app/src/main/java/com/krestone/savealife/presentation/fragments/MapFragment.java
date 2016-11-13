@@ -12,6 +12,7 @@ import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -40,6 +41,8 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     private MapboxMap mapboxMap;
 
+    private Marker currentLocationMarker;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
         ButterKnife.bind(this, fragmentView);
 
         initPresenter();
-        mapPresenter.requestLastKnownLocation();
+        mapPresenter.requestLocationUpdates();
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap1 -> MapFragment.this.mapboxMap = mapboxMap1);
         setupAutocompleteView();
@@ -73,7 +76,9 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     }
 
     private void updateMap(double latitude, double longitude) {
-        mapboxMap.addMarker(new MarkerOptions()
+        if (currentLocationMarker != null) currentLocationMarker.remove();
+
+        currentLocationMarker = mapboxMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude, longitude)));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -110,6 +115,7 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        mapPresenter.destroy();
     }
 
     @Override

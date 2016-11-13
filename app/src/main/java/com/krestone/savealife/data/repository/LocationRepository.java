@@ -8,4 +8,6 @@ import rx.Observable;
 public interface LocationRepository {
 
     Observable<Location> getLastKnownLocation();
+
+    Observable<Location> startGettingLocationUpdates();
 }

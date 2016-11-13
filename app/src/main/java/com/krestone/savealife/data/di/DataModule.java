@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = RepositoriesModule.class)
+@Module(includes = {RepositoriesModule.class, MiscellaneousModule.class})
 public class DataModule {
 
     @Provides
