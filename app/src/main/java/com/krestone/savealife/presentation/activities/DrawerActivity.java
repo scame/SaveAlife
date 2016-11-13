@@ -13,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.presentation.di.components.MapComponent;
+import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.ContactsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
@@ -42,20 +45,29 @@ public class DrawerActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle drawerToggle;
 
+    private MapComponent mapComponent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
 
         ButterKnife.bind(this);
-        setupToolbar();
         navigationView.setNavigationItemSelectedListener(this::selectDrawerItem);
         setupDrawerToggle();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setupToolbar();
+    }
+
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setupDrawerToggle() {
@@ -117,5 +129,12 @@ public class DrawerActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.settings_drawer_item, fragment, fragmentTag)
                 .commit();
+    }
+
+    public MapComponent provideMapComponent() {
+        if (mapComponent == null) {
+            mapComponent = SaveAlifeApplication.getAppComponent().provideMapSubcomponent(new MapModule());
+        }
+        return mapComponent;
     }
 }

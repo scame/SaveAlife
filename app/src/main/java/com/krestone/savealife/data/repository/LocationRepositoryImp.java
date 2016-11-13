@@ -21,11 +21,9 @@ public class LocationRepositoryImp implements LocationRepository {
     @Override
     public Observable<Location> getLastKnownLocation() {
         ReactiveLocationProvider reactiveLocationProvider = new ReactiveLocationProvider(context);
-        if (checkPermission()) {
-            return reactiveLocationProvider.getLastKnownLocation();
-        } else {
-            throw new RuntimeException("noPermission");
-        }
+
+        return checkPermission() ? reactiveLocationProvider.getLastKnownLocation()
+                          : Observable.error(new RuntimeException("neededPermissions"));
     }
 
     private boolean checkPermission() {

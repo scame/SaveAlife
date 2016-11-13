@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -21,10 +22,15 @@ import com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapFragment extends Fragment implements MapPresenter.MapView {
+
+    @Inject
+    MapPresenter<MapPresenter.MapView> mapPresenter;
 
     @BindView(R.id.mapView)
     MapView mapView;
@@ -34,8 +40,6 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     private MapboxMap mapboxMap;
 
-    private MapPresenter<MapPresenter.MapView> mapPresenter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,11 +47,20 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
         ButterKnife.bind(this, fragmentView);
 
+        initPresenter();
+        mapPresenter.requestLastKnownLocation();
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap1 -> MapFragment.this.mapboxMap = mapboxMap1);
         setupAutocompleteView();
 
         return fragmentView;
+    }
+
+    private void initPresenter() {
+        if (getActivity() instanceof DrawerActivity) {
+            ((DrawerActivity) getActivity()).provideMapComponent().inject(this);
+        }
+        mapPresenter.setView(this);
     }
 
     private void setupAutocompleteView() {
