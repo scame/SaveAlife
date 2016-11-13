@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.presenters.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -19,12 +20,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
-import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     @BindView(R.id.mapView)
     MapView mapView;
@@ -33,6 +33,8 @@ public class MapFragment extends Fragment {
     GeocoderAutoCompleteView autocompleteView;
 
     private MapboxMap mapboxMap;
+
+    private MapPresenter<MapPresenter.MapView> mapPresenter;
 
     @Nullable
     @Override
@@ -51,12 +53,9 @@ public class MapFragment extends Fragment {
     private void setupAutocompleteView() {
         autocompleteView.setAccessToken(MapboxAccountManager.getInstance().getAccessToken());
         autocompleteView.setType(GeocodingCriteria.TYPE_POI);
-        autocompleteView.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
-            @Override
-            public void OnFeatureClick(CarmenFeature feature) {
-                Position position = feature.asPosition();
-                updateMap(position.getLatitude(), position.getLongitude());
-            }
+        autocompleteView.setOnFeatureListener(feature -> {
+            Position position = feature.asPosition();
+            updateMap(position.getLatitude(), position.getLongitude());
         });
     }
 
@@ -69,6 +68,11 @@ public class MapFragment extends Fragment {
                 .zoom(15)
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+    }
+
+    @Override
+    public void displayLocation(LatLng latLng) {
+        updateMap(latLng.getLatitude(), latLng.getLongitude());
     }
 
     @Override
