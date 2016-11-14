@@ -2,6 +2,7 @@ package com.krestone.savealife;
 
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.krestone.savealife.data.di.DataModule;
 import com.krestone.savealife.presentation.di.components.ApplicationComponent;
@@ -17,6 +18,7 @@ public class SaveAlifeApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MapboxAccountManager.start(this, getString(R.string.default_access_token));
+        startService(new Intent(this, LocationService.class));
         buildAppComponent();
     }
 

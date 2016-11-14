@@ -19,7 +19,6 @@ public class MiscellaneousModule {
     LocationRequest provideLocationRequest() {
         return LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setNumUpdates(5)
                 .setInterval(100);
     }
 

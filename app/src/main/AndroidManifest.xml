@@ -24,6 +24,8 @@
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
+        <service android:name=".LocationService" />
+
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 

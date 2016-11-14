@@ -44,7 +44,6 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
         locationUpdatesUseCase.unsubscribe();
     }
 
-
     private final class LocationUpdateSubscriber extends DefaultSubscriber<Location> {
 
         @Override
