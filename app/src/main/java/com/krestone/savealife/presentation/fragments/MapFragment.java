@@ -43,6 +43,8 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     private Marker currentLocationMarker;
 
+    private LatLng latestPosition;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,10 +55,19 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
         initPresenter();
         mapPresenter.requestLocationUpdates();
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(mapboxMap1 -> MapFragment.this.mapboxMap = mapboxMap1);
+        initializeMap();
         setupAutocompleteView();
 
         return fragmentView;
+    }
+
+    private void initializeMap() {
+        mapView.getMapAsync(mapboxMap1 -> {
+            MapFragment.this.mapboxMap = mapboxMap1;
+            if (latestPosition != null) {
+                updateMap(latestPosition.getLatitude(), latestPosition.getLongitude());
+            }
+        });
     }
 
     private void initPresenter() {
@@ -76,16 +87,33 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     }
 
     private void updateMap(double latitude, double longitude) {
-        if (currentLocationMarker != null) currentLocationMarker.remove();
+        latestPosition = new LatLng(latitude, longitude);
 
+        if (mapboxMap != null) {
+            updateCurrentPositionMarker(latitude, longitude);
+            animateCamera(latitude, longitude, 5000, 15);
+        }
+    }
+
+
+    private void updateCurrentPositionMarker(double latitude, double longitude) {
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
         currentLocationMarker = mapboxMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude, longitude)));
+    }
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(latitude, longitude))
-                .zoom(15)
+    private void animateCamera(double latitude, double longitude, int durationMil, int zoom) {
+        CameraPosition cameraPosition = buildCameraPosition(new LatLng(latitude, longitude), zoom);
+        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), durationMil, null);
+    }
+
+    private CameraPosition buildCameraPosition(LatLng latLng, int zoom) {
+        return new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(zoom)
                 .build();
-        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
     }
 
     @Override
