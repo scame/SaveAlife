@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -27,11 +28,19 @@
 
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/phone_number_input"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_elem_margin"/>
+        app:hintTextAppearance="@style/TextAppearance.AppCompat"
+        android:layout_margin="@dimen/standard_elem_margin">
+
+        <EditText
+            android:id="@+id/phone_number_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phone_number_hint"
+            android:inputType="phone" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/phone_number_btn"
