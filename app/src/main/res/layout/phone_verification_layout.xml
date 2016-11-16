@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_elem_margin"
-        android:text="@string/continue_pn" />
+        android:text="@string/continue_btn_text" />
 
     <TextView
         android:id="@+id/code_failure_text"

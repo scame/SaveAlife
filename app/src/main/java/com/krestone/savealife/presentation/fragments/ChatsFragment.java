@@ -15,6 +15,6 @@ public class ChatsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.phone_number_layout, container, false);
+        return inflater.inflate(R.layout.sign_up_layout, container, false);
     }
 }

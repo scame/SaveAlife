@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/phone_number_btn"
-        android:text="@string/continue_pn"
+        android:text="@string/continue_btn_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/standard_elem_margin"
