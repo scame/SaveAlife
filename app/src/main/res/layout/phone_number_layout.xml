@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/login_img"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/profile_placeholder"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:text="@string/savealife_welcome"
+            android:layout_below="@id/login_img"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/phone_number_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin"/>
+
+    <Button
+        android:id="@+id/phone_number_btn"
+        android:text="@string/continue_pn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/standard_elem_margin"
+        android:layout_marginRight="@dimen/standard_elem_margin"
+        android:layout_marginTop="@dimen/standard_elem_margin"
+        android:layout_marginBottom="32dp"/>
+
+</LinearLayout>

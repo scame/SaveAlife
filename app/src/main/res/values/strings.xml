@@ -11,4 +11,7 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="autocomplete_hint">Search Location</string>
+
+    <string name="savealife_welcome">Welcome to SaveAlife!</string>
+    <string name="continue_pn">Continue</string>
 </resources>
