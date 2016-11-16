@@ -14,4 +14,6 @@
 
     <string name="savealife_welcome">Welcome to SaveAlife!</string>
     <string name="continue_pn">Continue</string>
+    <string name="code_failure_text">DIDN\'T GET IT?</string>
+    <string name="verification_text">We have sent you a verification code. Please, enter it to this field:</string>
 </resources>

@@ -5,4 +5,8 @@
 
     <dimen name="standard_elem_margin">8dp</dimen>
     <dimen name="standard_elem_padding">12dp</dimen>
+    
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_small">12dp</dimen>
 </resources>
