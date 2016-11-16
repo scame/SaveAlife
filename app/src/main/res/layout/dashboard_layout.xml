@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dashboard_location_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/dashboard_map_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_near_me_black_24dp"
+            android:padding="@dimen/standard_elem_padding"/>
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/space_holder"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/sos_btn"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/placeholder"
+        android:layout_above="@id/space_holder"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/standard_elem_margin"/>
+
+    <TextView
+        android:id="@+id/sos_text"
+        android:text="@string/sos_inactive_text"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/sos_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin"/>
+
+    <Switch
+        android:id="@+id/driver_mode_switch"
+        android:text="@string/driver_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/event_details_btn"
+        android:visibility="invisible"
+        android:layout_above="@id/driver_mode_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/event_details_btn_text"
+        android:layout_margin="@dimen/standard_elem_margin"/>
+
+</RelativeLayout>

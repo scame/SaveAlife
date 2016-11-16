@@ -14,7 +14,7 @@
             android:id="@+id/login_img"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/profile_placeholder"
+            android:src="@drawable/placeholder"
             android:layout_margin="@dimen/standard_elem_margin"
             android:layout_centerInParent="true" />
 
