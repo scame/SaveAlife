@@ -4,6 +4,8 @@ package com.krestone.savealife.data.di;
 import android.content.Context;
 
 import com.google.android.gms.location.LocationRequest;
+import com.krestone.savealife.data.repository.ContactsRepository;
+import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.data.repository.LocationRepositoryImp;
 
@@ -21,5 +23,11 @@ public class RepositoriesModule {
     LocationRepository provideLocationRepository(Context context, ReactiveLocationProvider locationProvider,
                                                  LocationRequest locationRequest) {
         return new LocationRepositoryImp(context, locationProvider, locationRequest);
+    }
+
+    @Provides
+    @Singleton
+    ContactsRepository provideContactsRepository(Context context) {
+        return new ContactsRepositoryImp(context);
     }
 }
