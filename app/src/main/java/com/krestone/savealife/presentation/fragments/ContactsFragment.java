@@ -55,7 +55,7 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
 
     @Override
     public void displayContacts(List<ContactModel> contacts) {
-        contactsAdapter = new ContactsAdapter(contacts, v -> Log.i("onxClick", "invite"));
+        contactsAdapter = new ContactsAdapter(getContext(), contacts, v -> Log.i("onxClick", "invite"));
 
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.setHasFixedSize(true);

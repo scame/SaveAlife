@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.adapters;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private View.OnClickListener inviteListener;
 
-    public ContactsAdapter(List<ContactModel> contacts, View.OnClickListener inviteListener) {
+    private Context context;
+
+    public ContactsAdapter(Context context, List<ContactModel> contacts, View.OnClickListener inviteListener) {
         this.inviteListener = inviteListener;
         this.contacts = contacts;
+        this.context = context;
     }
 
     @Override
@@ -32,10 +36,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (viewType == VIEW_TYPE_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_in_app, parent, false);
-            viewHolder = new InAppViewHolder(itemView);
+            viewHolder = new InAppViewHolder(itemView, context);
         } else if (viewType == VIEW_TYPE_NOT_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_not_in_app, parent, false);
-            viewHolder = new NotInAppViewHolder(itemView, inviteListener);
+            viewHolder = new NotInAppViewHolder(context, itemView, inviteListener);
         }
         return viewHolder;
     }

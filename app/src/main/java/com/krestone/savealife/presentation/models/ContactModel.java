@@ -14,15 +14,18 @@ public class ContactModel {
 
     private String mobileNumber;
 
+    private String thumbnailUri;
+
     private boolean inApp;
 
     private boolean inEmergencyList;
 
     public ContactModel() { }
 
-    public ContactModel(String id, String name) {
+    public ContactModel(String id, String name, String thumbnailUri) {
         this.id = id;
         this.name = name;
+        this.thumbnailUri = thumbnailUri;
     }
 
     public boolean isInEmergencyList() {
@@ -51,6 +54,14 @@ public class ContactModel {
 
     public String getMobileNumber() {
         return mobileNumber;
+    }
+
+    public String getThumbnailUri() {
+        return thumbnailUri;
+    }
+
+    public void setThumbnailUri(String thumbnailUri) {
+        this.thumbnailUri = thumbnailUri;
     }
 
     public void setInEmergencyList(boolean inEmergencyList) {

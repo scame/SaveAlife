@@ -17,7 +17,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private final String[] projectionFields = new String[] {
             ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
     };
 
     private Context context;
@@ -42,7 +43,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                contacts.add(new ContactModel(id, name));
+                String thumbnailUri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
+                contacts.add(new ContactModel(id, name, thumbnailUri));
 
                 parsePhoneNumbers(resolver, contacts.get(contacts.size() - 1));
             }
