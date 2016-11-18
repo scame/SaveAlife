@@ -29,4 +29,7 @@
     <string name="driver_mode">Driver mode</string>
     <string name="event_details_btn_text">View details</string>
 
+    <string name="in_app">IN APP</string>
+    <string name="invite">invite</string>
+
 </resources>
