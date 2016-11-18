@@ -14,7 +14,9 @@ import android.view.MenuItem;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.presentation.di.components.ContactsComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
+import com.krestone.savealife.presentation.di.modules.ContactsModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.ContactsFragment;
@@ -46,6 +48,8 @@ public class DrawerActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
 
     private MapComponent mapComponent;
+
+    private ContactsComponent contactsComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,5 +140,12 @@ public class DrawerActivity extends AppCompatActivity {
             mapComponent = SaveAlifeApplication.getAppComponent().provideMapSubcomponent(new MapModule());
         }
         return mapComponent;
+    }
+
+    public ContactsComponent provideContactsComponent() {
+        if (contactsComponent == null) {
+            contactsComponent = SaveAlifeApplication.getAppComponent().provideContactsSubcomponent(new ContactsModule());
+        }
+        return contactsComponent;
     }
 }

@@ -42,6 +42,7 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
     public void destroy() {
         lastKnownLocationUseCase.unsubscribe();
         locationUpdatesUseCase.unsubscribe();
+        view = null;
     }
 
     private final class LocationUpdateSubscriber extends DefaultSubscriber<Location> {
