@@ -1,0 +1,61 @@
+package com.krestone.savealife.presentation.adapters;
+
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.models.ContactModel;
+
+import java.util.List;
+
+public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_IN_APP = 0;
+    private static final int VIEW_TYPE_NOT_IN_APP = 1;
+
+    private List<ContactModel> contacts;
+
+    private View.OnClickListener inviteListener;
+
+    public ContactsAdapter(List<ContactModel> contacts, View.OnClickListener inviteListener) {
+        this.inviteListener = inviteListener;
+        this.contacts = contacts;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        RecyclerView.ViewHolder viewHolder = null;
+
+        if (viewType == VIEW_TYPE_IN_APP) {
+            View itemView = inflater.inflate(R.layout.contact_item_in_app, parent, false);
+            viewHolder = new InAppViewHolder(itemView);
+        } else if (viewType == VIEW_TYPE_NOT_IN_APP) {
+            View itemView = inflater.inflate(R.layout.contact_item_not_in_app, parent, false);
+            viewHolder = new NotInAppViewHolder(itemView, inviteListener);
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof InAppViewHolder) {
+            ((InAppViewHolder) holder).bindHolder(contacts, position);
+        } else if (holder instanceof NotInAppViewHolder) {
+            ((NotInAppViewHolder) holder).bindHolder(contacts, position);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return contacts == null ? 0 : contacts.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return contacts.get(position).isInApp() ? VIEW_TYPE_IN_APP : VIEW_TYPE_NOT_IN_APP;
+    }
+}

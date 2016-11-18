@@ -14,11 +14,23 @@ public class ContactModel {
 
     private String mobileNumber;
 
+    private boolean inApp;
+
+    private boolean inEmergencyList;
+
     public ContactModel() { }
 
     public ContactModel(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public boolean isInEmergencyList() {
+        return inEmergencyList;
+    }
+
+    public boolean isInApp() {
+        return inApp;
     }
 
     public String getId() {
@@ -39,6 +51,14 @@ public class ContactModel {
 
     public String getMobileNumber() {
         return mobileNumber;
+    }
+
+    public void setInEmergencyList(boolean inEmergencyList) {
+        this.inEmergencyList = inEmergencyList;
+    }
+
+    public void setInApp(boolean inApp) {
+        this.inApp = inApp;
     }
 
     public void setId(String id) {
