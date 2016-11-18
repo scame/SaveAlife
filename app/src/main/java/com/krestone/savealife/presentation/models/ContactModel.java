@@ -8,37 +8,17 @@ public class ContactModel {
 
     private String name;
 
-    private int homeNumber;
+    private String homeNumber;
 
-    private int workNumber;
+    private String workNumber;
 
-    private int mobileNumber;
+    private String mobileNumber;
 
     public ContactModel() { }
 
     public ContactModel(String id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setHomeNumber(int homeNumber) {
-        this.homeNumber = homeNumber;
-    }
-
-    public void setWorkNumber(int workNumber) {
-        this.workNumber = workNumber;
-    }
-
-    public void setMobileNumber(int mobileNumber) {
-        this.mobileNumber = mobileNumber;
     }
 
     public String getId() {
@@ -49,15 +29,35 @@ public class ContactModel {
         return name;
     }
 
-    public int getHomeNumber() {
+    public String getHomeNumber() {
         return homeNumber;
     }
 
-    public int getWorkNumber() {
+    public String getWorkNumber() {
         return workNumber;
     }
 
-    public int getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHomeNumber(String homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 }
