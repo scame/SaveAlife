@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.adapters;
+package com.krestone.savealife.presentation.adapters.contacts;
 
 
 import android.content.Context;

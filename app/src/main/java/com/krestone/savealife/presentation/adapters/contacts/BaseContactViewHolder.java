@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.adapters;
+package com.krestone.savealife.presentation.adapters.contacts;
 
 
 import android.content.Context;
@@ -51,5 +51,11 @@ public class BaseContactViewHolder extends RecyclerView.ViewHolder {
         } else {
             emergencyBox.setChecked(false);
         }
+    }
+
+    protected void bindHolder(List<ContactModel> contacts, int position) {
+        contactName.setText(contacts.get(position).getName());
+        handleCheckbox(contacts, position);
+        handleProfileImage(contacts, position);
     }
 }

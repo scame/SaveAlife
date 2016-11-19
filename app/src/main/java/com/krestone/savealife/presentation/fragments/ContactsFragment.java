@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
-import com.krestone.savealife.presentation.adapters.ContactsAdapter;
+import com.krestone.savealife.presentation.adapters.contacts.ContactsAdapter;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.ContactsPresenter;
 
