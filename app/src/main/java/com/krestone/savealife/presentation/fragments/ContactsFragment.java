@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
+import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.contacts.ContactsAdapter;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.ContactsPresenter;
@@ -58,6 +59,7 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
         contactsAdapter = new ContactsAdapter(getContext(), contacts, v -> Log.i("onxClick", "invite"));
 
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);
     }
