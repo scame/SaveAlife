@@ -19,8 +19,8 @@ import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.modules.ContactsModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
-import com.krestone.savealife.presentation.fragments.ContactsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
+import com.krestone.savealife.presentation.fragments.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
 
@@ -91,7 +91,7 @@ public class DrawerActivity extends AppCompatActivity {
                 replaceFragment(CHATS_FRAG_TAG, new ChatsFragment());
                 break;
             case R.id.contacts_drawer_item:
-                replaceFragment(CONTACTS_FRAG_TAG, new ContactsFragment());
+                replaceFragment(CONTACTS_FRAG_TAG, new EmergencyContactsFragment());
                 break;
             case R.id.settings_drawer_item:
                 replaceFragment(SETTINGS_FRAG_TAG, new SettingsFragment());

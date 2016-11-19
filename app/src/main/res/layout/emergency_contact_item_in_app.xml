@@ -20,20 +20,13 @@
         android:layout_gravity="center_vertical"
         android:text="Slava Petrochenko" />
 
-    <Button
-        android:id="@+id/invite_button"
+
+    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_elem_margin"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:text="@string/invite" />
-
-    <CheckBox
-        android:id="@+id/emergency_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/standard_elem_margin" />
+        android:text="@string/in_app" />
 
 </LinearLayout>
