@@ -13,12 +13,18 @@ import java.util.List;
 
 import rx.Observable;
 
+// TODO: duplicates are possible when a contact has more than one number
+// TODO: should be eliminated with contact_id field
 public class ContactsRepositoryImp implements ContactsRepository {
 
-    private final String[] projectionFields = new String[] {
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
+    private static final String PHONE_NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
+    private static final String PHONE_TYPE = ContactsContract.CommonDataKinds.Phone.TYPE;
+    private static final String CONTACT_NAME = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
+    private static final String PHOTO_URI = ContactsContract.CommonDataKinds.Phone.PHOTO_URI;
+    private static final String CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+
+    private final String[] projectionFields = new String[]{
+            PHONE_NUMBER, PHONE_TYPE, CONTACT_NAME, PHOTO_URI, CONTACT_ID
     };
 
     private Context context;
@@ -29,52 +35,31 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Observable<List<ContactModel>> getContacts() {
-        return Observable.defer(() -> Observable.from(queryContacts()))
-                .filter(contact -> contact.getMobileNumber() != null)
-                .toList();
+        return Observable.defer(() -> Observable.just(queryContacts()));
     }
 
     private List<ContactModel> queryContacts() {
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, projectionFields, null, null, null);
+        Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionFields, null, null, null);
         List<ContactModel> contacts = new ArrayList<>();
 
         if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String thumbnailUri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-                contacts.add(new ContactModel(id, name, thumbnailUri));
+            int idColumnIndex = cursor.getColumnIndex(CONTACT_ID);
+            int nameColumnIndex = cursor.getColumnIndex(CONTACT_NAME);
+            int thumbnailColumnIndex = cursor.getColumnIndex(PHOTO_URI);
+            int numberColumnIndex = cursor.getColumnIndex(PHONE_NUMBER);
 
-                parsePhoneNumbers(resolver, contacts.get(contacts.size() - 1));
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(idColumnIndex);
+                String name = cursor.getString(nameColumnIndex);
+                String thumbnailUri = cursor.getString(thumbnailColumnIndex);
+                String phoneNumber = cursor.getString(numberColumnIndex);
+
+                contacts.add(new ContactModel(id, name, thumbnailUri, phoneNumber));
             }
             cursor.close();
         }
 
         return contacts;
-    }
-
-    private void parsePhoneNumbers(ContentResolver resolver, ContactModel contactModel) {
-        Cursor phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactModel.getId(), null, null);
-
-        if (phones != null) {
-            while (phones.moveToNext()) {
-                String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                int type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                switch (type) {
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                        contactModel.setHomeNumber(number);
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                        contactModel.setMobileNumber(number);
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                        contactModel.setWorkNumber(number);
-                        break;
-                }
-            }
-            phones.close();
-        }
     }
 }

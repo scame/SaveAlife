@@ -22,10 +22,11 @@ public class ContactModel {
 
     public ContactModel() { }
 
-    public ContactModel(String id, String name, String thumbnailUri) {
+    public ContactModel(String id, String name, String thumbnailUri, String mobileNumber) {
         this.id = id;
         this.name = name;
         this.thumbnailUri = thumbnailUri;
+        this.mobileNumber = mobileNumber;
     }
 
     public boolean isInEmergencyList() {
