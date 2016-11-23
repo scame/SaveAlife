@@ -9,7 +9,7 @@ import com.krestone.savealife.domain.schedulers.SubscribeOn;
 
 import rx.Observable;
 
-public class LastKnownLocationUseCase extends UseCase<Location> {
+public class LastKnownLocationUseCase extends UseCaseObservable<Location> {
 
     private LocationRepository locationRepository;
 

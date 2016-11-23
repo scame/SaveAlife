@@ -8,6 +8,7 @@ import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.data.repository.LocationRepositoryImp;
+import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 
 import javax.inject.Singleton;
 
@@ -27,7 +28,7 @@ public class RepositoriesModule {
 
     @Provides
     @Singleton
-    ContactsRepository provideContactsRepository(Context context) {
-        return new ContactsRepositoryImp(context);
+    ContactsRepository provideContactsRepository(Context context, SaveAlifeDatabaseHelper databaseHelper) {
+        return new ContactsRepositoryImp(context, databaseHelper);
     }
 }

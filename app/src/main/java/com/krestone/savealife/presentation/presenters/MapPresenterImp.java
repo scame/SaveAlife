@@ -25,12 +25,12 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
 
     @Override
     public void requestLastKnownLocation() {
-        lastKnownLocationUseCase.execute(new LastKnowLocationSubscriber());
+        lastKnownLocationUseCase.executeObservable(new LastKnowLocationSubscriber());
     }
 
     @Override
     public void requestLocationUpdates() {
-        locationUpdatesUseCase.execute(new LocationUpdateSubscriber());
+        locationUpdatesUseCase.executeObservable(new LocationUpdateSubscriber());
     }
 
     @Override

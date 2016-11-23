@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.ArrayList;
@@ -13,8 +14,7 @@ import java.util.List;
 
 import rx.Observable;
 
-// TODO: duplicates are possible when a contact has more than one number
-// TODO: should be eliminated with contact_id field
+
 public class ContactsRepositoryImp implements ContactsRepository {
 
     private static final String PHONE_NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
@@ -29,8 +29,11 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private Context context;
 
-    public ContactsRepositoryImp(Context context) {
+    private SaveAlifeDatabaseHelper databaseHelper;
+
+    public ContactsRepositoryImp(Context context, SaveAlifeDatabaseHelper databaseHelper) {
         this.context = context;
+        this.databaseHelper = databaseHelper;
     }
 
     @Override
@@ -38,6 +41,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
         return Observable.defer(() -> Observable.just(queryContacts()));
     }
 
+    // TODO: duplicates are possible when a contact has more than one number
+    // TODO: should be eliminated with contact_id field
     private List<ContactModel> queryContacts() {
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionFields, null, null, null);

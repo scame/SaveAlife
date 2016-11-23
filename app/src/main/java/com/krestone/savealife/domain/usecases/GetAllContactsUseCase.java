@@ -10,7 +10,7 @@ import java.util.List;
 
 import rx.Observable;
 
-public class GetAllContactsUseCase extends UseCase<List<ContactModel>> {
+public class GetAllContactsUseCase extends UseCaseObservable<List<ContactModel>> {
 
     private ContactsRepository contactsRepository;
 

@@ -21,7 +21,7 @@ public class ContactsPresenterImp<T extends ContactsPresenter.ContactsView> impl
 
     @Override
     public void requestContacts() {
-        getAllContactsUseCase.execute(new ContactsSubscriber());
+        getAllContactsUseCase.executeObservable(new ContactsSubscriber());
     }
 
     @Override
