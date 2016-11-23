@@ -5,6 +5,7 @@ import com.krestone.savealife.LocationService;
 import com.krestone.savealife.data.di.DataModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
 import com.krestone.savealife.presentation.di.modules.ContactsModule;
+import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 
 import javax.inject.Singleton;
@@ -21,4 +22,6 @@ public interface ApplicationComponent {
     MapComponent provideMapSubcomponent(MapModule mapModule);
 
     ContactsComponent provideContactsSubcomponent(ContactsModule contactsModule);
+
+    EmergencyComponent provideEmergencySubcomponent(EmergencyModule emergencyModule);
 }

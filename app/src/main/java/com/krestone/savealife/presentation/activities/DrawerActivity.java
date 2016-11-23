@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.ContactsComponent;
+import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.modules.ContactsModule;
+import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.ContactsFragment;
@@ -52,6 +54,8 @@ public class DrawerActivity extends AppCompatActivity implements EmergencyContac
     private MapComponent mapComponent;
 
     private ContactsComponent contactsComponent;
+
+    private EmergencyComponent emergencyComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,5 +161,12 @@ public class DrawerActivity extends AppCompatActivity implements EmergencyContac
             contactsComponent = SaveAlifeApplication.getAppComponent().provideContactsSubcomponent(new ContactsModule());
         }
         return contactsComponent;
+    }
+
+    public EmergencyComponent provideEmergencyComponent() {
+        if (emergencyComponent == null) {
+            emergencyComponent = SaveAlifeApplication.getAppComponent().provideEmergencySubcomponent(new EmergencyModule());
+        }
+        return emergencyComponent;
     }
 }
