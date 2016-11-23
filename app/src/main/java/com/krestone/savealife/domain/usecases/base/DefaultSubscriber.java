@@ -1,4 +1,4 @@
-package com.krestone.savealife.domain.usecases;
+package com.krestone.savealife.domain.usecases.base;
 
 public class DefaultSubscriber<T> extends rx.Subscriber<T> {
     @Override

@@ -4,7 +4,7 @@ package com.krestone.savealife.presentation.presenters;
 import android.location.Location;
 import android.util.Log;
 
-import com.krestone.savealife.domain.usecases.DefaultSubscriber;
+import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
 import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
 import com.mapbox.mapboxsdk.geometry.LatLng;

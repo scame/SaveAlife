@@ -6,6 +6,7 @@ import android.location.Location;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
+import com.krestone.savealife.domain.usecases.base.UseCaseObservable;
 
 import rx.Observable;
 

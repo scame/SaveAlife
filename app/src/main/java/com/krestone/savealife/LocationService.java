@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.krestone.savealife.data.repository.LocationRepository;
-import com.krestone.savealife.domain.usecases.DefaultSubscriber;
+import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 
 import javax.inject.Inject;
 

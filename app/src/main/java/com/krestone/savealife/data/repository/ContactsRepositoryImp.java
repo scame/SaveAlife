@@ -12,7 +12,8 @@ import com.krestone.savealife.presentation.models.ContactModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
+import rx.Completable;
+import rx.Single;
 
 
 public class ContactsRepositoryImp implements ContactsRepository {
@@ -37,8 +38,22 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Observable<List<ContactModel>> getContacts() {
-        return Observable.defer(() -> Observable.just(queryContacts()));
+    public Single<List<ContactModel>> getEmergencyContacts() {
+        return Single.defer(() -> Single.just(databaseHelper.getAllContacts()));
+    }
+
+    @Override
+    public Completable updateEmergencyContacts(List<ContactModel> contacts) {
+        return Completable.defer(() -> {
+            databaseHelper.deleteAllContacts();
+            databaseHelper.addContacts(contacts);
+            return Completable.complete();
+        });
+    }
+
+    @Override
+    public Single<List<ContactModel>> getContacts() {
+        return Single.defer(() -> Single.just(queryContacts()));
     }
 
     // TODO: duplicates are possible when a contact has more than one number

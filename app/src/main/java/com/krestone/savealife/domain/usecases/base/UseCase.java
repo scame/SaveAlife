@@ -1,4 +1,4 @@
-package com.krestone.savealife.domain.usecases;
+package com.krestone.savealife.domain.usecases.base;
 
 
 import com.krestone.savealife.domain.schedulers.ObserveOn;
