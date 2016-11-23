@@ -1,11 +1,20 @@
 package com.krestone.savealife.data.sqlite;
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
+
+import com.krestone.savealife.presentation.models.ContactModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
 
@@ -23,7 +32,7 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
     private static SaveAlifeDatabaseHelper helper;
 
     private SaveAlifeDatabaseHelper(Context context) {
-        super(context, null, null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public static synchronized SaveAlifeDatabaseHelper getInstance(Context context) {
@@ -58,6 +67,82 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion != newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
             onCreate(db);
+        }
+    }
+
+    public void addContact(ContactModel contact) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(KEY_CONTACT_NAME, contact.getName());
+            contentValues.put(KEY_CONTACT_NUMBER, contact.getMobileNumber());
+            contentValues.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
+
+            db.insertOrThrow(TABLE_CONTACTS, null, contentValues);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.i("onxAddContactErr", e.getLocalizedMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public void addContacts(List<ContactModel> contacts) {
+        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?);";
+        SQLiteDatabase db = getWritableDatabase();
+        SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
+
+        db.beginTransaction();
+        try {
+            for (ContactModel contact : contacts) {
+                sqLiteStatement.clearBindings();
+                sqLiteStatement.bindString(1, contact.getName());
+                sqLiteStatement.bindString(2, contact.getMobileNumber());
+                sqLiteStatement.bindString(3, contact.getThumbnailUri());
+                sqLiteStatement.execute();
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public List<ContactModel> getAllContacts() {
+        List<ContactModel> contacts = new ArrayList<>();
+
+        String CONTACTS_SELECT_QUERY = String.format("SELECT * FROM %S", TABLE_CONTACTS);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(CONTACTS_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+              do {
+                  ContactModel contactModel = new ContactModel();
+                  contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
+                  contactModel.setMobileNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
+                  contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
+                  contacts.add(contactModel);
+              } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        return contacts;
+    }
+
+    public void deleteAllContacts() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_CONTACTS, null, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 }
