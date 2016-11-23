@@ -19,6 +19,7 @@ import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.modules.ContactsModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
+import com.krestone.savealife.presentation.fragments.ContactsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
@@ -27,12 +28,13 @@ import com.krestone.savealife.presentation.fragments.SettingsFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DrawerActivity extends AppCompatActivity {
+public class DrawerActivity extends AppCompatActivity implements EmergencyContactsFragment.EmergencyListener {
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
     private static final String CHATS_FRAG_TAG = "chatsFragment";
     private static final String CONTACTS_FRAG_TAG = "contactsFragment";
+    private static final String EMERGENCY_CONTACTS_TAG = "emergencyContacts";
 
     private static final String SETTINGS_FRAG_TAG = "settingsFragment";
 
@@ -91,7 +93,7 @@ public class DrawerActivity extends AppCompatActivity {
                 replaceFragment(CHATS_FRAG_TAG, new ChatsFragment());
                 break;
             case R.id.contacts_drawer_item:
-                replaceFragment(CONTACTS_FRAG_TAG, new EmergencyContactsFragment());
+                replaceFragment(EMERGENCY_CONTACTS_TAG, new EmergencyContactsFragment());
                 break;
             case R.id.settings_drawer_item:
                 replaceFragment(SETTINGS_FRAG_TAG, new SettingsFragment());
@@ -104,6 +106,14 @@ public class DrawerActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
 
         return true;
+    }
+
+    @Override
+    public void onEditEmergencyListClick() {
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.drawer_activity_fl, new ContactsFragment(), CONTACTS_FRAG_TAG)
+                .commit();
     }
 
     @Override
@@ -131,7 +141,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     private void replaceFragment(String fragmentTag, android.app.Fragment fragment) {
         getFragmentManager().beginTransaction()
-                .replace(R.id.settings_drawer_item, fragment, fragmentTag)
+                .replace(R.id.drawer_activity_fl, fragment, fragmentTag)
                 .commit();
     }
 
