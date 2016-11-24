@@ -33,5 +33,7 @@
     <string name="invite">invite</string>
     <string name="emergency_header">In case of this situation we\'ll send a message with your location to these people:</string>
     <string name="edit_emergency_text">Edit list</string>
+    <string name="save_action">Save</string>
+    <string name="cancel_action">Cancel</string>
 
 </resources>

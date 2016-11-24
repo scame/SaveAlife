@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,10 +31,11 @@ public class BaseContactViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.emergency_checkbox)
     CheckBox emergencyBox;
 
-    public BaseContactViewHolder(Context context, View itemView) {
+    public BaseContactViewHolder(Context context, View itemView, CompoundButton.OnCheckedChangeListener checkboxListener) {
         super(itemView);
-        ButterKnife.bind(this, itemView);
         this.context = context;
+        ButterKnife.bind(this, itemView);
+        emergencyBox.setOnCheckedChangeListener(checkboxListener);
     }
 
     protected void handleProfileImage(List<ContactModel> contacts, int position) {

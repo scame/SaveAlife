@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.models.ContactModel;
@@ -21,9 +22,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private View.OnClickListener inviteListener;
 
+    private CompoundButton.OnCheckedChangeListener checkboxListener;
+
     private Context context;
 
-    public ContactsAdapter(Context context, List<ContactModel> contacts, View.OnClickListener inviteListener) {
+    public ContactsAdapter(Context context, List<ContactModel> contacts, View.OnClickListener inviteListener,
+                           CompoundButton.OnCheckedChangeListener checkboxListener) {
+        this.checkboxListener = checkboxListener;
         this.inviteListener = inviteListener;
         this.contacts = contacts;
         this.context = context;
@@ -36,10 +41,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (viewType == VIEW_TYPE_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_in_app, parent, false);
-            viewHolder = new InAppViewHolder(itemView, context);
+            viewHolder = new InAppViewHolder(itemView, context, checkboxListener);
         } else if (viewType == VIEW_TYPE_NOT_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_not_in_app, parent, false);
-            viewHolder = new NotInAppViewHolder(context, itemView, inviteListener);
+            viewHolder = new NotInAppViewHolder(context, itemView, inviteListener, checkboxListener);
         }
         return viewHolder;
     }
