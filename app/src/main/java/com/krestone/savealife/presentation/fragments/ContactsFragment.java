@@ -37,7 +37,6 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
     @Inject
     ContactsPresenter<ContactsPresenter.ContactsView> contactsPresenter;
 
-
     private ContactsAdapter contactsAdapter;
 
     private ActionMode actionMode;
@@ -45,7 +44,7 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
     private final ActionMode.Callback actionCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.setTitle("Title");
+            mode.setTitle("Actions");
             mode.getMenuInflater().inflate(R.menu.contacts_actions, menu);
             return true;
         }
@@ -85,13 +84,8 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
         inject();
         contactsPresenter.setView(this);
         contactsPresenter.requestContacts();
-        setupActionMode();
 
         return fragmentView;
-    }
-
-    private void setupActionMode() {
-
     }
 
     private void inject() {
@@ -104,7 +98,7 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
     public void displayContacts(List<ContactModel> contacts) {
         contactsAdapter = new ContactsAdapter(getContext(), contacts, v -> Log.i("onxClick", "invite"), (buttonView, isChecked) -> {
             if (actionMode != null) return;
-            actionMode = getActivity().startActionMode(actionCallback);
+            actionMode = (getActivity()).findViewById(R.id.toolbar).startActionMode(actionCallback);
         });
 
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
