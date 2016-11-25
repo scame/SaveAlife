@@ -7,11 +7,11 @@ import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import rx.Observable;
 import rx.Subscriber;
 
-public abstract class UseCaseObservable<T> extends UseCase<T> {
+public abstract class UseCaseStream<T> extends UseCase<T> {
 
     private Observable<T> observable;
 
-    public UseCaseObservable(SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public UseCaseStream(SubscribeOn subscribeOn, ObserveOn observeOn) {
         super(subscribeOn, observeOn);
         this.subscribeOn = subscribeOn;
         this.observeOn = observeOn;

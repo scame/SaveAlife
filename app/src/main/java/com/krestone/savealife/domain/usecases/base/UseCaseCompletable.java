@@ -16,7 +16,7 @@ public abstract class UseCaseCompletable<T> extends UseCase<T> {
         super(subscribeOn, observeOn);
     }
 
-    public void executeCompletable(Action0 onComplete, Action1<? super Throwable> onError) {
+    public void executeCompletable(Action0 onComplete, Action1<Throwable> onError) {
         if (completable == null) {
             completable = getUseCaseCompletable()
                     .subscribeOn(subscribeOn.getScheduler())

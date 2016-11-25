@@ -6,11 +6,11 @@ import android.location.Location;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
-import com.krestone.savealife.domain.usecases.base.UseCaseObservable;
+import com.krestone.savealife.domain.usecases.base.UseCaseStream;
 
 import rx.Observable;
 
-public class LastKnownLocationUseCase extends UseCaseObservable<Location> {
+public class LastKnownLocationUseCase extends UseCaseStream<Location> {
 
     private LocationRepository locationRepository;
 

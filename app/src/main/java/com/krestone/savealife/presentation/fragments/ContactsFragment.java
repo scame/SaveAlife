@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
@@ -41,6 +40,8 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
 
     private ActionMode actionMode;
 
+    private List<ContactModel> contacts;
+
     private final ActionMode.Callback actionCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -58,11 +59,11 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_save:
-                    Toast.makeText(getContext(), "Save", Toast.LENGTH_LONG).show();
+                    contactsPresenter.saveUpdatedContacts(contacts);
                     mode.finish();
                     break;
                 case R.id.action_cancel:
-                    Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
+                    contactsPresenter.cancelChanges();
                     mode.finish();
                     break;
             }
@@ -95,15 +96,32 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
     }
 
     @Override
-    public void displayContacts(List<ContactModel> contacts) {
+    public void displayContacts(List<ContactModel> newContacts) {
+        this.contacts = newContacts;
         contactsAdapter = new ContactsAdapter(getContext(), contacts, v -> Log.i("onxClick", "invite"), (buttonView, isChecked) -> {
-            if (actionMode != null) return;
-            actionMode = (getActivity()).findViewById(R.id.toolbar).startActionMode(actionCallback);
+            contactsPresenter.compareWithOldModel(contacts);
         });
 
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);
+    }
+
+    @Override
+    public void redrawList(List<ContactModel> newContacts) {
+        contacts.clear();
+        contacts.addAll(newContacts);
+        contactsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDoneComparison(boolean isEqualToOld) {
+        if (actionMode != null && isEqualToOld) {
+            actionMode.finish();
+            actionMode = null;
+        } else if (actionMode == null) {
+            actionMode = (getActivity()).findViewById(R.id.toolbar).startActionMode(actionCallback);
+        }
     }
 }

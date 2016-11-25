@@ -31,11 +31,17 @@ public class BaseContactViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.emergency_checkbox)
     CheckBox emergencyBox;
 
-    public BaseContactViewHolder(Context context, View itemView, CompoundButton.OnCheckedChangeListener checkboxListener) {
+    public BaseContactViewHolder(Context context, View itemView, CompoundButton.OnCheckedChangeListener checkboxListener,
+                                 List<ContactModel> contacts) {
         super(itemView);
         this.context = context;
         ButterKnife.bind(this, itemView);
-        emergencyBox.setOnCheckedChangeListener(checkboxListener);
+        emergencyBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (getAdapterPosition() != -1) {
+                contacts.get(getAdapterPosition()).setInEmergencyList(isChecked);
+            }
+            checkboxListener.onCheckedChanged(buttonView, isChecked);
+        });
     }
 
     protected void handleProfileImage(List<ContactModel> contacts, int position) {

@@ -1,7 +1,6 @@
 package com.krestone.savealife.presentation.models;
 
 
-
 public class ContactModel {
 
     private String id;
@@ -21,6 +20,17 @@ public class ContactModel {
     private boolean inEmergencyList;
 
     public ContactModel() { }
+
+    public ContactModel(ContactModel contactModel) {
+        this.id = contactModel.getId() == null ? null : contactModel.getId();
+        this.name = contactModel.getName() == null ? null : contactModel.getName();
+        this.homeNumber = contactModel.getHomeNumber() == null ? null : contactModel.getHomeNumber();
+        this.workNumber = contactModel.getWorkNumber() == null ? null : contactModel.getWorkNumber();
+        this.mobileNumber = contactModel.getMobileNumber() == null ? null : contactModel.getMobileNumber();
+        this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
+        this.inApp = contactModel.isInApp();
+        this.inEmergencyList = contactModel.isInEmergencyList();
+    }
 
     public ContactModel(String id, String name, String thumbnailUri, String mobileNumber) {
         this.id = id;
@@ -91,5 +101,24 @@ public class ContactModel {
 
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+
+        if (obj.getClass().equals(this.getClass())) {
+            ContactModel contact = (ContactModel) obj;
+
+            return  (contact.getId() == null ? this.id == null : contact.getId().equals(this.id)) &&
+                    (contact.getName() == null ? this.name == null : contact.getName().equals(this.name)) &&
+                    (contact.getHomeNumber() == null ? this.homeNumber == null : contact.getHomeNumber().equals(this.homeNumber)) &&
+                    (contact.getWorkNumber() == null ? this.workNumber == null : contact.getWorkNumber().equals(this.workNumber)) &&
+                    (contact.getMobileNumber() == null ? this.mobileNumber == null : contact.getMobileNumber().equals(this.mobileNumber)) &&
+                    (contact.getThumbnailUri() == null ? this.thumbnailUri == null : contact.getThumbnailUri().equals(this.thumbnailUri)) &&
+                    (contact.isInApp() == this.inApp && contact.isInEmergencyList() == this.inEmergencyList);
+        }
+        return false;
     }
 }

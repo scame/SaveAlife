@@ -41,10 +41,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (viewType == VIEW_TYPE_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_in_app, parent, false);
-            viewHolder = new InAppViewHolder(itemView, context, checkboxListener);
+            viewHolder = new InAppViewHolder(itemView, context, checkboxListener, contacts);
         } else if (viewType == VIEW_TYPE_NOT_IN_APP) {
             View itemView = inflater.inflate(R.layout.contact_item_not_in_app, parent, false);
-            viewHolder = new NotInAppViewHolder(context, itemView, inviteListener, checkboxListener);
+            viewHolder = new NotInAppViewHolder(context, itemView, inviteListener, checkboxListener, contacts);
         }
         return viewHolder;
     }
