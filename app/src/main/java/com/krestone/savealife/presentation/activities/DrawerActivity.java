@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.krestone.savealife.R;
@@ -67,7 +66,14 @@ public class DrawerActivity extends AppCompatActivity implements EmergencyContac
         ButterKnife.bind(this);
         navigationView.setNavigationItemSelectedListener(this::selectDrawerItem);
         setupDrawerToggle();
+        setupDefaultFragment();
         configureToolbar();
+    }
+
+    private void setupDefaultFragment() {
+        if (getSupportFragmentManager().getFragments() == null) {
+            replaceFragment(DASHBOARD_FRAG_TAG, new DashboardFragment());
+        }
     }
 
     private void configureToolbar() {
