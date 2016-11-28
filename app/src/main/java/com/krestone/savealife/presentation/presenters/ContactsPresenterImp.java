@@ -30,12 +30,16 @@ public class ContactsPresenterImp<T extends ContactsPresenter.ContactsView> impl
     public void requestContacts() {
         getAllContactsUseCase.executeSingle(contactModels -> {
             if (view != null) {
-                for (ContactModel contact : contactModels) {
-                    cachedContacts.add(new ContactModel(contact));
-                }
+                cacheContacts(contactModels);
                 view.displayContacts(contactModels);
             }
         }, throwable -> Log.i("onxContactsErr", throwable.getLocalizedMessage()));
+    }
+
+    private void cacheContacts(List<ContactModel> contacts) {
+        for (ContactModel contact : contacts) {
+            cachedContacts.add(new ContactModel(contact));
+        }
     }
 
     @Override

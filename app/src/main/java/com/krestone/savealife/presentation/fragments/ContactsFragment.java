@@ -111,7 +111,9 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
     @Override
     public void redrawList(List<ContactModel> newContacts) {
         contacts.clear();
-        contacts.addAll(newContacts);
+        for (ContactModel contactModel : newContacts) {
+            contacts.add(new ContactModel(contactModel));
+        }
         contactsAdapter.notifyDataSetChanged();
     }
 
@@ -120,7 +122,7 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
         if (actionMode != null && isEqualToOld) {
             actionMode.finish();
             actionMode = null;
-        } else if (actionMode == null) {
+        } else if (actionMode == null && !isEqualToOld) {
             actionMode = (getActivity()).findViewById(R.id.toolbar).startActionMode(actionCallback);
         }
     }
