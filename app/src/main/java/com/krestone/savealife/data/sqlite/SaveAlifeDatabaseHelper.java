@@ -90,17 +90,20 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addContacts(List<ContactModel> contacts) {
-        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?);";
+        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?);";
         SQLiteDatabase db = getWritableDatabase();
         SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
 
         db.beginTransaction();
         try {
             for (ContactModel contact : contacts) {
+                Log.i("onxAdded", "yep");
                 sqLiteStatement.clearBindings();
-                sqLiteStatement.bindString(1, contact.getName());
-                sqLiteStatement.bindString(2, contact.getMobileNumber());
-                sqLiteStatement.bindString(3, contact.getThumbnailUri());
+                sqLiteStatement.bindString(2, contact.getName());
+                sqLiteStatement.bindString(3, contact.getMobileNumber());
+                if (contact.getThumbnailUri() != null) { // default bind value is null, so it's fine to just skip this one
+                    sqLiteStatement.bindString(4, contact.getThumbnailUri());
+                }
                 sqLiteStatement.execute();
             }
             db.setTransactionSuccessful();

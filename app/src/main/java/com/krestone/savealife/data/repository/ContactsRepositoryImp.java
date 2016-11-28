@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Completable;
+import rx.Observable;
 import rx.Single;
 
 
@@ -45,8 +46,10 @@ public class ContactsRepositoryImp implements ContactsRepository {
     @Override
     public Completable updateEmergencyContacts(List<ContactModel> contacts) {
         return Completable.defer(() -> {
-            databaseHelper.deleteAllContacts();
-            databaseHelper.addContacts(contacts);
+            Observable.from(contacts).filter(ContactModel::isInEmergencyList).toList().toSingle().subscribe(contactModels -> {
+                databaseHelper.deleteAllContacts();
+                databaseHelper.addContacts(contactModels);
+            });
             return Completable.complete();
         });
     }
