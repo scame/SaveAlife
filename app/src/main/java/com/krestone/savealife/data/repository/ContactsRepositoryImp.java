@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 import com.krestone.savealife.presentation.models.ContactModel;
@@ -40,7 +41,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Single<List<ContactModel>> getEmergencyContacts() {
-        return Single.defer(() -> Single.just(databaseHelper.getAllContacts()));
+        return Single.defer(() -> Single.just(databaseHelper.getAllEmergencyContacts()));
     }
 
     @Override
@@ -56,7 +57,24 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Single<List<ContactModel>> getContacts() {
-        return Single.defer(() -> Single.just(queryContacts()));
+        return Single.zip(getEmergencyContacts(), Single.just(queryContacts()), (emergencyContacts, allContacts) -> {
+            contactContacts(emergencyContacts, allContacts);
+            return allContacts;
+        });
+    }
+
+    // TODO: should be done through contact ids, read below
+    private void contactContacts(List<ContactModel> emergencyContacts, List<ContactModel> allContacts) {
+        for (ContactModel emergencyContact : emergencyContacts) {
+            for (ContactModel plainContact : allContacts) {
+                if (plainContact.getMobileNumber().equals(emergencyContact.getMobileNumber()) &&
+                        plainContact.getName().equals(emergencyContact.getName())) {
+                    plainContact.setInApp(emergencyContact.isInApp());
+                    plainContact.setInEmergencyList(emergencyContact.isInEmergencyList());
+                    break;
+                }
+            }
+        }
     }
 
     // TODO: duplicates are possible when a contact has more than one number

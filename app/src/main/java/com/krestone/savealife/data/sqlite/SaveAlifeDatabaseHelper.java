@@ -28,6 +28,8 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CONTACT_NAME = "name";
     private static final String KEY_CONTACT_NUMBER = "number";
     private static final String KEY_PROFILE_IMAGE_URI = "thumbnail";
+    private static final String KEY_IS_IN_APP = "isinapp";
+    private static final String KEY_IS_IN_EMERGENCY = "isinemergency";
 
     private static SaveAlifeDatabaseHelper helper;
 
@@ -55,8 +57,10 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_CONTACT_ID + " INTEGER PRIMARY KEY," +
                 KEY_CONTACT_NAME + " TEXT," +
-                KEY_CONTACT_NUMBER + " INTEGER," +
-                KEY_PROFILE_IMAGE_URI + " TEXT" +
+                KEY_CONTACT_NUMBER + " TEXT," +
+                KEY_PROFILE_IMAGE_URI + " TEXT," +
+                KEY_IS_IN_EMERGENCY + " INTEGER," +
+                KEY_IS_IN_APP + " INTEGER" +
                 ")";
 
         db.execSQL(CREATE_CONTACTS_TABLE);
@@ -79,6 +83,8 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(KEY_CONTACT_NAME, contact.getName());
             contentValues.put(KEY_CONTACT_NUMBER, contact.getMobileNumber());
             contentValues.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
+            contentValues.put(KEY_IS_IN_EMERGENCY, contact.isInEmergencyList() ? 1 : 0);
+            contentValues.put(KEY_IS_IN_APP, contact.isInApp() ? 1 : 0);
 
             db.insertOrThrow(TABLE_CONTACTS, null, contentValues);
             db.setTransactionSuccessful();
@@ -90,20 +96,22 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addContacts(List<ContactModel> contacts) {
-        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?);";
+        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?, ?, ?);";
         SQLiteDatabase db = getWritableDatabase();
         SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
 
         db.beginTransaction();
         try {
             for (ContactModel contact : contacts) {
-                Log.i("onxAdded", "yep");
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindString(2, contact.getName());
                 sqLiteStatement.bindString(3, contact.getMobileNumber());
                 if (contact.getThumbnailUri() != null) { // default bind value is null, so it's fine to just skip this one
                     sqLiteStatement.bindString(4, contact.getThumbnailUri());
                 }
+                sqLiteStatement.bindLong(5, contact.isInEmergencyList() ? 1 : 0);
+                sqLiteStatement.bindLong(6, contact.isInApp() ? 1 : 0);
+
                 sqLiteStatement.execute();
             }
             db.setTransactionSuccessful();
@@ -112,7 +120,7 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<ContactModel> getAllContacts() {
+    public List<ContactModel> getAllEmergencyContacts() {
         List<ContactModel> contacts = new ArrayList<>();
 
         String CONTACTS_SELECT_QUERY = String.format("SELECT * FROM %S", TABLE_CONTACTS);
@@ -126,6 +134,8 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
                   contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
                   contactModel.setMobileNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                   contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
+                  contactModel.setInEmergencyList(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_EMERGENCY)) == 1);
+                  contactModel.setInApp(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP)) == 1);
                   contacts.add(contactModel);
               } while (cursor.moveToNext());
             }
