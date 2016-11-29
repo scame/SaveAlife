@@ -37,6 +37,7 @@ public class ContactsPresenterImp<T extends ContactsPresenter.ContactsView> impl
     }
 
     private void cacheContacts(List<ContactModel> contacts) {
+        cachedContacts.clear();
         for (ContactModel contact : contacts) {
             cachedContacts.add(new ContactModel(contact));
         }
