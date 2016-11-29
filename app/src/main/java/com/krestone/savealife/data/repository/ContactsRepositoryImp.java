@@ -5,8 +5,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
+import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.entities.responses.ContactsStatusEntity;
+import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -30,14 +32,18 @@ public class ContactsRepositoryImp implements ContactsRepository {
             PHONE_NUMBER, PHONE_TYPE, CONTACT_NAME, PHOTO_URI, CONTACT_ID
     };
 
+    private ServerApi serverApi;
+
     private Context context;
 
     private SaveAlifeDatabaseHelper databaseHelper;
 
-    public ContactsRepositoryImp(Context context, SaveAlifeDatabaseHelper databaseHelper) {
+    public ContactsRepositoryImp(Context context, SaveAlifeDatabaseHelper databaseHelper, ServerApi serverApi) {
         this.context = context;
+        this.serverApi = serverApi;
         this.databaseHelper = databaseHelper;
     }
+
 
     @Override
     public Single<List<ContactModel>> getEmergencyContacts() {
@@ -53,6 +59,14 @@ public class ContactsRepositoryImp implements ContactsRepository {
             });
             return Completable.complete();
         });
+    }
+
+    @Override
+    public Single<ContactsStatusEntity> getContactsStatus() {
+        return getContacts().toObservable().flatMap(Observable::from)
+                .map(ContactModel::getMobileNumber)
+                .toList().map(ContactsNumbersHolder::new)
+                .flatMap(numbersHolder -> serverApi.getContactsStatus(numbersHolder)).toSingle();
     }
 
     @Override
