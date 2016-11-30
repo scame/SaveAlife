@@ -38,5 +38,13 @@
     <string name="phone_str">Phone</string>
     <string name="medical_skills">Medical skills</string>
     <string name="call">call</string>
+    <string name="public_info">PUBLIC INFO</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="private_info">Private info</string>
+    <string name="email">E-mail</string>
+    <string name="sex">Sex</string>
+    <string name="age">Age</string>
+    <string name="diseases">Diseases</string>
 
 </resources>

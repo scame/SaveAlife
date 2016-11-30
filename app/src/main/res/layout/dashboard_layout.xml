@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_near_me_black_24dp"
-            android:padding="@dimen/standard_elem_padding"/>
+            android:padding="@dimen/standard_elem_padding"
+            android:src="@drawable/ic_near_me_black_24dp" />
     </LinearLayout>
 
     <Space
@@ -34,36 +34,36 @@
         android:id="@+id/sos_btn"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/placeholder"
         android:layout_above="@id/space_holder"
         android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/standard_elem_margin"/>
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/sos_text"
-        android:text="@string/sos_inactive_text"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/sos_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_elem_margin"/>
+        android:layout_below="@id/sos_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:text="@string/sos_inactive_text" />
 
     <Switch
         android:id="@+id/driver_mode_switch"
-        android:text="@string/driver_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp" />
+        android:layout_marginBottom="32dp"
+        android:text="@string/driver_mode" />
 
     <Button
         android:id="@+id/event_details_btn"
-        android:visibility="invisible"
-        android:layout_above="@id/driver_mode_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/driver_mode_switch"
+        android:layout_margin="@dimen/standard_elem_margin"
         android:text="@string/event_details_btn_text"
-        android:layout_margin="@dimen/standard_elem_margin"/>
+        android:visibility="invisible" />
 
 </RelativeLayout>

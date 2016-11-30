@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkingModule {
 
-    private static final String BASE_URL = "";
+    private static final String BASE_URL = "https://www.google.com.ua/";
 
     private static final int READ_TIMEOUT = 10;
 
