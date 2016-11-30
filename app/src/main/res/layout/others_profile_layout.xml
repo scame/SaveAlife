@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/contact_profile_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/standard_elem_padding"
+            android:src="@drawable/placeholder" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/contact_profile_image" />
+
+        <TextView
+            android:id="@+id/points_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:gravity="center_horizontal"
+            android:text="61 points"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:id="@+id/status_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/points_tv"
+            android:gravity="center_horizontal"
+            android:text="Driver"
+            android:textSize="@dimen/text_size_medium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/background_dark" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:layout_weight="1"
+            android:text="@string/phone_str" />
+
+        <TextView
+            android:id="@+id/phone_number_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:layout_weight="5" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:text="@string/medical_skills" />
+
+    <TextView
+        android:id="@+id/skills_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/call_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:text="@string/call" />
+
+    </RelativeLayout>
+
+</LinearLayout>
