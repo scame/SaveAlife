@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -43,11 +44,27 @@ public class DashboardFragment extends Fragment {
     @BindView(R.id.event_details_btn)
     Button eventDetailsBtn;
 
+    private DashboardListener dashboardListener;
+
+    public interface DashboardListener {
+
+        void onOpenMapClick();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof DashboardListener) {
+            dashboardListener = ((DashboardListener) context);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.dashboard_layout, container, false);
         ButterKnife.bind(this, fragmentView);
+        mapButton.setOnClickListener(v -> dashboardListener.onOpenMapClick());
 
         return fragmentView;
     }

@@ -42,6 +42,6 @@
         android:layout_margin="@dimen/standard_elem_margin"
         android:gravity="center_horizontal"
         android:text="@string/code_failure_text"
-        android:textSize="@dimen/text_size_large" />
+        android:textSize="@dimen/text_size_medium" />
 
 </LinearLayout>

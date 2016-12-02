@@ -31,7 +31,8 @@ import com.krestone.savealife.presentation.fragments.SettingsFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DrawerActivity extends AppCompatActivity implements EmergencyContactsFragment.EmergencyListener {
+public class DrawerActivity extends AppCompatActivity implements
+        EmergencyContactsFragment.EmergencyListener, DashboardFragment.DashboardListener {
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
@@ -130,6 +131,11 @@ public class DrawerActivity extends AppCompatActivity implements EmergencyContac
                 .addToBackStack(null)
                 .replace(R.id.drawer_activity_fl, new ContactsFragment(), CONTACTS_FRAG_TAG)
                 .commit();
+    }
+
+    @Override
+    public void onOpenMapClick() {
+        replaceFragment(MAP_FRAG_TAG, new MapFragment());
     }
 
     @Override
