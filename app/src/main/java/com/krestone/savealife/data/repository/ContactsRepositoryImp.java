@@ -44,7 +44,6 @@ public class ContactsRepositoryImp implements ContactsRepository {
         this.databaseHelper = databaseHelper;
     }
 
-
     @Override
     public Single<List<ContactModel>> getEmergencyContacts() {
         return Single.defer(() -> Single.just(databaseHelper.getAllEmergencyContacts()));
@@ -66,7 +65,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
         return getContacts().toObservable().flatMap(Observable::from)
                 .map(ContactModel::getMobileNumber)
                 .toList().map(ContactsNumbersHolder::new)
-                .flatMap(numbersHolder -> serverApi.getContactsStatus(numbersHolder)).toSingle();
+                .flatMap(numbersHolder -> serverApi.getContactsStatus(numbersHolder, "Basic MTox"))
+                .toSingle();
     }
 
     @Override

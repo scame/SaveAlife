@@ -13,7 +13,7 @@
             android:id="@+id/profile_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/placeholder"
+            android:src="@drawable/my_photo"
             android:layout_margin="@dimen/standard_elem_margin"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
@@ -31,7 +31,8 @@
             android:layout_margin="@dimen/standard_elem_margin"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_medium"/>
 
         <ImageButton
             android:id="@+id/header_button"

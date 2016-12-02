@@ -12,6 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
@@ -26,6 +29,7 @@ import com.krestone.savealife.presentation.fragments.ContactsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
+import com.krestone.savealife.presentation.fragments.MyProfileFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
 
 import butterknife.BindView;
@@ -39,6 +43,7 @@ public class DrawerActivity extends AppCompatActivity implements
     private static final String CHATS_FRAG_TAG = "chatsFragment";
     private static final String CONTACTS_FRAG_TAG = "contactsFragment";
     private static final String EMERGENCY_CONTACTS_TAG = "emergencyContacts";
+    private static final String MY_PROFILE_TAG = "myProfile";
 
     private static final String SETTINGS_FRAG_TAG = "settingsFragment";
 
@@ -47,6 +52,18 @@ public class DrawerActivity extends AppCompatActivity implements
 
     @BindView(R.id.main_navigation_view)
     NavigationView navigationView;
+
+    @Nullable
+    @BindView(R.id.profile_image)
+    ImageView profileImage;
+
+    @Nullable
+    @BindView(R.id.username_tv)
+    TextView usernameTv;
+
+    @Nullable
+    @BindView(R.id.header_button)
+    ImageButton headerButton;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -69,6 +86,25 @@ public class DrawerActivity extends AppCompatActivity implements
         setupDrawerToggle();
         setupDefaultFragment();
         configureToolbar();
+
+        bindHeaderViews();
+        configureHeaderView();
+    }
+
+    private void bindHeaderViews() {
+        usernameTv = ButterKnife.findById(navigationView.getHeaderView(0), R.id.username_tv);
+        headerButton = ButterKnife.findById(navigationView.getHeaderView(0), R.id.header_button);
+    }
+
+    private void configureHeaderView() {
+        usernameTv.setText("Slava Petrochenko");
+        headerButton.setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.drawer_activity_fl, new MyProfileFragment(), MY_PROFILE_TAG)
+                    .commit();
+            drawerLayout.closeDrawers();
+        });
     }
 
     private void setupDefaultFragment() {
@@ -114,6 +150,7 @@ public class DrawerActivity extends AppCompatActivity implements
                 break;
             case R.id.settings_drawer_item:
                 replaceFragment(SETTINGS_FRAG_TAG, new SettingsFragment());
+                break;
             default:
                 replaceFragment(DASHBOARD_FRAG_TAG, new DashboardFragment());
         }
@@ -157,12 +194,6 @@ public class DrawerActivity extends AppCompatActivity implements
 
     private void replaceFragment(String fragmentTag, Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.drawer_activity_fl, fragment, fragmentTag)
-                .commit();
-    }
-
-    private void replaceFragment(String fragmentTag, android.app.Fragment fragment) {
-        getFragmentManager().beginTransaction()
                 .replace(R.id.drawer_activity_fl, fragment, fragmentTag)
                 .commit();
     }

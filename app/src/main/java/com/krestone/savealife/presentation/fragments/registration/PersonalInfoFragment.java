@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.krestone.savealife.R;
 
 import butterknife.BindView;
@@ -19,6 +20,9 @@ public class PersonalInfoFragment extends Fragment {
 
     @BindView(R.id.sign_up_btn)
     Button signUpBtn;
+
+    @BindView(R.id.qualifications_spinner)
+    MaterialSpinner qualificationSpinner;
 
     private PersonalInfoListener personalInfoListener;
 
@@ -41,6 +45,8 @@ public class PersonalInfoFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.sign_up_layout, container, false);
         ButterKnife.bind(this, fragmentView);
         signUpBtn.setOnClickListener(v -> personalInfoListener.onSignUpClick());
+
+        qualificationSpinner.setItems("No medical qualification", "Surgeon", "Nurse");
 
         return fragmentView;
     }

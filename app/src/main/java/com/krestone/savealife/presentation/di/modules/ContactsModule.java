@@ -5,6 +5,7 @@ import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.GetAllContactsUseCase;
+import com.krestone.savealife.domain.usecases.GetContactsStatusUseCase;
 import com.krestone.savealife.domain.usecases.UpdateEmergencyContactsUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.presenters.ContactsPresenter;
@@ -19,8 +20,16 @@ public class ContactsModule {
     @Provides
     @PerActivity
     ContactsPresenter<ContactsPresenter.ContactsView> provideContactsPresenter(GetAllContactsUseCase allContactsUseCase,
-                                                                               UpdateEmergencyContactsUseCase updateUseCase) {
-        return new ContactsPresenterImp<>(allContactsUseCase, updateUseCase);
+                                                                               UpdateEmergencyContactsUseCase updateUseCase,
+                                                                               GetContactsStatusUseCase contactsStatusUseCase) {
+        return new ContactsPresenterImp<>(allContactsUseCase, updateUseCase, contactsStatusUseCase);
+    }
+
+    @Provides
+    @PerActivity
+    GetContactsStatusUseCase provideContactsStatusUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                                          ContactsRepository contactsRepository) {
+        return new GetContactsStatusUseCase(subscribeOn, observeOn, contactsRepository);
     }
 
 

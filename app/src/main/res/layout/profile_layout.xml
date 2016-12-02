@@ -19,7 +19,7 @@
                 android:layout_height="96dp"
                 android:layout_centerInParent="true"
                 android:padding="@dimen/standard_elem_padding"
-                android:src="@drawable/placeholder" />
+                android:src="@drawable/my_photo" />
 
             <android.support.v4.widget.Space
                 android:id="@+id/separator"
@@ -77,6 +77,7 @@
                 android:id="@+id/profile_name"
                 android:layout_width="0dp"
                 android:layout_margin="@dimen/standard_elem_margin"
+                android:text="Slava Petrochenko"
                 app:layout_columnWeight="4" />
 
             <TextView
@@ -90,7 +91,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_elem_margin"
-                app:layout_columnWeight="1" />
+                android:text="+380 66 41 00 958"
+                app:layout_columnWeight="4" />
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/profile_qualifications_spinner"
@@ -147,6 +149,7 @@
                 android:id="@+id/profile_email"
                 android:layout_width="0dp"
                 android:layout_margin="@dimen/standard_elem_margin"
+                android:text="vs.petrochenko@gmail.com"
                 app:layout_columnWeight="4" />
 
             <TextView
@@ -159,6 +162,7 @@
                 android:id="@+id/profile_sex"
                 android:layout_width="0dp"
                 android:layout_margin="@dimen/standard_elem_margin"
+                android:text="male"
                 app:layout_columnWeight="4" />
 
             <TextView
@@ -171,6 +175,7 @@
                 android:id="@+id/profile_age"
                 android:layout_width="0dp"
                 android:layout_margin="@dimen/standard_elem_margin"
+                android:text="19"
                 app:layout_columnWeight="4" />
 
             <TextView
@@ -183,6 +188,7 @@
                 android:id="@+id/profile_diseases"
                 android:layout_width="0dp"
                 android:layout_margin="@dimen/standard_elem_margin"
+                android:text="Not specified"
                 app:layout_columnWeight="4" />
 
             <Button
