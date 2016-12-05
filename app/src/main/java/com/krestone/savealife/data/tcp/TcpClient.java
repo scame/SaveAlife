@@ -64,12 +64,17 @@ public class TcpClient {
         return new Socket(serverAddress, port);
     }
 
-    private void initIoStreams(Socket socket) {
+    private void initIoStreams(Socket socket) throws IOException {
         try {
             output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             Log.i("onxStreamsException", e.getLocalizedMessage());
+        } finally {
+            output.flush();
+            output.close();
+            input.close();
+            socket.close();
         }
     }
 }
