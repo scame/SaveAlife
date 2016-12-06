@@ -84,4 +84,10 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.setAdapter(contactsAdapter);
     }
+
+    @Override
+    public void onDestroyView() {
+        emergencyPresenter.destroy();
+        super.onDestroyView();
+    }
 }

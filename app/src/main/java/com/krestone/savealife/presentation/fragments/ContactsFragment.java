@@ -126,4 +126,10 @@ public class ContactsFragment extends Fragment implements ContactsPresenter.Cont
             actionMode = (getActivity()).findViewById(R.id.toolbar).startActionMode(actionCallback);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        contactsPresenter.destroy();
+        super.onDestroyView();
+    }
 }
