@@ -10,8 +10,11 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.SSLContext;
 
 import rx.Completable;
 
@@ -45,14 +48,22 @@ public class ClientWebSocket {
                 Log.i("onxConnectIOExc", e.getLocalizedMessage());
             } catch (WebSocketException e) {
                 Log.i("onxConnectSocketExc", e.getLocalizedMessage());
+            } catch (NoSuchAlgorithmException e) {
+                Log.i("onxAlgorithmExc", e.getLocalizedMessage());
             }
         }
         return Completable.complete();
     }
 
-    private WebSocket createWebSocket() throws IOException {
-        WebSocketFactory socketFactory = new WebSocketFactory();
+    private WebSocket createWebSocket() throws IOException, NoSuchAlgorithmException {
+        WebSocketFactory socketFactory = provideSocketFactory();
         return socketFactory.createSocket(host, CONNECT_TIMEOUT_MS);
+    }
+
+    private WebSocketFactory provideSocketFactory() throws NoSuchAlgorithmException {
+        WebSocketFactory socketFactory = new WebSocketFactory();
+        SSLContext context = NaiveSSLContext.getInstance("TLS");
+        return socketFactory.setSSLContext(context);
     }
 
     private void reconnect() {
