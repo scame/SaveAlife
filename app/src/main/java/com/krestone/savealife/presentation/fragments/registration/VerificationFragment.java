@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.krestone.savealife.R;
 
@@ -20,11 +21,23 @@ public class VerificationFragment extends Fragment {
     @BindView(R.id.verification_btn)
     Button verificationButton;
 
+    @BindView(R.id.verification_input)
+    EditText verificationInput;
+
     private VerificationListener verificationListener;
 
     public interface VerificationListener {
 
         void onVerificationClick();
+    }
+
+    public static VerificationFragment newInstance(String phoneNumber) {
+        Bundle bundle = new Bundle();
+        bundle.putString(VerificationFragment.class.getCanonicalName(), phoneNumber);
+
+        VerificationFragment verificationFragment = new VerificationFragment();
+        verificationFragment.setArguments(bundle);
+        return verificationFragment;
     }
 
     @Override

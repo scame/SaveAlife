@@ -8,6 +8,8 @@ import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.data.repository.LocationRepositoryImp;
+import com.krestone.savealife.data.repository.RegistrationRepository;
+import com.krestone.savealife.data.repository.RegistrationRepositoryImp;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 
@@ -31,5 +33,11 @@ public class RepositoriesModule {
     @Singleton
     ContactsRepository provideContactsRepository(Context context, SaveAlifeDatabaseHelper databaseHelper, ServerApi serverApi) {
         return new ContactsRepositoryImp(context, databaseHelper, serverApi);
+    }
+
+    @Provides
+    @Singleton
+    RegistrationRepository provideRegistrationRepository(ServerApi serverApi) {
+        return new RegistrationRepositoryImp(serverApi);
     }
 }

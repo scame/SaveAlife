@@ -11,13 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.activities.RegistrationActivity;
+import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhoneNumberFragment extends Fragment {
+public class PhoneNumberFragment extends Fragment implements RegistrationNumberPresenter.RegistrationNumberView {
 
     @BindView(R.id.phone_number_btn)
     Button phoneNumberBtn;
@@ -25,11 +30,14 @@ public class PhoneNumberFragment extends Fragment {
     @BindView(R.id.phone_number_input)
     EditText phoneNumberInput;
 
+    @Inject
+    RegistrationNumberPresenter<RegistrationNumberPresenter.RegistrationNumberView> presenter;
+
     private PhoneNumberListener phoneNumberListener;
 
     public interface PhoneNumberListener {
 
-        void onPhoneNumberContinue();
+        void onPhoneNumberContinue(String phoneNumber);
     }
 
     @Override
@@ -45,10 +53,28 @@ public class PhoneNumberFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.phone_number_layout, container, false);
         ButterKnife.bind(this, fragmentView);
-        phoneNumberBtn.setOnClickListener(v -> phoneNumberListener.onPhoneNumberContinue());
+
+        inject();
+        presenter.setView(this);
+
         setPhoneNumber();
+        setupPhoneNumberBtn();
 
         return fragmentView;
+    }
+
+    private void setupPhoneNumberBtn() {
+        phoneNumberBtn.setOnClickListener(v -> {
+            if (!phoneNumberInput.getText().toString().isEmpty()) {
+                presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());
+            }
+        });
+    }
+
+    private void inject() {
+        if (getActivity() instanceof RegistrationActivity) {
+            ((RegistrationActivity) getActivity()).provideRegistrationNumberComponent().inject(this);
+        }
     }
 
     private void setPhoneNumber() {
@@ -57,5 +83,15 @@ public class PhoneNumberFragment extends Fragment {
         if (phoneNumber == null) phoneNumber = "";
 
         phoneNumberInput.setText(phoneNumber);
+    }
+
+    @Override
+    public void onRegistrationNumberSent() {
+        phoneNumberListener.onPhoneNumberContinue(phoneNumberInput.getText().toString());
+    }
+
+    @Override
+    public void onRegistrationNumberError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 }

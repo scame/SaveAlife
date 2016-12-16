@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.presentation.di.components.RegistrationNumberComponent;
+import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.fragments.registration.PersonalInfoFragment;
 import com.krestone.savealife.presentation.fragments.registration.PhoneNumberFragment;
 import com.krestone.savealife.presentation.fragments.registration.VerificationFragment;
@@ -26,6 +29,8 @@ public class RegistrationActivity extends AppCompatActivity implements
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    private RegistrationNumberComponent registrationNumberComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,8 +62,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPhoneNumberContinue() {
-        replaceFragmentWithBackstack(VERIFICATION_FRAGM, new VerificationFragment());
+    public void onPhoneNumberContinue(String phoneNumber) {
+        replaceFragmentWithBackstack(VERIFICATION_FRAGM, VerificationFragment.newInstance(phoneNumber));
     }
 
     @Override
@@ -82,5 +87,13 @@ public class RegistrationActivity extends AppCompatActivity implements
                 .replace(R.id.registration_activity_fl, fragment, tag)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public RegistrationNumberComponent provideRegistrationNumberComponent() {
+        if (registrationNumberComponent == null) {
+            registrationNumberComponent = SaveAlifeApplication.getAppComponent()
+                    .provideRegistrationNumberSubcomponent(new RegistrationNumberModule());
+        }
+        return registrationNumberComponent;
     }
 }

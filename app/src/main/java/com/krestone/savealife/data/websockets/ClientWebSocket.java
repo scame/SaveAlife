@@ -37,6 +37,10 @@ public class ClientWebSocket {
 
     // blocks, shouldn't be called from main thread
     public Completable connect() {
+        return Completable.defer(this::connectWrapper);
+    }
+
+    private Completable connectWrapper() {
         if (webSocket != null) {
             reconnect();
         } else {

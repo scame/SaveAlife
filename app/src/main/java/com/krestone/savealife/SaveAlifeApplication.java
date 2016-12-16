@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.krestone.savealife.data.di.DataModule;
+import com.krestone.savealife.data.websockets.SocketTest;
 import com.krestone.savealife.presentation.di.components.ApplicationComponent;
 import com.krestone.savealife.presentation.di.components.DaggerApplicationComponent;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
@@ -14,9 +15,12 @@ public class SaveAlifeApplication extends Application {
 
     private static ApplicationComponent applicationComponent;
 
+    private SocketTest socketTest;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        socketTest = new SocketTest();
         MapboxAccountManager.start(this, getString(R.string.default_access_token));
         startService(new Intent(this, LocationService.class));
         buildAppComponent();
@@ -31,5 +35,9 @@ public class SaveAlifeApplication extends Application {
 
     public static ApplicationComponent getAppComponent() {
         return applicationComponent;
+    }
+
+    public SocketTest getSocketTest() {
+        return socketTest;
     }
 }

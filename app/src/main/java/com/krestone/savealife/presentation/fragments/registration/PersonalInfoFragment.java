@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.krestone.savealife.R;
@@ -17,6 +18,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PersonalInfoFragment extends Fragment {
+
+    @BindView(R.id.first_name_input)
+    EditText firstNameInput;
+
+    @BindView(R.id.last_name_input)
+    EditText lastNameInput;
+
+    @BindView(R.id.password_input)
+    EditText passwordInput;
+
+    @BindView(R.id.password_input_confirm)
+    EditText passwordInputConfirm;
 
     @BindView(R.id.sign_up_btn)
     Button signUpBtn;
