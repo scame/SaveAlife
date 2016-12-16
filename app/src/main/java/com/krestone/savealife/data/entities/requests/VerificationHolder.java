@@ -4,23 +4,30 @@ package com.krestone.savealife.data.entities.requests;
 
 public class VerificationHolder {
 
-    private int verificationCode;
+    private String currentToken;
 
-    private int phoneNumber;
+    private String phoneNumber;
 
-    public void setVerificationCode(int verificationCode) {
-        this.verificationCode = verificationCode;
-    }
+    public VerificationHolder() { }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public VerificationHolder(String currentToken, String phoneNumber) {
+        this.currentToken = currentToken;
         this.phoneNumber = phoneNumber;
     }
 
-    public int getPhoneNumber() {
+    public void setCurrentToken(String currentToken) {
+        this.currentToken = currentToken;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public int getVerificationCode() {
-        return verificationCode;
+    public String getCurrentToken() {
+        return currentToken;
     }
 }

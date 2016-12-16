@@ -11,7 +11,9 @@ import android.support.v7.widget.Toolbar;
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.RegistrationNumberComponent;
+import com.krestone.savealife.presentation.di.components.VerificationComponent;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
+import com.krestone.savealife.presentation.di.modules.VerificationModule;
 import com.krestone.savealife.presentation.fragments.registration.PersonalInfoFragment;
 import com.krestone.savealife.presentation.fragments.registration.PhoneNumberFragment;
 import com.krestone.savealife.presentation.fragments.registration.VerificationFragment;
@@ -31,6 +33,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     Toolbar toolbar;
 
     private RegistrationNumberComponent registrationNumberComponent;
+
+    private VerificationComponent verificationComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,8 +71,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onVerificationClick() {
-        replaceFragmentWithBackstack(PERSONAL_INFO_FRAGM, new PersonalInfoFragment());
+    public void onVerificationClick(String phoneNumber) {
+        replaceFragmentWithBackstack(PERSONAL_INFO_FRAGM, PersonalInfoFragment.newInstance(phoneNumber));
     }
 
     @Override
@@ -95,5 +99,13 @@ public class RegistrationActivity extends AppCompatActivity implements
                     .provideRegistrationNumberSubcomponent(new RegistrationNumberModule());
         }
         return registrationNumberComponent;
+    }
+
+    public VerificationComponent provideVerificationComponent() {
+        if (verificationComponent == null) {
+            verificationComponent = SaveAlifeApplication.getAppComponent()
+                    .provideVerificationComponent(new VerificationModule());
+        }
+        return verificationComponent;
     }
 }

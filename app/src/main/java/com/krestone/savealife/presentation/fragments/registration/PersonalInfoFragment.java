@@ -44,6 +44,16 @@ public class PersonalInfoFragment extends Fragment {
         void onSignUpClick();
     }
 
+    public static PersonalInfoFragment newInstance(String phoneNumber) {
+        Bundle bundle = new Bundle();
+        bundle.putString(PersonalInfoFragment.class.getCanonicalName(), phoneNumber);
+
+        PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+        personalInfoFragment.setArguments(bundle);
+
+        return personalInfoFragment;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

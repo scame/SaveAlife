@@ -9,6 +9,7 @@ import com.krestone.savealife.presentation.di.modules.ContactsModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
+import com.krestone.savealife.presentation.di.modules.VerificationModule;
 
 import javax.inject.Singleton;
 
@@ -28,4 +29,6 @@ public interface ApplicationComponent {
     EmergencyComponent provideEmergencySubcomponent(EmergencyModule emergencyModule);
 
     RegistrationNumberComponent provideRegistrationNumberSubcomponent(RegistrationNumberModule module);
+
+    VerificationComponent provideVerificationComponent(VerificationModule verificationModule);
 }

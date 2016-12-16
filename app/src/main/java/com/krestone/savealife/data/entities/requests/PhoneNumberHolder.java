@@ -6,6 +6,12 @@ public class PhoneNumberHolder {
 
     private String phoneNumber;
 
+    public PhoneNumberHolder() { }
+
+    public PhoneNumberHolder(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
