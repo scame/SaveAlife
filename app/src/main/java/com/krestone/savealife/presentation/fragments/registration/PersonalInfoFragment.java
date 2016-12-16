@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments.registration;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,6 +45,8 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
 
     @Inject
     PersonalInfoPresenter<PersonalInfoPresenter.PersonalInfoView> presenter;
+
+    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
 
     private String phoneNumber;
 
@@ -92,19 +95,22 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
 
     @Override
     public void onPersonalInfoSent() {
+        progressDialog.dismiss();
         personalInfoListener.onSignUpClick();
     }
 
     @Override
     public void onPersonalInfoErr(String error) {
+        progressDialog.dismiss();
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     private void setupSignUpBtn() {
         signUpBtn.setOnClickListener(v -> {
             if (validate()) {
+                progressDialog.show();
                 presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
-                        passwordInput.getText().toString(), phoneNumber, "No medical qualification", verifCode);
+                        passwordInput.getText().toString(), phoneNumber, qualificationSpinner.toString(), verifCode);
             }
         });
     }
@@ -120,8 +126,27 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
         }
     }
 
-    // TODO: implement validation
     private boolean validate() {
-        return true;
+        boolean valid = true;
+        String firstName = firstNameInput.getText().toString();
+        String lastName = lastNameInput.getText().toString();
+        String password = passwordInput.getText().toString();
+
+        if (firstName.isEmpty() || firstName.length() < 3) {
+            firstNameInput.setError("at least 3 characters");
+            valid = false;
+        }
+
+        if (lastName.isEmpty() || lastName.length() < 3) {
+            lastNameInput.setError("at least 3 characters");
+            valid = false;
+        }
+
+        if (password.isEmpty() || password.length() < 6 || password.length() > 16) {
+            passwordInput.setError("between 6 and 16 characters");
+            valid = false;
+        }
+
+        return valid;
     }
 }

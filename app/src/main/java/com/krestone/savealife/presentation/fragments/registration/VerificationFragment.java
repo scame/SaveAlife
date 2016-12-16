@@ -1,11 +1,11 @@
 package com.krestone.savealife.presentation.fragments.registration;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +32,8 @@ public class VerificationFragment extends Fragment implements VerificationPresen
 
     @Inject
     VerificationPresenter<VerificationPresenter.VerificationView> presenter;
+
+    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
 
     private VerificationListener verificationListener;
 
@@ -76,20 +78,29 @@ public class VerificationFragment extends Fragment implements VerificationPresen
     private void setupVerificationBtn() {
         verificationButton.setOnClickListener(v -> {
             if (verificationInput.getText().toString().isEmpty()) {
-                Toast.makeText(getContext(), "field is empty", Toast.LENGTH_SHORT).show();
+                verificationInput.setError("invalid code");
             } else {
+                showProgressDialog();
                 presenter.verify(phoneNumber, verificationInput.getText().toString());
             }
         });
     }
 
+    private void showProgressDialog() {
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+    }
+
     @Override
     public void onVerificationSuccess() {
+        progressDialog.dismiss();
         verificationListener.onVerificationClick(phoneNumber, verificationInput.getText().toString());
     }
 
     @Override
     public void onVerificationErr(String error) {
+        progressDialog.dismiss();
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 

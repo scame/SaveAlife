@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments.registration;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +36,8 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     private PhoneNumberListener phoneNumberListener;
 
+    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
+
     public interface PhoneNumberListener {
 
         void onPhoneNumberContinue(String phoneNumber);
@@ -66,9 +69,18 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
     private void setupPhoneNumberBtn() {
         phoneNumberBtn.setOnClickListener(v -> {
             if (!phoneNumberInput.getText().toString().isEmpty()) {
+                showProgressDialog();
                 presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());
+            } else {
+                phoneNumberInput.setError("invalid number");
             }
         });
+    }
+
+    protected void showProgressDialog() {
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Validating...");
+        progressDialog.show();
     }
 
     private void inject() {
@@ -87,11 +99,13 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     @Override
     public void onRegistrationNumberSent() {
+        progressDialog.dismiss();
         phoneNumberListener.onPhoneNumberContinue(phoneNumberInput.getText().toString());
     }
 
     @Override
     public void onRegistrationNumberError(String error) {
+        progressDialog.dismiss();
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 }
