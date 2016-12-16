@@ -10,14 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.activities.RegistrationActivity;
+import com.krestone.savealife.presentation.presenters.PersonalInfoPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PersonalInfoFragment extends Fragment {
+public class PersonalInfoFragment extends Fragment implements PersonalInfoPresenter.PersonalInfoView {
 
     @BindView(R.id.first_name_input)
     EditText firstNameInput;
@@ -37,6 +42,13 @@ public class PersonalInfoFragment extends Fragment {
     @BindView(R.id.qualifications_spinner)
     MaterialSpinner qualificationSpinner;
 
+    @Inject
+    PersonalInfoPresenter<PersonalInfoPresenter.PersonalInfoView> presenter;
+
+    private String phoneNumber;
+
+    private String verifCode;
+
     private PersonalInfoListener personalInfoListener;
 
     public interface PersonalInfoListener {
@@ -44,9 +56,10 @@ public class PersonalInfoFragment extends Fragment {
         void onSignUpClick();
     }
 
-    public static PersonalInfoFragment newInstance(String phoneNumber) {
+    public static PersonalInfoFragment newInstance(String phoneNumber, String verifCode) {
         Bundle bundle = new Bundle();
-        bundle.putString(PersonalInfoFragment.class.getCanonicalName(), phoneNumber);
+        bundle.putString(PersonalInfoFragment.class.getCanonicalName() + "phone", phoneNumber);
+        bundle.putString(PersonalInfoFragment.class.getCanonicalName() + "code", verifCode);
 
         PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
         personalInfoFragment.setArguments(bundle);
@@ -67,10 +80,48 @@ public class PersonalInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.sign_up_layout, container, false);
         ButterKnife.bind(this, fragmentView);
-        signUpBtn.setOnClickListener(v -> personalInfoListener.onSignUpClick());
+        parseArgs();
+        inject();
+        presenter.setView(this);
+        setupSignUpBtn();
 
         qualificationSpinner.setItems("No medical qualification", "Surgeon", "Nurse");
 
         return fragmentView;
+    }
+
+    @Override
+    public void onPersonalInfoSent() {
+        personalInfoListener.onSignUpClick();
+    }
+
+    @Override
+    public void onPersonalInfoErr(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupSignUpBtn() {
+        signUpBtn.setOnClickListener(v -> {
+            if (validate()) {
+                presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
+                        passwordInput.getText().toString(), phoneNumber, "No medical qualification", verifCode);
+            }
+        });
+    }
+
+    private void parseArgs() {
+        phoneNumber = getArguments().getString(this.getClass().getCanonicalName() + "phone", "");
+        verifCode = getArguments().getString(this.getClass().getCanonicalName() + "code", "");
+    }
+
+    private void inject() {
+        if (getActivity() instanceof RegistrationActivity) {
+            ((RegistrationActivity) getActivity()).providePersonalInfoComponent().inject(this);
+        }
+    }
+
+    // TODO: implement validation
+    private boolean validate() {
+        return true;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
 
     public interface VerificationListener {
 
-        void onVerificationClick(String phoneNumber);
+        void onVerificationClick(String phoneNumber, String verificationCode);
     }
 
     public static VerificationFragment newInstance(String phoneNumber) {
@@ -84,7 +85,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
 
     @Override
     public void onVerificationSuccess() {
-        verificationListener.onVerificationClick(phoneNumber);
+        verificationListener.onVerificationClick(phoneNumber, verificationInput.getText().toString());
     }
 
     @Override

@@ -20,8 +20,8 @@ public abstract class UseCaseSingle<T> extends UseCase<T> {
             single = getUseCaseSingle()
                     .subscribeOn(subscribeOn.getScheduler())
                     .observeOn(observeOn.getScheduler())
-                    .doOnSuccess(t -> t = null)
-                    .doOnError(t -> t = null);
+                    .doOnSuccess(t -> single = null)
+                    .doOnError(t -> single = null);
         }
         subscription = single.subscribe(onSuccess, onError);
     }

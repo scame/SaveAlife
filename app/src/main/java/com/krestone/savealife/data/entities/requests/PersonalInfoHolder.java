@@ -14,16 +14,23 @@ public class PersonalInfoHolder {
 
     private String phoneNumber;
 
+    private String currentToken;
+
     public PersonalInfoHolder() { }
 
     public PersonalInfoHolder(String firstName, String lastName,
                               String password, String medicalQualification,
-                              String phoneNumber) {
+                              String phoneNumber, String currentToken) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.medicalQualification = medicalQualification;
         this.phoneNumber = phoneNumber;
+        this.currentToken = currentToken;
+    }
+
+    public String getCurrentToken() {
+        return currentToken;
     }
 
     public String getFirstName() {
@@ -60,6 +67,10 @@ public class PersonalInfoHolder {
 
     public void setMedicalQualification(String medicalQualification) {
         this.medicalQualification = medicalQualification;
+    }
+
+    public void setCurrentToken(String currentToken) {
+        this.currentToken = currentToken;
     }
 
     public void setPhoneNumber(String phoneNumber) {

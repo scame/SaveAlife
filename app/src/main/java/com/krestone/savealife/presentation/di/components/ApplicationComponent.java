@@ -8,6 +8,7 @@ import com.krestone.savealife.presentation.di.modules.ApplicationModule;
 import com.krestone.savealife.presentation.di.modules.ContactsModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
+import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
 
@@ -31,4 +32,6 @@ public interface ApplicationComponent {
     RegistrationNumberComponent provideRegistrationNumberSubcomponent(RegistrationNumberModule module);
 
     VerificationComponent provideVerificationComponent(VerificationModule verificationModule);
+
+    PersonalInfoComponent providePersonalInfoComponent(PersonalInfoModule personalInfoModule);
 }

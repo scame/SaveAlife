@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.presentation.di.components.PersonalInfoComponent;
 import com.krestone.savealife.presentation.di.components.RegistrationNumberComponent;
 import com.krestone.savealife.presentation.di.components.VerificationComponent;
+import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
 import com.krestone.savealife.presentation.fragments.registration.PersonalInfoFragment;
@@ -35,6 +37,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     private RegistrationNumberComponent registrationNumberComponent;
 
     private VerificationComponent verificationComponent;
+
+    private PersonalInfoComponent personalInfoComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,8 +75,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onVerificationClick(String phoneNumber) {
-        replaceFragmentWithBackstack(PERSONAL_INFO_FRAGM, PersonalInfoFragment.newInstance(phoneNumber));
+    public void onVerificationClick(String phoneNumber, String verificationCode) {
+        replaceFragmentWithBackstack(PERSONAL_INFO_FRAGM, PersonalInfoFragment.newInstance(phoneNumber, verificationCode));
     }
 
     @Override
@@ -107,5 +111,13 @@ public class RegistrationActivity extends AppCompatActivity implements
                     .provideVerificationComponent(new VerificationModule());
         }
         return verificationComponent;
+    }
+
+    public PersonalInfoComponent providePersonalInfoComponent() {
+        if (personalInfoComponent == null) {
+            personalInfoComponent = SaveAlifeApplication.getAppComponent()
+                    .providePersonalInfoComponent(new PersonalInfoModule());
+        }
+        return personalInfoComponent;
     }
 }

@@ -20,14 +20,13 @@ public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresente
     public void sendRegistrationNumber(String number) {
         registrationNumberUseCase.setPhoneNumber(number);
         registrationNumberUseCase.executeSingle(responseBody -> {
-            Log.i("onxRegistrNumberSent", "ok");
             if (view != null) {
                 view.onRegistrationNumberSent();
             }
         }, throwable -> {
             Log.i("onxRegistrNumberErr", throwable.getLocalizedMessage());
             if (view != null) {
-                view.onRegistrationNumberError(throwable.getLocalizedMessage());
+                view.onRegistrationNumberError(throwable.getMessage());
             }
         });
     }
