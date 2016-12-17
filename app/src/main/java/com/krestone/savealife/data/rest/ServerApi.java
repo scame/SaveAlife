@@ -3,10 +3,12 @@ package com.krestone.savealife.data.rest;
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
+import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.ContactsStatusEntity;
+import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -32,4 +34,7 @@ public interface ServerApi {
 
     @POST("http://10.0.1.94:8080//updateCoordinates")
     Observable<ResponseBody> sendLocation(@Body LocationHolder locationHolder);
+
+    @POST("http://10.0.1.94:8080//objectsInArea")
+    Observable<MapObjectsEntity> sendMapObjectsRequest(@Body MapObjectsRequest mapObjectsRequest);
 }

@@ -3,11 +3,14 @@ package com.krestone.savealife.data.repository;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.location.LocationRequest;
+import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.rest.ServerApi;
 
@@ -47,7 +50,7 @@ public class LocationRepositoryImp implements LocationRepository {
 
     @Override
     public Observable<Location> startGettingLocationUpdates() {
-        return checkPermission() ? locationProvider.getUpdatedLocation(locationRequest)
+        return checkPermission() ? locationProvider.getUpdatedLocation(locationRequest).map(this::cacheLocation)
                                  : Observable.error(new RuntimeException("neededPermissions"));
     }
 
@@ -56,5 +59,12 @@ public class LocationRepositoryImp implements LocationRepository {
                 PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED;
+    }
+
+    private Location cacheLocation(Location location) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPrefs.edit().putFloat(context.getString(R.string.latitude_key), (float) location.getLatitude()).apply();
+        sharedPrefs.edit().putFloat(context.getString(R.string.longitude_key), (float) location.getLongitude()).apply();
+        return location;
     }
 }

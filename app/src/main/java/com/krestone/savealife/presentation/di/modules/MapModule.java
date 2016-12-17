@@ -2,8 +2,10 @@ package com.krestone.savealife.presentation.di.modules;
 
 
 import com.krestone.savealife.data.repository.LocationRepository;
+import com.krestone.savealife.data.repository.MapRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
+import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
 import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
@@ -19,8 +21,9 @@ public class MapModule {
     @Provides
     @PerActivity
     MapPresenter<MapPresenter.MapView> provideMapPresenter(LastKnownLocationUseCase lastKnownLocationUseCase,
-                                                           LocationUpdatesUseCase locationUpdatesUseCase) {
-        return new MapPresenterImp<>(lastKnownLocationUseCase, locationUpdatesUseCase);
+                                                           LocationUpdatesUseCase locationUpdatesUseCase,
+                                                           GetMapObjectsUseCase mapObjectsUseCase) {
+        return new MapPresenterImp<>(lastKnownLocationUseCase, locationUpdatesUseCase, mapObjectsUseCase);
     }
 
     @Provides
@@ -35,5 +38,12 @@ public class MapModule {
     LocationUpdatesUseCase provideLocationUpdatesUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
                                                          LocationRepository locationRepository) {
         return new LocationUpdatesUseCase(subscribeOn, observeOn, locationRepository);
+    }
+
+    @Provides
+    @PerActivity
+    GetMapObjectsUseCase provideMapObjectsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                                  MapRepository mapRepository) {
+        return new GetMapObjectsUseCase(subscribeOn, observeOn, mapRepository);
     }
 }
