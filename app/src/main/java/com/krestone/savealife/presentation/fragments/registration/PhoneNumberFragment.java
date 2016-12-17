@@ -36,7 +36,7 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     private PhoneNumberListener phoneNumberListener;
 
-    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
+    private ProgressDialog progressDialog;
 
     public interface PhoneNumberListener {
 
@@ -78,6 +78,7 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
     }
 
     protected void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Validating...");
         progressDialog.show();

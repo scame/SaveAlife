@@ -8,6 +8,8 @@ import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.data.repository.LocationRepositoryImp;
+import com.krestone.savealife.data.repository.MapRepository;
+import com.krestone.savealife.data.repository.MapRepositoryImpl;
 import com.krestone.savealife.data.repository.RegistrationRepository;
 import com.krestone.savealife.data.repository.RegistrationRepositoryImp;
 import com.krestone.savealife.data.rest.ServerApi;
@@ -25,8 +27,8 @@ public class RepositoriesModule {
     @Provides
     @Singleton
     LocationRepository provideLocationRepository(Context context, ReactiveLocationProvider locationProvider,
-                                                 LocationRequest locationRequest) {
-        return new LocationRepositoryImp(context, locationProvider, locationRequest);
+                                                 LocationRequest locationRequest, ServerApi serverApi) {
+        return new LocationRepositoryImp(context, locationProvider, locationRequest, serverApi);
     }
 
     @Provides
@@ -39,5 +41,11 @@ public class RepositoriesModule {
     @Singleton
     RegistrationRepository provideRegistrationRepository(ServerApi serverApi) {
         return new RegistrationRepositoryImp(serverApi);
+    }
+
+    @Provides
+    @Singleton
+    MapRepository provideMapRepository(ServerApi serverApi, Context context) {
+        return new MapRepositoryImpl(serverApi, context);
     }
 }

@@ -1,7 +1,6 @@
 package com.krestone.savealife.data.entities.requests;
 
 
-
 public class MapObjectsRequest {
 
     private double currentLat;

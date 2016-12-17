@@ -65,6 +65,7 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
         initPresenter();
         mapPresenter.requestLocationUpdates();
+        mapPresenter.requestMapObjects();
         mapView.onCreate(savedInstanceState);
         initializeMap();
         setupAutocompleteView();
@@ -148,6 +149,7 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
         }
     }
 
+    // TODO: add status icons
     private void handlePlainObject(MapObject mapObject) {
         if (mapObject.getRole().equals("driver")) {
             addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_cancel_black_24dp);

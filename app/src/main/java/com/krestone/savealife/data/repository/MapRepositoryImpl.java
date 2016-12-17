@@ -33,7 +33,7 @@ public class MapRepositoryImpl implements MapRepository {
     public Observable<MapObjectsEntity> getMapObjects() {
         return Observable.interval(updateIntervalSec, TimeUnit.SECONDS)
                 .flatMap(clockTick -> serverApi
-                        .sendMapObjectsRequest(getMapObjectsRequest())
+                        .sendMapObjectsRequest(getMapObjectsRequest(), "Basic Mjoy")
                         .retry(3));
     }
 

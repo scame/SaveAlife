@@ -15,6 +15,8 @@ import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LocationService extends Service {
 
@@ -31,7 +33,7 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        subscription =  locationRepository.startGettingLocationUpdates().subscribe(new LocationSubscriber());
+        subscription = locationRepository.startGettingLocationUpdates().subscribe(new LocationSubscriber());
         return START_STICKY;
     }
 
@@ -54,7 +56,12 @@ public class LocationService extends Service {
         @Override
         public void onNext(Location location) {
             super.onNext(location);
-            locationRepository.sendLocationToServer(new LocationHolder(location.getLatitude(), location.getLongitude()));
+            locationRepository.sendLocationToServer(new LocationHolder(location.getLatitude(), location.getLongitude()))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(responseBody -> Log.i("onxNext", "sent"),
+                            throwable -> Log.i("onxLocationErr", throwable.getLocalizedMessage())
+                    );
         }
 
         @Override

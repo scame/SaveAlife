@@ -33,8 +33,10 @@ public interface ServerApi {
     Observable<ResponseBody> sendPersonalInfo(@Body PersonalInfoHolder personalInfoHolder);
 
     @POST("http://10.0.1.94:8080//updateCoordinates")
-    Observable<ResponseBody> sendLocation(@Body LocationHolder locationHolder);
+    Observable<ResponseBody> sendLocation(@Body LocationHolder locationHolder,
+                                          @Header("Authorization") String token);
 
     @POST("http://10.0.1.94:8080//objectsInArea")
-    Observable<MapObjectsEntity> sendMapObjectsRequest(@Body MapObjectsRequest mapObjectsRequest);
+    Observable<MapObjectsEntity> sendMapObjectsRequest(@Body MapObjectsRequest mapObjectsRequest,
+                                                       @Header("Authorization") String token);
 }

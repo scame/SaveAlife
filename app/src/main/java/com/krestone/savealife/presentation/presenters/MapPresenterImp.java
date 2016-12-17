@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
-import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
 import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
+import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPresenter<T> {

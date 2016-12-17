@@ -33,7 +33,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
     @Inject
     VerificationPresenter<VerificationPresenter.VerificationView> presenter;
 
-    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
+    private ProgressDialog progressDialog;
 
     private VerificationListener verificationListener;
 
@@ -87,6 +87,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
     }
 
     private void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();

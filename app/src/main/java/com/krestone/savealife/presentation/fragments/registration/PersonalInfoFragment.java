@@ -46,7 +46,7 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
     @Inject
     PersonalInfoPresenter<PersonalInfoPresenter.PersonalInfoView> presenter;
 
-    private final ProgressDialog progressDialog = new ProgressDialog(getContext());
+    private ProgressDialog progressDialog;
 
     private String phoneNumber;
 
@@ -108,11 +108,18 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
     private void setupSignUpBtn() {
         signUpBtn.setOnClickListener(v -> {
             if (validate()) {
-                progressDialog.show();
+                showProgressDialog();
                 presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
                         passwordInput.getText().toString(), phoneNumber, qualificationSpinner.toString(), verifCode);
             }
         });
+    }
+
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Validating...");
+        progressDialog.show();
     }
 
     private void parseArgs() {

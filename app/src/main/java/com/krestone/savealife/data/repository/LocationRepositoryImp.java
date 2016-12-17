@@ -39,7 +39,7 @@ public class LocationRepositoryImp implements LocationRepository {
 
     @Override
     public Single<ResponseBody> sendLocationToServer(LocationHolder locationHolder) {
-        return serverApi.sendLocation(locationHolder).toSingle();
+        return serverApi.sendLocation(locationHolder, "Basic Mjoy").toSingle();
     }
 
     @Override
