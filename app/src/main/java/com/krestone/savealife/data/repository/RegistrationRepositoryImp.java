@@ -29,6 +29,6 @@ public class RegistrationRepositoryImp implements RegistrationRepository {
 
     @Override
     public Single<ResponseBody> sendPersonalInfo(PersonalInfoHolder personalInfoHolder) {
-        return serverApi.sendProfileInfo(personalInfoHolder).toSingle();
+        return serverApi.sendPersonalInfo(personalInfoHolder).toSingle();
     }
 }

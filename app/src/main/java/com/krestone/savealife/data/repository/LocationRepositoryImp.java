@@ -8,9 +8,13 @@ import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.location.LocationRequest;
+import com.krestone.savealife.data.entities.requests.LocationHolder;
+import com.krestone.savealife.data.rest.ServerApi;
 
+import okhttp3.ResponseBody;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
+import rx.Single;
 
 public class LocationRepositoryImp implements LocationRepository {
 
@@ -20,11 +24,19 @@ public class LocationRepositoryImp implements LocationRepository {
 
     private LocationRequest locationRequest;
 
+    private ServerApi serverApi;
+
     public LocationRepositoryImp(Context context, ReactiveLocationProvider locationProvider,
-                                 LocationRequest locationRequest) {
+                                 LocationRequest locationRequest, ServerApi serverApi) {
         this.context = context;
+        this.serverApi = serverApi;
         this.locationProvider = locationProvider;
         this.locationRequest = locationRequest;
+    }
+
+    @Override
+    public Single<ResponseBody> sendLocationToServer(LocationHolder locationHolder) {
+        return serverApi.sendLocation(locationHolder).toSingle();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.repository.LocationRepository;
 import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 
@@ -53,7 +54,7 @@ public class LocationService extends Service {
         @Override
         public void onNext(Location location) {
             super.onNext(location);
-            // TODO: send locations to the server
+            locationRepository.sendLocationToServer(new LocationHolder(location.getLatitude(), location.getLongitude()));
         }
 
         @Override

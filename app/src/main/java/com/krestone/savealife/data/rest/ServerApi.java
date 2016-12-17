@@ -2,6 +2,7 @@ package com.krestone.savealife.data.rest;
 
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
@@ -27,5 +28,8 @@ public interface ServerApi {
     Observable<ResponseBody> sendVerificationCode(@Body VerificationHolder verificationHolder);
 
     @POST("http://10.0.1.94:8080/fillProfile")
-    Observable<ResponseBody> sendProfileInfo(@Body PersonalInfoHolder personalInfoHolder);
+    Observable<ResponseBody> sendPersonalInfo(@Body PersonalInfoHolder personalInfoHolder);
+
+    @POST("http://10.0.1.94:8080//updateCoordinates")
+    Observable<ResponseBody> sendLocation(@Body LocationHolder locationHolder);
 }
