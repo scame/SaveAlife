@@ -1,18 +1,23 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.responses.MapObject;
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -23,6 +28,9 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,6 +53,8 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     private Marker currentLocationMarker;
 
     private LatLng latestPosition;
+
+    private final List<Marker> mapObjects = new ArrayList<>();
 
     @Nullable
     @Override
@@ -124,7 +134,52 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     @Override
     public void displayMapObjects(MapObjectsEntity mapObjectsEntity) {
+        removeOldMapObjects();
+        addMapObjectsToMap(mapObjectsEntity);
+    }
 
+    private void addMapObjectsToMap(MapObjectsEntity mapObjectsEntity) {
+        for (MapObject mapObject : mapObjectsEntity.getMapObjectList()) {
+            if (mapObject.isSos()) {
+                handleSosCase(mapObject);
+            } else {
+                handlePlainObject(mapObject);
+            }
+        }
+    }
+
+    private void handlePlainObject(MapObject mapObject) {
+        if (mapObject.getRole().equals("driver")) {
+            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_cancel_black_24dp);
+        } else if (mapObject.getRole().equals("person")) {
+            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_arrow_back_black_24dp);
+        } else if (mapObject.getRole().equals("ambulance")) {
+            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_near_me_black_24dp);
+        }
+    }
+
+    // TODO: should provide additional info dialog
+    private void handleSosCase(MapObject mapObject) {
+        addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_help_black_24dp);
+    }
+
+    private void addObjectMarker(double latitude, double longitude, int markerDrawable) {
+        mapObjects.add(mapboxMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .setIcon(getMapboxIcon(markerDrawable))));
+    }
+
+    private void removeOldMapObjects() {
+        for (Marker marker : mapObjects) {
+            marker.remove();
+        }
+        mapObjects.clear();
+    }
+
+    private Icon getMapboxIcon(int drawableId) {
+        IconFactory iconFactory = IconFactory.getInstance(getContext());
+        Drawable iconDrawable = ContextCompat.getDrawable(getContext(), drawableId);
+        return iconFactory.fromDrawable(iconDrawable);
     }
 
     @Override
