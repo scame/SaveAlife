@@ -51,4 +51,11 @@
 
     <string name="latitude_key">lat_key</string>
     <string name="longitude_key">long_key</string>
+
+    <string name="password">password</string>
+    <string name="phone_number">phone_number</string>
+    <string name="first_name">first_name</string>
+    <string name="last_name">last_name</string>
+    <string name="med_qualification">med_qualification</string>
+    <string name="current_token">current_token</string>
 </resources>
