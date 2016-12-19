@@ -36,6 +36,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 
 public class MapFragment extends Fragment implements MapPresenter.MapView {
 
@@ -52,22 +54,24 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     private Marker currentLocationMarker;
 
-    private LatLng latestPosition;
-
     private final List<Marker> mapObjects = new ArrayList<>();
+
+    @State
+    LatLng latestPosition;
+
+    @State
+    MapObjectsEntity mapObjectsEntity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.map_fragment_layout, container, false);
-
+        Icepick.restoreInstanceState(this, savedInstanceState);
         ButterKnife.bind(this, fragmentView);
 
         initPresenter();
-        mapPresenter.requestLocationUpdates();
-        mapPresenter.requestMapObjects();
-        mapView.onCreate(savedInstanceState);
         initializeMap();
+        mapView.onCreate(savedInstanceState);
         setupAutocompleteView();
 
         return fragmentView;
@@ -76,6 +80,10 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     private void initializeMap() {
         mapView.getMapAsync(mapboxMap1 -> {
             MapFragment.this.mapboxMap = mapboxMap1;
+            mapPresenter.requestLocationUpdates();
+            mapPresenter.requestMapObjects();
+
+            restoreMapObjects();
             if (latestPosition != null) {
                 updateMap(latestPosition.getLatitude(), latestPosition.getLongitude());
             }
@@ -135,6 +143,7 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
 
     @Override
     public void displayMapObjects(MapObjectsEntity mapObjectsEntity) {
+        this.mapObjectsEntity = mapObjectsEntity;
         removeOldMapObjects();
         addMapObjectsToMap(mapObjectsEntity);
     }
@@ -166,9 +175,11 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     }
 
     private void addObjectMarker(double latitude, double longitude, int markerDrawable) {
-        mapObjects.add(mapboxMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude))
-                .setIcon(getMapboxIcon(markerDrawable))));
+        if (mapboxMap != null) {
+            mapObjects.add(mapboxMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .setIcon(getMapboxIcon(markerDrawable))));
+        }
     }
 
     private void removeOldMapObjects() {
@@ -213,5 +224,12 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    private void restoreMapObjects() {
+        if (mapObjectsEntity != null) {
+            addMapObjectsToMap(mapObjectsEntity);
+        }
     }
 }
