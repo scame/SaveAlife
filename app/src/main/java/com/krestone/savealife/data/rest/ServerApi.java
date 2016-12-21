@@ -9,6 +9,7 @@ import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.ContactsStatusEntity;
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -44,4 +45,7 @@ public interface ServerApi {
 
     @GET("http://10.0.1.94:8080//signIn")
     Observable<Response> getAuthToken(@Header("Authorization") String encodedEntryData);
+
+    @GET("http://10.0.1.94:8080//signIn/profile")
+    Observable<SomeoneProfileEntity> getSomeoneProfileInfo(@Header("phoneNumber") String phoneNumber);
 }
