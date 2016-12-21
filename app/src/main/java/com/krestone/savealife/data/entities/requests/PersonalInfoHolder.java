@@ -14,6 +14,7 @@ public class PersonalInfoHolder {
 
     private String phoneNumber;
 
+    // it's a code sent by the server
     private String currentToken;
 
     public PersonalInfoHolder() { }

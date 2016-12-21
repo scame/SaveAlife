@@ -21,14 +21,14 @@ public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalI
                                  String medicalQualification, String verifCode) {
         personalInfoUseCase.setPersonalInfoHolder(new PersonalInfoHolder
                 (firstName, lastName, password, medicalQualification, phoneNumber, verifCode));
-        personalInfoUseCase.executeSingle(responseBody -> {
+        personalInfoUseCase.executeCompletable(() -> {
             if (view != null) {
                 view.onPersonalInfoSent();
             }
         }, throwable -> {
-            Log.i("onxPersInfoErr", throwable.getLocalizedMessage());
+            Log.i("onxPersInfoErr", throwable.toString());
             if (view != null) {
-                view.onPersonalInfoErr(throwable.getLocalizedMessage());
+                view.onPersonalInfoErr(throwable.toString());
             }
         });
     }

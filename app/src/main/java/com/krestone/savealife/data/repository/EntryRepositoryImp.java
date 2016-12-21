@@ -4,6 +4,7 @@ package com.krestone.savealife.data.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
@@ -12,17 +13,32 @@ import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.rest.ServerApi;
 
 import okhttp3.ResponseBody;
+import rx.Completable;
 import rx.Single;
 
-public class RegistrationRepositoryImp implements RegistrationRepository {
+;
+
+public class EntryRepositoryImp implements EntryRepository {
 
     private ServerApi serverApi;
 
     private Context context;
 
-    public RegistrationRepositoryImp(ServerApi serverApi, Context context) {
+    public EntryRepositoryImp(ServerApi serverApi, Context context) {
         this.serverApi = serverApi;
         this.context = context;
+    }
+
+    @Override
+    public Single<String> getAuthToken(String password, String phoneNumber) {
+        return serverApi.getAuthToken(encodeEntryData(password, phoneNumber))
+                .map(response -> response.header("x-auth-token", ""))
+                .toSingle();
+    }
+
+    private String encodeEntryData(String password, String phoneNumber) {
+        String numberAndPasswordStr = phoneNumber + ":" + password;
+        return "Basic " + new String(Base64.decode(numberAndPasswordStr.getBytes(), Base64.DEFAULT));
     }
 
     @Override
@@ -36,12 +52,22 @@ public class RegistrationRepositoryImp implements RegistrationRepository {
     }
 
     @Override
-    public Single<ResponseBody> sendPersonalInfo(PersonalInfoHolder personalInfoHolder) {
+    public Completable sendPersonalInfo(PersonalInfoHolder personalInfoHolder) {
         return serverApi.sendPersonalInfo(personalInfoHolder).toSingle()
-                .doOnSuccess(responseBody -> cacheEntryInfo(personalInfoHolder));
+                .flatMap(responseBody -> getAuthToken(personalInfoHolder.getPassword(), personalInfoHolder.getPhoneNumber()))
+                .map(this::cacheAuthToken)
+                .map(ignore -> cacheEntryInfo(personalInfoHolder))
+                .toCompletable();
     }
 
-    private void cacheEntryInfo(PersonalInfoHolder personalInfoHolder) {
+    private Completable cacheAuthToken(String token) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(context.getString(R.string.auth_token), token).apply();
+        return Completable.complete();
+    }
+
+
+    private Completable cacheEntryInfo(PersonalInfoHolder personalInfoHolder) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         editor.putString(getString(R.string.password), personalInfoHolder.getPassword()).apply();
@@ -50,6 +76,7 @@ public class RegistrationRepositoryImp implements RegistrationRepository {
         editor.putString(getString(R.string.last_name), personalInfoHolder.getLastName()).apply();
         editor.putString(getString(R.string.current_token), personalInfoHolder.getCurrentToken()).apply();
         editor.putString(getString(R.string.med_qualification), personalInfoHolder.getMedicalQualification()).apply();
+        return Completable.complete();
     }
 
     private String getString(int stringId) {

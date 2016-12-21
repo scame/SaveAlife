@@ -1,7 +1,7 @@
 package com.krestone.savealife.domain.usecases;
 
 
-import com.krestone.savealife.data.repository.RegistrationRepository;
+import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseSingle;
@@ -11,21 +11,21 @@ import rx.Single;
 
 public class VerificationUseCase extends UseCaseSingle<ResponseBody> {
 
-    private RegistrationRepository registrationRepository;
+    private EntryRepository entryRepository;
 
     private String phoneNumber;
 
     private String verifCode;
 
     public VerificationUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                               RegistrationRepository registrationRepository) {
+                               EntryRepository entryRepository) {
         super(subscribeOn, observeOn);
-        this.registrationRepository = registrationRepository;
+        this.entryRepository = entryRepository;
     }
 
     @Override
     protected Single<ResponseBody> getUseCaseSingle() {
-        return registrationRepository.sendVerificationCode(phoneNumber, verifCode);
+        return entryRepository.sendVerificationCode(phoneNumber, verifCode);
     }
 
     public void setData(String phoneNumber, String verifCode) {

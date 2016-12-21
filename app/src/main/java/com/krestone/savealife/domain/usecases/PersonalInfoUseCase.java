@@ -2,30 +2,30 @@ package com.krestone.savealife.domain.usecases;
 
 
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
-import com.krestone.savealife.data.repository.RegistrationRepository;
+import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
-import com.krestone.savealife.domain.usecases.base.UseCaseSingle;
+import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
 
-import okhttp3.ResponseBody;
-import rx.Single;
+import rx.Completable;
 
-public class PersonalInfoUseCase extends UseCaseSingle<ResponseBody> {
+public class PersonalInfoUseCase extends UseCaseCompletable {
 
-    private RegistrationRepository registrationRepository;
+    private EntryRepository entryRepository;
 
     private PersonalInfoHolder personalInfoHolder;
 
     public PersonalInfoUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                               RegistrationRepository registrationRepository) {
+                               EntryRepository entryRepository) {
         super(subscribeOn, observeOn);
-        this.registrationRepository = registrationRepository;
+        this.entryRepository = entryRepository;
     }
 
     @Override
-    protected Single<ResponseBody> getUseCaseSingle() {
-        return registrationRepository.sendPersonalInfo(personalInfoHolder);
+    protected Completable getUseCaseCompletable() {
+        return entryRepository.sendPersonalInfo(personalInfoHolder);
     }
+
 
     public void setPersonalInfoHolder(PersonalInfoHolder personalInfoHolder) {
         this.personalInfoHolder = personalInfoHolder;

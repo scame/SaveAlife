@@ -1,7 +1,7 @@
 package com.krestone.savealife.presentation.di.modules;
 
 
-import com.krestone.savealife.data.repository.RegistrationRepository;
+import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.RegistrationNumberUseCase;
@@ -26,7 +26,7 @@ public class RegistrationNumberModule {
     @Provides
     @PerActivity
     RegistrationNumberUseCase provideRegistrationNumberUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                                               RegistrationRepository registrationRepository) {
-        return new RegistrationNumberUseCase(subscribeOn, observeOn, registrationRepository);
+                                                               EntryRepository entryRepository) {
+        return new RegistrationNumberUseCase(subscribeOn, observeOn, entryRepository);
     }
 }

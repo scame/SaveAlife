@@ -1,7 +1,7 @@
 package com.krestone.savealife.presentation.di.modules;
 
 
-import com.krestone.savealife.data.repository.RegistrationRepository;
+import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.VerificationUseCase;
@@ -24,7 +24,7 @@ public class VerificationModule {
     @Provides
     @PerActivity
     VerificationUseCase provideVerificationUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                                   RegistrationRepository registrationRepository) {
-        return new VerificationUseCase(subscribeOn, observeOn, registrationRepository);
+                                                   EntryRepository entryRepository) {
+        return new VerificationUseCase(subscribeOn, observeOn, entryRepository);
     }
 }
