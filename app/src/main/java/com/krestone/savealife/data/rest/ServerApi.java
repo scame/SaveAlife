@@ -14,6 +14,7 @@ import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -25,6 +26,9 @@ public interface ServerApi {
     @POST("http://10.0.1.94:8080/addContacts")
     Observable<ContactsStatusEntity> getContactsStatus(@Body ContactsNumbersHolder numbersHolder,
                                                        @Header("Authorization") String tokenHeader);
+
+    @DELETE("http://10.0.1.94:8080/deleteContact")
+    Observable<ResponseBody> deleteContact(@Body ContactsNumbersHolder numbersHolder);
 
     @POST("http://10.0.1.94:8080/signUp")
     Observable<ResponseBody> sendRegistrationNumber(@Body PhoneNumberHolder phoneNumber);

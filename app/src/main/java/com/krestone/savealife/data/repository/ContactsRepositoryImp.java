@@ -45,6 +45,11 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
+    public Completable deleteContact(ContactsNumbersHolder contactsNumbersHolder) {
+        return serverApi.deleteContact(contactsNumbersHolder).toCompletable();
+    }
+
+    @Override
     public Single<List<ContactModel>> getEmergencyContacts() {
         return Single.defer(() -> Single.just(databaseHelper.getAllEmergencyContacts()));
     }
