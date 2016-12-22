@@ -1,6 +1,8 @@
 package com.krestone.savealife.data.di;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.krestone.savealife.data.rest.ServerApi;
 
 import java.util.concurrent.TimeUnit;
@@ -33,14 +35,23 @@ public class NetworkingModule {
 
     @Singleton
     @Provides
-    Retrofit provideRetrofit(OkHttpClient client) {
+    Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
+
+    @Singleton
+    @Provides
+    Gson provideGson() {
+        return new GsonBuilder()
+                .setLenient()
+                .create();
+    }
+
 
     @Singleton
     @Provides

@@ -11,8 +11,8 @@ import com.krestone.savealife.data.entities.responses.ContactsStatusEntity;
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -23,7 +23,7 @@ import rx.Observable;
 public interface ServerApi {
 
 
-    @POST("http://10.0.1.94:8080/addContacts")
+    @POST("http://10.0.1.94:8080/contactsInApp")
     Observable<ContactsStatusEntity> getContactsStatus(@Body ContactsNumbersHolder numbersHolder,
                                                        @Header("Authorization") String tokenHeader);
 
@@ -48,7 +48,7 @@ public interface ServerApi {
                                                        @Header("Authorization") String token);
 
     @GET("http://10.0.1.94:8080//signIn")
-    Observable<Response> getAuthToken(@Header("Authorization") String encodedEntryData);
+    Observable<Response<ResponseBody>> getAuthToken(@Header("Authorization") String encodedEntryData);
 
     @GET("http://10.0.1.94:8080//signIn/profile")
     Observable<SomeoneProfileEntity> getSomeoneProfileInfo(@Header("phoneNumber") String phoneNumber);

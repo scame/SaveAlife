@@ -16,7 +16,7 @@ import okhttp3.ResponseBody;
 import rx.Completable;
 import rx.Single;
 
-;
+
 
 public class EntryRepositoryImp implements EntryRepository {
 
@@ -32,13 +32,13 @@ public class EntryRepositoryImp implements EntryRepository {
     @Override
     public Single<String> getAuthToken(String password, String phoneNumber) {
         return serverApi.getAuthToken(encodeEntryData(password, phoneNumber))
-                .map(response -> response.header("x-auth-token", ""))
+                .map(response -> response.headers().get("x-auth-token"))
                 .toSingle();
     }
 
     private String encodeEntryData(String password, String phoneNumber) {
         String numberAndPasswordStr = phoneNumber + ":" + password;
-        return "Basic " + new String(Base64.decode(numberAndPasswordStr.getBytes(), Base64.DEFAULT));
+        return "Basic " + Base64.encodeToString(numberAndPasswordStr.getBytes(), Base64.NO_WRAP);
     }
 
     @Override

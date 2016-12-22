@@ -110,7 +110,8 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
             if (validate()) {
                 showProgressDialog();
                 presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
-                        passwordInput.getText().toString(), phoneNumber, qualificationSpinner.toString(), verifCode);
+                        passwordInput.getText().toString(), phoneNumber,
+                        String.valueOf(qualificationSpinner.getItems().get(qualificationSpinner.getSelectedIndex())), verifCode);
             }
         });
     }
