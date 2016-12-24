@@ -8,4 +8,5 @@ import rx.Single;
 public interface ProfileRepository {
 
     Single<SomeoneProfileEntity> getSomeoneProfileInfo(String phoneNumber);
+
 }

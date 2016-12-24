@@ -5,10 +5,6 @@ public class SomeoneProfileEntity {
 
     private String phoneNumber;
 
-    private boolean enable;
-
-    private String email;
-
     private String firstName;
 
     private String lastName;
@@ -19,16 +15,18 @@ public class SomeoneProfileEntity {
 
     private String sosTime;
 
+    private boolean sos;
+
+    public boolean isSos() {
+        return sos;
+    }
+
+    public void setSos(boolean sos) {
+        this.sos = sos;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setFirstName(String firstName) {
@@ -53,14 +51,6 @@ public class SomeoneProfileEntity {
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getFirstName() {

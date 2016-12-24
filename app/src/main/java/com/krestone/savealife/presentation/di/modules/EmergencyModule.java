@@ -23,7 +23,8 @@ public class EmergencyModule {
 
     @Provides
     @PerActivity
-    GetEmergencyContactsUseCase provideEmergencyUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, ContactsRepository repository) {
-        return new GetEmergencyContactsUseCase(subscribeOn, observeOn, repository);
+    GetEmergencyContactsUseCase provideGetEmergencyContactsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                                                   ContactsRepository contactsRepository) {
+        return new GetEmergencyContactsUseCase(subscribeOn, observeOn, contactsRepository);
     }
 }

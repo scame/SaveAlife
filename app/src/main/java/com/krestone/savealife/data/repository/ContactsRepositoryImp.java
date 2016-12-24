@@ -3,11 +3,13 @@ package com.krestone.savealife.data.repository;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 
+import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
-import com.krestone.savealife.data.entities.responses.ContactsStatusEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 import com.krestone.savealife.presentation.models.ContactModel;
@@ -45,14 +47,35 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable deleteContact(ContactsNumbersHolder contactsNumbersHolder) {
-        return serverApi.deleteContact(contactsNumbersHolder).toCompletable();
+    public Single<ContactsNumbersHolder> getContactsInApp() {
+        return serverApi.getContactsInApp(getContactsNumbers(), getAuthToken()).toSingle();
+    }
+
+    private ContactsNumbersHolder getContactsNumbers() {
+        List<String> numbers = new ArrayList<>();
+        List<ContactModel> detailedContacts = queryContacts();
+
+        for (ContactModel contactModel : detailedContacts) {
+            numbers.add(contactModel.getMobileNumber());
+        }
+        return new ContactsNumbersHolder(numbers);
     }
 
     @Override
-    public Single<List<ContactModel>> getEmergencyContacts() {
-        return Single.defer(() -> Single.just(databaseHelper.getAllEmergencyContacts()));
+    public Completable addToEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
+        return serverApi.addToEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
     }
+
+    @Override
+    public Single<ContactsNumbersHolder> getEmergencyContacts() {
+        return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
+    }
+
+    @Override
+    public Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
+        return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
+    }
+
 
     @Override
     public Completable updateEmergencyContacts(List<ContactModel> contacts) {
@@ -65,19 +88,11 @@ public class ContactsRepositoryImp implements ContactsRepository {
         });
     }
 
-    @Override
-    public Single<ContactsStatusEntity> getContactsStatus() {
-        return getContacts().toObservable().flatMap(Observable::from)
-                .map(ContactModel::getMobileNumber)
-                .toList().map(ContactsNumbersHolder::new)
-                .flatMap(numbersHolder -> serverApi.getContactsStatus(numbersHolder, "Basic MTox"))
-                .toSingle();
-    }
 
     @Override
     public Single<List<ContactModel>> getContacts() {
         return Single.zip(getEmergencyContacts(), Single.just(queryContacts()), (emergencyContacts, allContacts) -> {
-            contactContacts(emergencyContacts, allContacts);
+            //contactContacts(emergencyContacts, allContacts);
             return allContacts;
         });
     }
@@ -121,5 +136,10 @@ public class ContactsRepositoryImp implements ContactsRepository {
         }
 
         return contacts;
+    }
+
+    private String getAuthToken() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPrefs.getString(context.getString(R.string.auth_token), "");
     }
 }

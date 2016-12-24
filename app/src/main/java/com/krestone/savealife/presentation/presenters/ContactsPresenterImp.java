@@ -4,7 +4,7 @@ package com.krestone.savealife.presentation.presenters;
 import android.util.Log;
 
 import com.krestone.savealife.domain.usecases.GetAllContactsUseCase;
-import com.krestone.savealife.domain.usecases.GetContactsStatusUseCase;
+import com.krestone.savealife.domain.usecases.GetContactsInAppUseCase;
 import com.krestone.savealife.domain.usecases.UpdateEmergencyContactsUseCase;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -17,7 +17,7 @@ public class ContactsPresenterImp<T extends ContactsPresenter.ContactsView> impl
 
     private UpdateEmergencyContactsUseCase updateEmergencyContactsUseCase;
 
-    private GetContactsStatusUseCase getContactsStatusUseCase;
+    private GetContactsInAppUseCase getContactsInAppUseCase;
 
     private final List<ContactModel> cachedContacts = new ArrayList<>();
 
@@ -25,10 +25,10 @@ public class ContactsPresenterImp<T extends ContactsPresenter.ContactsView> impl
 
     public ContactsPresenterImp(GetAllContactsUseCase getAllContactsUseCase,
                                 UpdateEmergencyContactsUseCase updateEmergencyContactsUseCase,
-                                GetContactsStatusUseCase getContactsStatusUseCase) {
+                                GetContactsInAppUseCase getContactsInAppUseCase) {
         this.getAllContactsUseCase = getAllContactsUseCase;
         this.updateEmergencyContactsUseCase = updateEmergencyContactsUseCase;
-        this.getContactsStatusUseCase = getContactsStatusUseCase;
+        this.getContactsInAppUseCase = getContactsInAppUseCase;
     }
 
     @Override

@@ -9,20 +9,21 @@ import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
 
 import rx.Completable;
 
-public class DeleteContactUseCase extends UseCaseCompletable {
+public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     private ContactsRepository contactsRepository;
 
     private ContactsNumbersHolder contactsNumbersHolder;
 
-    public DeleteContactUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, ContactsRepository contactsRepository) {
+    public AddToEmergencyListUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                     ContactsRepository contactsRepository) {
         super(subscribeOn, observeOn);
         this.contactsRepository = contactsRepository;
     }
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.deleteContact(contactsNumbersHolder);
+        return contactsRepository.addToEmergencyList(contactsNumbersHolder);
     }
 
     public ContactsNumbersHolder getContactsNumbersHolder() {

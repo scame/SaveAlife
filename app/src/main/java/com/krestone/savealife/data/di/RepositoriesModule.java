@@ -53,7 +53,7 @@ public class RepositoriesModule {
 
     @Provides
     @Singleton
-    ProfileRepository provideSomeoneProfileInfo(ServerApi serverApi) {
-        return new ProfileRepositoryImpl(serverApi);
+    ProfileRepository provideProfileRepository(ServerApi serverApi, Context context) {
+        return new ProfileRepositoryImpl(serverApi, context);
     }
 }

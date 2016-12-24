@@ -19,7 +19,7 @@ public class EmergencyPresenterImp<T extends EmergencyPresenter.EmergencyView> i
     public void requestEmergencyContacts() {
         getEmergencyContactsUseCase.executeSingle(contactModels -> {
             if (view != null) {
-                view.displayEmergencyList(contactModels);
+                //view.displayEmergencyList(contactModels);
             }
         }, throwable -> Log.i("onxEmergencyErr", throwable.getLocalizedMessage()));
     }
