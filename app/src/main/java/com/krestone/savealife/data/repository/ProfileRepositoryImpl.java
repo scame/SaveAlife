@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
+import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 
+import rx.Completable;
 import rx.Single;
 
 public class ProfileRepositoryImpl implements ProfileRepository {
@@ -27,6 +30,15 @@ public class ProfileRepositoryImpl implements ProfileRepository {
         return serverApi.getSomeoneProfileInfo(phoneNumber, getAuthToken()).toSingle();
     }
 
+    @Override
+    public Single<MyProfileInfoEntity> getMyProfileInfo() {
+        return serverApi.getMyProfileInfo(getAuthToken()).toSingle();
+    }
+
+    @Override
+    public Completable updateMyProfileInfo(UpdateMyProfileInfoRequest updateMyProfileInfoRequest) {
+        return serverApi.updateMyProfileInfo(getAuthToken(), updateMyProfileInfoRequest).toCompletable();
+    }
 
     private String getAuthToken() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
