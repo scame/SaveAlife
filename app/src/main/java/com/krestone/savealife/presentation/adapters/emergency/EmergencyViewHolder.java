@@ -16,7 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BaseEmergencyViewHolder extends RecyclerView.ViewHolder {
+public class EmergencyViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.contact_name)
     TextView contactName;
@@ -26,13 +26,13 @@ public class BaseEmergencyViewHolder extends RecyclerView.ViewHolder {
 
     private Context context;
 
-    public BaseEmergencyViewHolder(View itemView, Context context) {
+    public EmergencyViewHolder(View itemView, Context context) {
         super(itemView);
         this.context = context;
         ButterKnife.bind(this, itemView);
     }
 
-    protected void handleProfileImage(List<ContactModel> contacts, int position) {
+    private void handleProfileImage(List<ContactModel> contacts, int position) {
         String thumbnailUri = contacts.get(position).getThumbnailUri();
         if (thumbnailUri != null && !thumbnailUri.equals("")) {
             contactImage.setImageURI(Uri.parse(thumbnailUri));

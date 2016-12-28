@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:text="@string/emergency_header"
+        android:textSize="@dimen/text_size_medium" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/emergency_contacts_rv"
         android:layout_width="match_parent"

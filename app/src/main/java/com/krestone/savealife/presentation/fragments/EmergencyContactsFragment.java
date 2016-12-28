@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,8 +79,9 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     public void displayEmergencyList(List<ContactModel> contacts) {
         this.contacts = contacts;
 
-        contactsAdapter = new EmergencyContactsAdapter(contacts, getContext(), v -> Log.i("onxInvite", "click"));
+        contactsAdapter = new EmergencyContactsAdapter(contacts, getContext());
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);
     }
 
