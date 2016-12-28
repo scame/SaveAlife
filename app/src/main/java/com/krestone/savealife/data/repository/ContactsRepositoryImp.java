@@ -11,6 +11,7 @@ import android.provider.ContactsContract;
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.mappers.NumbersToContactsMapper;
+import com.krestone.savealife.data.mappers.PossibleEmergencyContactsFilter;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 import rx.Completable;
 import rx.Observable;
+import rx.Scheduler;
 import rx.Single;
 
 
@@ -40,10 +42,26 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private NumbersToContactsMapper numbersToContactsMapper;
 
-    public ContactsRepositoryImp(Context context, ServerApi serverApi, NumbersToContactsMapper numbersToContactsMapper) {
+    private PossibleEmergencyContactsFilter possibleEmergencyContactsFilter;
+
+    private Scheduler scheduler;
+
+    public ContactsRepositoryImp(Context context, ServerApi serverApi, NumbersToContactsMapper numbersToContactsMapper,
+                                 PossibleEmergencyContactsFilter possibleEmergencyContactsFilter,
+                                 Scheduler scheduler) {
         this.context = context;
         this.serverApi = serverApi;
+        this.scheduler = scheduler;
         this.numbersToContactsMapper = numbersToContactsMapper;
+        this.possibleEmergencyContactsFilter = possibleEmergencyContactsFilter;
+    }
+
+    @Override
+    public Single<List<ContactModel>> getPossibleEmergencyContacts() {
+        return Single.zip(getContactsInApp().subscribeOn(scheduler),
+                serverApi.getEmergencyContacts(getAuthToken()).subscribeOn(scheduler).toSingle(),
+                possibleEmergencyContactsFilter::filter)
+                .map(filteredContactsNumbers -> numbersToContactsMapper.map(filteredContactsNumbers, queryContacts()));
     }
 
     @Override
@@ -68,7 +86,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Single<List<ContactModel>> getEmergencyContacts() {
-        return Observable.zip(serverApi.getEmergencyContacts(getAuthToken()), Observable.just(queryContacts()),
+        return Observable.zip(serverApi.getEmergencyContacts(getAuthToken()).subscribeOn(scheduler),
+                Observable.just(queryContacts()).subscribeOn(scheduler),
                 numbersToContactsMapper::map).toSingle();
     }
 

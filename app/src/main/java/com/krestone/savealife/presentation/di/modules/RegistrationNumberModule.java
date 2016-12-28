@@ -4,7 +4,7 @@ package com.krestone.savealife.presentation.di.modules;
 import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
-import com.krestone.savealife.domain.usecases.RegistrationNumberUseCase;
+import com.krestone.savealife.domain.usecases.entry.RegistrationNumberUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenter;
 import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenterImp;

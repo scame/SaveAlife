@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
-import com.krestone.savealife.domain.usecases.RegistrationNumberUseCase;
+import com.krestone.savealife.domain.usecases.entry.RegistrationNumberUseCase;
 
 public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresenter.RegistrationNumberView>
         implements RegistrationNumberPresenter<T> {

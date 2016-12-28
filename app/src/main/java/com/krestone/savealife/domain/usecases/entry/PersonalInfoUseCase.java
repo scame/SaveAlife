@@ -1,4 +1,4 @@
-package com.krestone.savealife.domain.usecases;
+package com.krestone.savealife.domain.usecases.entry;
 
 
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;

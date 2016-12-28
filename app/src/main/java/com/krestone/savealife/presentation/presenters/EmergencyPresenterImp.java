@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
-import com.krestone.savealife.domain.usecases.GetEmergencyContactsUseCase;
+import com.krestone.savealife.domain.usecases.contacts.GetEmergencyContactsUseCase;
 
 public class EmergencyPresenterImp<T extends EmergencyPresenter.EmergencyView> implements EmergencyPresenter<T> {
 

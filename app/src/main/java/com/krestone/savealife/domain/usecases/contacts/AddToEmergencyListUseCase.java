@@ -1,4 +1,4 @@
-package com.krestone.savealife.domain.usecases;
+package com.krestone.savealife.domain.usecases.contacts;
 
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
@@ -9,20 +9,21 @@ import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
 
 import rx.Completable;
 
-public class DeleteFromEmergencyListUseCase extends UseCaseCompletable {
+public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     private ContactsRepository contactsRepository;
 
     private ContactsNumbersHolder contactsNumbersHolder;
 
-    public DeleteFromEmergencyListUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, ContactsRepository contactsRepository) {
+    public AddToEmergencyListUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                     ContactsRepository contactsRepository) {
         super(subscribeOn, observeOn);
         this.contactsRepository = contactsRepository;
     }
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.deleteFromEmergencyList(contactsNumbersHolder);
+        return contactsRepository.addToEmergencyList(contactsNumbersHolder);
     }
 
     public ContactsNumbersHolder getContactsNumbersHolder() {

@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
-import com.krestone.savealife.domain.usecases.VerificationUseCase;
+import com.krestone.savealife.domain.usecases.entry.VerificationUseCase;
 
 public class VerificationPresenterImpl<T extends VerificationPresenter.VerificationView> implements VerificationPresenter<T> {
 

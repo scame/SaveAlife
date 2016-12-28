@@ -1,4 +1,4 @@
-package com.krestone.savealife.domain.usecases;
+package com.krestone.savealife.domain.usecases.contacts;
 
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;

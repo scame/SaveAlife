@@ -4,7 +4,7 @@ package com.krestone.savealife.presentation.presenters;
 import android.util.Log;
 
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
-import com.krestone.savealife.domain.usecases.PersonalInfoUseCase;
+import com.krestone.savealife.domain.usecases.entry.PersonalInfoUseCase;
 
 public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalInfoView> implements PersonalInfoPresenter<T> {
 

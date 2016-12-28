@@ -11,6 +11,8 @@ import rx.Single;
 
 public interface ContactsRepository {
 
+    Single<List<ContactModel>> getPossibleEmergencyContacts();
+
     Single<List<ContactModel>> getContacts();
 
     Single<ContactsNumbersHolder> getContactsInApp();
