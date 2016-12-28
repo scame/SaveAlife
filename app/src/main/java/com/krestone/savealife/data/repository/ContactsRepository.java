@@ -13,13 +13,11 @@ public interface ContactsRepository {
 
     Single<List<ContactModel>> getContacts();
 
-    Completable updateEmergencyContacts(List<ContactModel> contacts);
-
     Single<ContactsNumbersHolder> getContactsInApp();
 
     Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder);
 
     Completable addToEmergencyList(ContactsNumbersHolder contactsNumbersHolder);
 
-    Single<ContactsNumbersHolder> getEmergencyContacts();
+    Single<List<ContactModel>> getEmergencyContacts();
 }

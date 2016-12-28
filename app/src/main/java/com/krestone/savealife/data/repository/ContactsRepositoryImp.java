@@ -10,8 +10,8 @@ import android.provider.ContactsContract;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.mappers.NumbersToContactsMapper;
 import com.krestone.savealife.data.rest.ServerApi;
-import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.ArrayList;
@@ -38,12 +38,12 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private Context context;
 
-    private SaveAlifeDatabaseHelper databaseHelper;
+    private NumbersToContactsMapper numbersToContactsMapper;
 
-    public ContactsRepositoryImp(Context context, SaveAlifeDatabaseHelper databaseHelper, ServerApi serverApi) {
+    public ContactsRepositoryImp(Context context, ServerApi serverApi, NumbersToContactsMapper numbersToContactsMapper) {
         this.context = context;
         this.serverApi = serverApi;
-        this.databaseHelper = databaseHelper;
+        this.numbersToContactsMapper = numbersToContactsMapper;
     }
 
     @Override
@@ -67,8 +67,9 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Single<ContactsNumbersHolder> getEmergencyContacts() {
-        return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
+    public Single<List<ContactModel>> getEmergencyContacts() {
+        return Observable.zip(serverApi.getEmergencyContacts(getAuthToken()), Observable.just(queryContacts()),
+                numbersToContactsMapper::map).toSingle();
     }
 
     @Override
@@ -76,39 +77,9 @@ public class ContactsRepositoryImp implements ContactsRepository {
         return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
     }
 
-
-    @Override
-    public Completable updateEmergencyContacts(List<ContactModel> contacts) {
-        return Completable.defer(() -> {
-            Observable.from(contacts).filter(ContactModel::isInEmergencyList).toList().toSingle().subscribe(contactModels -> {
-                databaseHelper.deleteAllContacts();
-                databaseHelper.addContacts(contactModels);
-            });
-            return Completable.complete();
-        });
-    }
-
-
     @Override
     public Single<List<ContactModel>> getContacts() {
-        return Single.zip(getEmergencyContacts(), Single.just(queryContacts()), (emergencyContacts, allContacts) -> {
-            //contactContacts(emergencyContacts, allContacts);
-            return allContacts;
-        });
-    }
-
-    // TODO: should be done through contact ids, read below
-    private void contactContacts(List<ContactModel> emergencyContacts, List<ContactModel> allContacts) {
-        for (ContactModel emergencyContact : emergencyContacts) {
-            for (ContactModel plainContact : allContacts) {
-                if (plainContact.getMobileNumber().equals(emergencyContact.getMobileNumber()) &&
-                        plainContact.getName().equals(emergencyContact.getName())) {
-                    plainContact.setInApp(emergencyContact.isInApp());
-                    plainContact.setInEmergencyList(emergencyContact.isInEmergencyList());
-                    break;
-                }
-            }
-        }
+        return Single.defer(() -> Single.just(queryContacts()));
     }
 
     // TODO: duplicates are possible when a contact has more than one number
