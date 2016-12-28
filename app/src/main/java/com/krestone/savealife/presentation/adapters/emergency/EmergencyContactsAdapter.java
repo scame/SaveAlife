@@ -26,7 +26,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.emergency_contact_item_in_app, parent, false);
+        View itemView = inflater.inflate(R.layout.emergency_contact_item, parent, false);
 
         return new EmergencyViewHolder(itemView, context);
     }

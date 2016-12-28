@@ -18,14 +18,14 @@ import android.widget.TextView;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
-import com.krestone.savealife.presentation.di.components.ContactsComponent;
+import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
-import com.krestone.savealife.presentation.di.modules.ContactsModule;
+import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
-import com.krestone.savealife.presentation.fragments.ContactsFragment;
+import com.krestone.savealife.presentation.fragments.AddToEmergencyListFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
@@ -72,7 +72,7 @@ public class DrawerActivity extends AppCompatActivity implements
 
     private MapComponent mapComponent;
 
-    private ContactsComponent contactsComponent;
+    private AddToEmergencyListComponent addToEmergencyListComponent;
 
     private EmergencyComponent emergencyComponent;
 
@@ -166,7 +166,7 @@ public class DrawerActivity extends AppCompatActivity implements
     public void onEditEmergencyListClick() {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.drawer_activity_fl, new ContactsFragment(), CONTACTS_FRAG_TAG)
+                .replace(R.id.drawer_activity_fl, new AddToEmergencyListFragment(), CONTACTS_FRAG_TAG)
                 .commit();
     }
 
@@ -205,11 +205,12 @@ public class DrawerActivity extends AppCompatActivity implements
         return mapComponent;
     }
 
-    public ContactsComponent provideContactsComponent() {
-        if (contactsComponent == null) {
-            contactsComponent = SaveAlifeApplication.getAppComponent().provideContactsSubcomponent(new ContactsModule());
+    public AddToEmergencyListComponent provideContactsComponent() {
+        if (addToEmergencyListComponent == null) {
+            addToEmergencyListComponent = SaveAlifeApplication.getAppComponent()
+                    .provideAddToEmergencyListSubcomponent(new AddToEmergencyListModule());
         }
-        return contactsComponent;
+        return addToEmergencyListComponent;
     }
 
     public EmergencyComponent provideEmergencyComponent() {
