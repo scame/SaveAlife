@@ -13,18 +13,6 @@ public class SomeoneProfileEntity {
 
     private String medicalQualification;
 
-    private String sosTime;
-
-    private boolean sos;
-
-    public boolean isSos() {
-        return sos;
-    }
-
-    public void setSos(boolean sos) {
-        this.sos = sos;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -45,10 +33,6 @@ public class SomeoneProfileEntity {
         this.medicalQualification = medicalQualification;
     }
 
-    public void setSosTime(String sosTime) {
-        this.sosTime = sosTime;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -67,9 +51,5 @@ public class SomeoneProfileEntity {
 
     public String getMedicalQualification() {
         return medicalQualification;
-    }
-
-    public String getSosTime() {
-        return sosTime;
     }
 }

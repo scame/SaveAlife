@@ -12,7 +12,7 @@ public class UpdateMyProfileInfoRequest {
 
     private String medicalQualification;
 
-    private String oldPassword;
+    private String password;
 
     private String newPassword;
 
@@ -48,12 +48,12 @@ public class UpdateMyProfileInfoRequest {
         this.medicalQualification = medicalQualification;
     }
 
-    public String getOldPassword() {
-        return oldPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNewPassword() {

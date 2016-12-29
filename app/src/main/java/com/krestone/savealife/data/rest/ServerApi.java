@@ -58,14 +58,14 @@ public interface ServerApi {
     @GET("http://10.0.1.94:8080//signIn")
     Observable<Response<ResponseBody>> getAuthToken(@Header("Authorization") String encodedEntryData);
 
-    @GET("http://10.0.1.94:8080//uses/profileInfo")
+    @GET("http://10.0.1.94:8080//profileInfo")
     Observable<SomeoneProfileEntity> getSomeoneProfileInfo(@Header("x-auth-token") String token,
                                                            @Header("phoneNumber") String phoneNumber);
 
     @GET("http://10.0.1.94:8080//myProfileInfo")
     Observable<MyProfileInfoEntity> getMyProfileInfo(@Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080//uses/profileInfo")
+    @POST("http://10.0.1.94:8080//updateProfile")
     Observable<ResponseBody> updateMyProfileInfo(@Header("x-auth-token") String token,
                                                  @Body UpdateMyProfileInfoRequest infoBody);
 }

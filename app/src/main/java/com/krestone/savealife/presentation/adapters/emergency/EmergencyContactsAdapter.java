@@ -33,7 +33,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        ((EmergencyViewHolder) holder).bindHolder(contacts, position);
     }
 
     @Override

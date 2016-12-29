@@ -27,7 +27,7 @@ public class ProfileRepositoryImpl implements ProfileRepository {
 
     @Override
     public Single<SomeoneProfileEntity> getSomeoneProfileInfo(String phoneNumber) {
-        return serverApi.getSomeoneProfileInfo(phoneNumber, getAuthToken()).toSingle();
+        return serverApi.getSomeoneProfileInfo(getAuthToken(), phoneNumber).toSingle();
     }
 
     @Override
