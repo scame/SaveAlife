@@ -114,4 +114,10 @@ public class VerificationFragment extends Fragment implements VerificationPresen
     private void parsePhoneNumber() {
         phoneNumber = getArguments().getString(getClass().getCanonicalName(), "");
     }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
+    }
 }

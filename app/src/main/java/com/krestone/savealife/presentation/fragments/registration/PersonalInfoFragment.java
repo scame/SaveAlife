@@ -157,4 +157,10 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
 
         return valid;
     }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
+    }
 }

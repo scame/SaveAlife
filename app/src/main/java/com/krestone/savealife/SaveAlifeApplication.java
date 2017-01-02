@@ -13,6 +13,8 @@ import com.mapbox.mapboxsdk.MapboxAccountManager;
 
 public class SaveAlifeApplication extends Application {
 
+    public static SaveAlifeApplication application;
+
     private static ApplicationComponent applicationComponent;
 
     private SocketTest socketTest;
@@ -21,6 +23,7 @@ public class SaveAlifeApplication extends Application {
     public void onCreate() {
         super.onCreate();
         socketTest = new SocketTest();
+        SaveAlifeApplication.application = this;
         MapboxAccountManager.start(this, getString(R.string.default_access_token));
         startService(new Intent(this, LocationService.class));
         buildAppComponent();

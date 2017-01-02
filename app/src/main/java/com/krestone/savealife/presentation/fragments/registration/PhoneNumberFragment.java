@@ -109,4 +109,10 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
         progressDialog.dismiss();
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
+    }
 }

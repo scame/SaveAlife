@@ -3,7 +3,10 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.domain.usecases.entry.RegistrationNumberUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 
 public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresenter.RegistrationNumberView>
         implements RegistrationNumberPresenter<T> {
@@ -18,7 +21,15 @@ public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresente
 
     @Override
     public void sendRegistrationNumber(String number) {
-        registrationNumberUseCase.setPhoneNumber(number);
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            registrationNumberUseCase.setPhoneNumber(number);
+            sendRegistrationNumber();
+        } else if (view != null) {
+            view.onRegistrationNumberError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void sendRegistrationNumber() {
         registrationNumberUseCase.executeSingle(responseBody -> {
             if (view != null) {
                 view.onRegistrationNumberSent();

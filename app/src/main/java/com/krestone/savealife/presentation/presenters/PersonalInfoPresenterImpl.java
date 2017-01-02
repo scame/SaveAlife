@@ -3,8 +3,11 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.domain.usecases.entry.PersonalInfoUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 
 public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalInfoView> implements PersonalInfoPresenter<T> {
 
@@ -19,8 +22,16 @@ public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalI
     @Override
     public void sendPersonalInfo(String firstName, String lastName, String password, String phoneNumber,
                                  String medicalQualification, String verifCode) {
-        personalInfoUseCase.setPersonalInfoHolder(new PersonalInfoHolder
-                (firstName, lastName, password, medicalQualification, phoneNumber, verifCode));
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            personalInfoUseCase.setPersonalInfoHolder(new PersonalInfoHolder
+                    (firstName, lastName, password, medicalQualification, phoneNumber, verifCode));
+            sendPersonalInfo();
+        } else if (view != null) {
+            view.onPersonalInfoErr(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void sendPersonalInfo() {
         personalInfoUseCase.executeCompletable(() -> {
             if (view != null) {
                 view.onPersonalInfoSent();

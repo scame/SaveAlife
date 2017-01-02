@@ -60,4 +60,6 @@
     <string name="current_token">current_token</string>
 
     <string name="auth_token">auth_token</string>
+
+    <string name="internet_connection_check">Check your internet connection</string>
 </resources>

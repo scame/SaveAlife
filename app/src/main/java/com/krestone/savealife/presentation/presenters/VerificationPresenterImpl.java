@@ -3,7 +3,10 @@ package com.krestone.savealife.presentation.presenters;
 
 import android.util.Log;
 
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.domain.usecases.entry.VerificationUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 
 public class VerificationPresenterImpl<T extends VerificationPresenter.VerificationView> implements VerificationPresenter<T> {
 
@@ -17,7 +20,15 @@ public class VerificationPresenterImpl<T extends VerificationPresenter.Verificat
 
     @Override
     public void verify(String phoneNumber, String verifCode) {
-        verificationUseCase.setData(phoneNumber, verifCode);
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            verificationUseCase.setData(phoneNumber, verifCode);
+            verify();
+        } else if (view != null) {
+            view.onVerificationErr(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void verify() {
         verificationUseCase.executeSingle(responseBody -> {
             if (view != null) {
                 view.onVerificationSuccess();
