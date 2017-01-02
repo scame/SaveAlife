@@ -1,6 +1,7 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.entry;
 
 
+import com.krestone.savealife.presentation.presenters.Presenter;
 
 public interface RegistrationNumberPresenter<T> extends Presenter<T> {
 
@@ -12,4 +13,6 @@ public interface RegistrationNumberPresenter<T> extends Presenter<T> {
     }
 
     void sendRegistrationNumber(String number);
+
+    void progressDialogCancel();
 }

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.RegistrationActivity;
-import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenter;
+import com.krestone.savealife.presentation.presenters.entry.RegistrationNumberPresenter;
 
 import javax.inject.Inject;
 
@@ -96,6 +96,7 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     protected void showProgressDialog() {
         progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> presenter.progressDialogCancel());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Validating...");
         progressDialog.show();

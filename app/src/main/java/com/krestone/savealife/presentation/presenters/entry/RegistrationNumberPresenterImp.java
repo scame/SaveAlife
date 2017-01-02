@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.entry;
 
 
 import android.util.Log;
@@ -40,6 +40,11 @@ public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresente
                 view.onRegistrationNumberError(throwable.getMessage());
             }
         });
+    }
+
+    @Override
+    public void progressDialogCancel() {
+        registrationNumberUseCase.unsubscribe();
     }
 
     @Override

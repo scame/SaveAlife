@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.entry;
 
 
 import android.util.Log;
@@ -39,6 +39,11 @@ public class VerificationPresenterImpl<T extends VerificationPresenter.Verificat
                 view.onVerificationErr(throwable.getLocalizedMessage());
             }
         });
+    }
+
+    @Override
+    public void progressDialogCancel() {
+        verificationUseCase.unsubscribe();
     }
 
     @Override

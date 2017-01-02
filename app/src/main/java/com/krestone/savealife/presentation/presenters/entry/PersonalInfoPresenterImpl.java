@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.entry;
 
 
 import android.util.Log;
@@ -42,6 +42,11 @@ public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalI
                 view.onPersonalInfoErr(throwable.toString());
             }
         });
+    }
+
+    @Override
+    public void progressDialogCancel() {
+        personalInfoUseCase.unsubscribe();
     }
 
     @Override

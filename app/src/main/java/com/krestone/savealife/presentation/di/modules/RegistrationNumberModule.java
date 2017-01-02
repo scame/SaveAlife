@@ -6,13 +6,13 @@ import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.entry.RegistrationNumberUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
-import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenter;
-import com.krestone.savealife.presentation.presenters.RegistrationNumberPresenterImp;
+import com.krestone.savealife.presentation.presenters.entry.RegistrationNumberPresenter;
+import com.krestone.savealife.presentation.presenters.entry.RegistrationNumberPresenterImp;
 
 import dagger.Module;
 import dagger.Provides;
 
-import static com.krestone.savealife.presentation.presenters.RegistrationNumberPresenter.RegistrationNumberView;
+import static com.krestone.savealife.presentation.presenters.entry.RegistrationNumberPresenter.RegistrationNumberView;
 
 @Module
 public class RegistrationNumberModule {

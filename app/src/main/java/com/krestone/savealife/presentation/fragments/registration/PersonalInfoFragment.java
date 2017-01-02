@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.RegistrationActivity;
-import com.krestone.savealife.presentation.presenters.PersonalInfoPresenter;
+import com.krestone.savealife.presentation.presenters.entry.PersonalInfoPresenter;
 
 import javax.inject.Inject;
 
@@ -97,6 +97,7 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
         return fragmentView;
     }
 
+
     @Override
     public void onPersonalInfoSent() {
         progressDialog.dismiss();
@@ -131,6 +132,7 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
 
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> presenter.progressDialogCancel());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Validating...");
         progressDialog.show();

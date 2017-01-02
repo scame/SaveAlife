@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.presentation.activities.RegistrationActivity;
-import com.krestone.savealife.presentation.presenters.VerificationPresenter;
+import com.krestone.savealife.presentation.presenters.entry.VerificationPresenter;
 
 import javax.inject.Inject;
 
@@ -105,6 +105,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
 
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> presenter.progressDialogCancel());
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
