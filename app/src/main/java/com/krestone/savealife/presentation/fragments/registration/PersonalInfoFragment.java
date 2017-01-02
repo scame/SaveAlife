@@ -6,9 +6,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -65,6 +67,7 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
         bundle.putString(PersonalInfoFragment.class.getCanonicalName() + "code", verifCode);
 
         PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+
         personalInfoFragment.setArguments(bundle);
 
         return personalInfoFragment;
@@ -87,6 +90,7 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
         inject();
         presenter.setView(this);
         setupSignUpBtn();
+        setupEditorActionListener();
 
         qualificationSpinner.setItems("No medical qualification", "Surgeon", "Nurse");
 
@@ -106,14 +110,23 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
     }
 
     private void setupSignUpBtn() {
-        signUpBtn.setOnClickListener(v -> {
-            if (validate()) {
-                showProgressDialog();
-                presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
-                        passwordInput.getText().toString(), phoneNumber,
-                        String.valueOf(qualificationSpinner.getItems().get(qualificationSpinner.getSelectedIndex())), verifCode);
-            }
-        });
+        signUpBtn.setOnClickListener(v -> tryToSignUp());
+    }
+
+    private void setupEditorActionListener() {
+        firstNameInput.setOnEditorActionListener(newEditorActionListener());
+        lastNameInput.setOnEditorActionListener(newEditorActionListener());
+        passwordInput.setOnEditorActionListener(newEditorActionListener());
+        passwordInputConfirm.setOnEditorActionListener(newEditorActionListener());
+    }
+
+    private void tryToSignUp() {
+        if (validate()) {
+            showProgressDialog();
+            presenter.sendPersonalInfo(firstNameInput.getText().toString(), lastNameInput.getText().toString(),
+                    passwordInput.getText().toString(), phoneNumber,
+                    String.valueOf(qualificationSpinner.getItems().get(qualificationSpinner.getSelectedIndex())), verifCode);
+        }
     }
 
     private void showProgressDialog() {
@@ -158,7 +171,18 @@ public class PersonalInfoFragment extends Fragment implements PersonalInfoPresen
         return valid;
     }
 
-    @Override
+    private EditText.OnEditorActionListener newEditorActionListener() {
+        return (v, actionId, event) -> {
+            boolean isValidKey = event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+            boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
+
+            if (isValidKey || isValidAction) {
+                tryToSignUp();
+            }
+            return false;
+        };
+    }
+
     public void onDestroyView() {
         presenter.destroy();
         super.onDestroyView();

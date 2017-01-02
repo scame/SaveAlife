@@ -6,9 +6,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -71,19 +73,34 @@ public class VerificationFragment extends Fragment implements VerificationPresen
 
         parsePhoneNumber();
         setupVerificationBtn();
+        setupEditorActionListener();
 
         return fragmentView;
     }
 
     private void setupVerificationBtn() {
-        verificationButton.setOnClickListener(v -> {
-            if (verificationInput.getText().toString().isEmpty()) {
-                verificationInput.setError("invalid code");
-            } else {
-                showProgressDialog();
-                presenter.verify(phoneNumber, verificationInput.getText().toString());
+        verificationButton.setOnClickListener(v -> tryToVerify());
+    }
+
+    private void setupEditorActionListener() {
+        verificationInput.setOnEditorActionListener((v, actionId, event) -> {
+            boolean isValidKey = event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+            boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
+
+            if (isValidKey || isValidAction) {
+                tryToVerify();
             }
+            return false;
         });
+    }
+
+    private void tryToVerify() {
+        if (verificationInput.getText().toString().isEmpty()) {
+            verificationInput.setError("invalid code");
+        } else {
+            showProgressDialog();
+            presenter.verify(phoneNumber, verificationInput.getText().toString());
+        }
     }
 
     private void showProgressDialog() {

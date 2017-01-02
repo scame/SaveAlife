@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,20 +63,35 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
         presenter.setView(this);
 
         setPhoneNumber();
+        setupEditorActionListener();
         setupPhoneNumberBtn();
 
         return fragmentView;
     }
 
-    private void setupPhoneNumberBtn() {
-        phoneNumberBtn.setOnClickListener(v -> {
-            if (!phoneNumberInput.getText().toString().isEmpty()) {
-                showProgressDialog();
-                presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());
-            } else {
-                phoneNumberInput.setError("invalid number");
+    private void setupEditorActionListener() {
+        phoneNumberInput.setOnEditorActionListener((v, actionId, event) -> {
+            boolean isValidKey = event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+            boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
+
+            if (isValidKey || isValidAction) {
+                continueWithNumber();
             }
+            return false;
         });
+    }
+
+    private void setupPhoneNumberBtn() {
+        phoneNumberBtn.setOnClickListener(v -> continueWithNumber());
+    }
+
+    private void continueWithNumber() {
+        if (!phoneNumberInput.getText().toString().isEmpty()) {
+            showProgressDialog();
+            presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());
+        } else {
+            phoneNumberInput.setError("invalid number");
+        }
     }
 
     protected void showProgressDialog() {
