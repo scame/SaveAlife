@@ -58,6 +58,7 @@
     <string name="last_name">last_name</string>
     <string name="med_qualification">med_qualification</string>
     <string name="current_token">current_token</string>
+    <string name="isLoggedIn">isLoggedIn</string>
 
     <string name="auth_token">auth_token</string>
 

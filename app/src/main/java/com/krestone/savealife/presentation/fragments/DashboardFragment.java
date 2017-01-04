@@ -69,7 +69,6 @@ public class DashboardFragment extends Fragment {
         return fragmentView;
     }
 
-
     @OnClick(R.id.sos_btn)
     public void onClick(View view) {
         if (sosButton.getTag() == null) {

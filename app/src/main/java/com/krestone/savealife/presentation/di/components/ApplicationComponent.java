@@ -6,6 +6,7 @@ import com.krestone.savealife.data.di.DataModule;
 import com.krestone.savealife.data.di.NetworkingModule;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
+import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
@@ -34,4 +35,6 @@ public interface ApplicationComponent {
     VerificationComponent provideVerificationComponent(VerificationModule verificationModule);
 
     PersonalInfoComponent providePersonalInfoComponent(PersonalInfoModule personalInfoModule);
+
+    DrawerComponent provideDashboardComponent(DrawerModule drawerModule);
 }

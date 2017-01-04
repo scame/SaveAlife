@@ -76,7 +76,14 @@ public class EntryRepositoryImp implements EntryRepository {
         editor.putString(getString(R.string.last_name), personalInfoHolder.getLastName()).apply();
         editor.putString(getString(R.string.current_token), personalInfoHolder.getCurrentToken()).apply();
         editor.putString(getString(R.string.med_qualification), personalInfoHolder.getMedicalQualification()).apply();
+        editor.putBoolean(getString(R.string.isLoggedIn), true);
         return Completable.complete();
+    }
+
+    @Override
+    public Single<Boolean> getLoginStatus() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return Single.just(sharedPrefs.getBoolean(getString(R.string.isLoggedIn), false));
     }
 
     private String getString(int stringId) {

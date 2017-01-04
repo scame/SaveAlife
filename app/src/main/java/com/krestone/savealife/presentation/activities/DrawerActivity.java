@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.activities;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,21 +23,26 @@ import com.krestone.savealife.presentation.di.components.AddToEmergencyListCompo
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
+import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
-import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.AddToEmergencyListFragment;
+import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
+import com.krestone.savealife.presentation.presenters.DrawerActivityPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DrawerActivity extends AppCompatActivity implements
-        EmergencyContactsFragment.EmergencyListener, DashboardFragment.DashboardListener {
+        EmergencyContactsFragment.EmergencyListener, DashboardFragment.DashboardListener,
+        DrawerActivityPresenter.DrawerView {
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
@@ -68,6 +74,9 @@ public class DrawerActivity extends AppCompatActivity implements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @Inject
+    DrawerActivityPresenter<DrawerActivityPresenter.DrawerView> presenter;
+
     private ActionBarDrawerToggle drawerToggle;
 
     private MapComponent mapComponent;
@@ -81,14 +90,31 @@ public class DrawerActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
 
+        inject();
+        presenter.setView(this);
+        presenter.checkLoginStatus();
+
         ButterKnife.bind(this);
         navigationView.setNavigationItemSelectedListener(this::selectDrawerItem);
         setupDrawerToggle();
-        setupDefaultFragment();
-        configureToolbar();
 
+        configureToolbar();
         bindHeaderViews();
         configureHeaderView();
+    }
+
+    private void inject() {
+        SaveAlifeApplication.getAppComponent().provideDashboardComponent(new DrawerModule()).inject(this);
+    }
+
+    @Override
+    public void startEntryProcess() {
+        startActivity(new Intent(this, RegistrationActivity.class));
+    }
+
+    @Override
+    public void goNormal() {
+        setupDefaultFragment();
     }
 
     private void bindHeaderViews() {

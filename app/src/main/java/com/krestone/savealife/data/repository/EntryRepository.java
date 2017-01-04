@@ -16,4 +16,6 @@ public interface EntryRepository {
     Completable sendPersonalInfo(PersonalInfoHolder personalInfoHolder);
 
     Single<String> getAuthToken(String password, String phoneNumber);
+
+    Single<Boolean> getLoginStatus();
 }
