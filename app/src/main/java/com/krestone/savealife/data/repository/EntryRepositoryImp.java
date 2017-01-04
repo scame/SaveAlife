@@ -86,6 +86,13 @@ public class EntryRepositoryImp implements EntryRepository {
         return Single.just(sharedPrefs.getBoolean(getString(R.string.isLoggedIn), false));
     }
 
+    @Override
+    public Completable signOut() {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putBoolean(getString(R.string.isLoggedIn), false).apply();
+        return Completable.complete();
+    }
+
     private String getString(int stringId) {
         return context.getString(stringId);
     }

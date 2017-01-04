@@ -9,6 +9,7 @@ import com.krestone.savealife.presentation.di.modules.ApplicationModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
+import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
@@ -24,17 +25,19 @@ public interface ApplicationComponent {
 
     void inject(LocationService locationService);
 
-    MapComponent provideMapSubcomponent(MapModule mapModule);
+    MapComponent provideMapComponent(MapModule mapModule);
 
-    AddToEmergencyListComponent provideAddToEmergencyListSubcomponent(AddToEmergencyListModule addToEmergencyListModule);
+    AddToEmergencyListComponent provideAddToEmergencyListComponent(AddToEmergencyListModule addToEmergencyListModule);
 
-    EmergencyComponent provideEmergencySubcomponent(EmergencyModule emergencyModule);
+    EmergencyComponent provideEmergencyComponent(EmergencyModule emergencyModule);
 
-    RegistrationNumberComponent provideRegistrationNumberSubcomponent(RegistrationNumberModule module);
+    RegistrationNumberComponent provideRegistrationNumberComponent(RegistrationNumberModule module);
 
     VerificationComponent provideVerificationComponent(VerificationModule verificationModule);
 
     PersonalInfoComponent providePersonalInfoComponent(PersonalInfoModule personalInfoModule);
 
     DrawerComponent provideDashboardComponent(DrawerModule drawerModule);
+
+    MyProfileComponent provideMyProfileComponent(MyProfileModule myProfileModule);
 }

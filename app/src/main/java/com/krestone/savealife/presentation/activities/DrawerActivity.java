@@ -22,10 +22,12 @@ import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
+import com.krestone.savealife.presentation.di.components.MyProfileComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
+import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.fragments.AddToEmergencyListFragment;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
@@ -42,7 +44,7 @@ import butterknife.ButterKnife;
 
 public class DrawerActivity extends AppCompatActivity implements
         EmergencyContactsFragment.EmergencyListener, DashboardFragment.DashboardListener,
-        DrawerActivityPresenter.DrawerView {
+        DrawerActivityPresenter.DrawerView, MyProfileFragment.MyProfileListener {
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
@@ -84,6 +86,8 @@ public class DrawerActivity extends AppCompatActivity implements
     private AddToEmergencyListComponent addToEmergencyListComponent;
 
     private EmergencyComponent emergencyComponent;
+
+    private MyProfileComponent myProfileComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -226,7 +230,7 @@ public class DrawerActivity extends AppCompatActivity implements
 
     public MapComponent provideMapComponent() {
         if (mapComponent == null) {
-            mapComponent = SaveAlifeApplication.getAppComponent().provideMapSubcomponent(new MapModule());
+            mapComponent = SaveAlifeApplication.getAppComponent().provideMapComponent(new MapModule());
         }
         return mapComponent;
     }
@@ -234,15 +238,27 @@ public class DrawerActivity extends AppCompatActivity implements
     public AddToEmergencyListComponent provideContactsComponent() {
         if (addToEmergencyListComponent == null) {
             addToEmergencyListComponent = SaveAlifeApplication.getAppComponent()
-                    .provideAddToEmergencyListSubcomponent(new AddToEmergencyListModule());
+                    .provideAddToEmergencyListComponent(new AddToEmergencyListModule());
         }
         return addToEmergencyListComponent;
     }
 
     public EmergencyComponent provideEmergencyComponent() {
         if (emergencyComponent == null) {
-            emergencyComponent = SaveAlifeApplication.getAppComponent().provideEmergencySubcomponent(new EmergencyModule());
+            emergencyComponent = SaveAlifeApplication.getAppComponent().provideEmergencyComponent(new EmergencyModule());
         }
         return emergencyComponent;
+    }
+
+    public MyProfileComponent provideMyProfileComponent() {
+        if (myProfileComponent == null) {
+            myProfileComponent = SaveAlifeApplication.getAppComponent().provideMyProfileComponent(new MyProfileModule());
+        }
+        return myProfileComponent;
+    }
+
+    @Override
+    public void onSignOutClick() {
+        startEntryProcess();
     }
 }

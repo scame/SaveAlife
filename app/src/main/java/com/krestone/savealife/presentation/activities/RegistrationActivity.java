@@ -100,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity implements
     public RegistrationNumberComponent provideRegistrationNumberComponent() {
         if (registrationNumberComponent == null) {
             registrationNumberComponent = SaveAlifeApplication.getAppComponent()
-                    .provideRegistrationNumberSubcomponent(new RegistrationNumberModule());
+                    .provideRegistrationNumberComponent(new RegistrationNumberModule());
         }
         return registrationNumberComponent;
     }

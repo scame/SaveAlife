@@ -18,4 +18,6 @@ public interface EntryRepository {
     Single<String> getAuthToken(String password, String phoneNumber);
 
     Single<Boolean> getLoginStatus();
+
+    Completable signOut();
 }
