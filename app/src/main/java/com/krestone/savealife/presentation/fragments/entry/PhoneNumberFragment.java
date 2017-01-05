@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.fragments.registration;
+package com.krestone.savealife.presentation.fragments.entry;
 
 
 import android.app.ProgressDialog;
@@ -43,6 +43,8 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
     public interface PhoneNumberListener {
 
         void onPhoneNumberContinue(String phoneNumber);
+
+        void onAlreadyInUseContinue(String phoneNumber);
     }
 
     @Override
@@ -122,10 +124,17 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
         phoneNumberListener.onPhoneNumberContinue(phoneNumberInput.getText().toString());
     }
 
+    /** server's response is an error only if the entered number is already taken
+     * so we open login screen where user should provide a password */
     @Override
-    public void onRegistrationNumberError(String error) {
+    public void onRegistrationNumberError(String error, boolean alreadyInUseError) {
         progressDialog.dismiss();
-        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+
+        if (alreadyInUseError) {
+            phoneNumberListener.onAlreadyInUseContinue(phoneNumberInput.getText().toString());
+        } else {
+            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -16,9 +16,10 @@ import com.krestone.savealife.presentation.di.components.VerificationComponent;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
-import com.krestone.savealife.presentation.fragments.registration.PersonalInfoFragment;
-import com.krestone.savealife.presentation.fragments.registration.PhoneNumberFragment;
-import com.krestone.savealife.presentation.fragments.registration.VerificationFragment;
+import com.krestone.savealife.presentation.fragments.entry.PersonalInfoFragment;
+import com.krestone.savealife.presentation.fragments.entry.PhoneNumberFragment;
+import com.krestone.savealife.presentation.fragments.entry.SignInFragment;
+import com.krestone.savealife.presentation.fragments.entry.VerificationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +31,7 @@ public class RegistrationActivity extends AppCompatActivity implements
     private static final String PERSONAL_INFO_FRAGM = "personalInfoFragm";
     private static final String PHONE_NUMBER_FRAGM = "phoneNumberFragm";
     private static final String VERIFICATION_FRAGM = "verificationFragm";
+    private static final String SIGN_IN_FRAGM = "signinFragm";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -72,6 +74,11 @@ public class RegistrationActivity extends AppCompatActivity implements
     @Override
     public void onPhoneNumberContinue(String phoneNumber) {
         replaceFragmentWithBackstack(VERIFICATION_FRAGM, VerificationFragment.newInstance(phoneNumber));
+    }
+
+    @Override
+    public void onAlreadyInUseContinue(String phoneNumber) {
+        replaceFragmentWithBackstack(SIGN_IN_FRAGM, SignInFragment.newInstance(phoneNumber));
     }
 
     @Override

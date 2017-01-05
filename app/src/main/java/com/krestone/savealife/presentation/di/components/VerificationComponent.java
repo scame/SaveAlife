@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.di.components;
 
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
-import com.krestone.savealife.presentation.fragments.registration.VerificationFragment;
+import com.krestone.savealife.presentation.fragments.entry.VerificationFragment;
 
 import dagger.Subcomponent;
 

@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.di.components;
 
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
-import com.krestone.savealife.presentation.fragments.registration.PhoneNumberFragment;
+import com.krestone.savealife.presentation.fragments.entry.PhoneNumberFragment;
 
 import dagger.Subcomponent;
 

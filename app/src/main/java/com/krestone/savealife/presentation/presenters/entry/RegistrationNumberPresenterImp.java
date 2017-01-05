@@ -25,7 +25,8 @@ public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresente
             registrationNumberUseCase.setPhoneNumber(number);
             sendRegistrationNumber();
         } else if (view != null) {
-            view.onRegistrationNumberError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+            view.onRegistrationNumberError(
+                    SaveAlifeApplication.application.getString(R.string.internet_connection_check), false);
         }
     }
 
@@ -37,7 +38,8 @@ public class RegistrationNumberPresenterImp<T extends RegistrationNumberPresente
         }, throwable -> {
             Log.i("onxRegistrNumberErr", throwable.getLocalizedMessage());
             if (view != null) {
-                view.onRegistrationNumberError(throwable.getMessage());
+                // TODO: check that the error corresponds to 'already in use' error
+                view.onRegistrationNumberError(throwable.getMessage(), true);
             }
         });
     }

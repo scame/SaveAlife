@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.di.components;
 
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
-import com.krestone.savealife.presentation.fragments.registration.PersonalInfoFragment;
+import com.krestone.savealife.presentation.fragments.entry.PersonalInfoFragment;
 
 import dagger.Subcomponent;
 

@@ -9,7 +9,7 @@ public interface RegistrationNumberPresenter<T> extends Presenter<T> {
 
         void onRegistrationNumberSent();
 
-        void onRegistrationNumberError(String error);
+        void onRegistrationNumberError(String error, boolean alreadyInUseError);
     }
 
     void sendRegistrationNumber(String number);

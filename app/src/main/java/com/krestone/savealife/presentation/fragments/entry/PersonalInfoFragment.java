@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.fragments.registration;
+package com.krestone.savealife.presentation.fragments.entry;
 
 
 import android.app.ProgressDialog;
