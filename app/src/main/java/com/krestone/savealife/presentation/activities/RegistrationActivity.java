@@ -12,9 +12,11 @@ import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.PersonalInfoComponent;
 import com.krestone.savealife.presentation.di.components.RegistrationNumberComponent;
+import com.krestone.savealife.presentation.di.components.SignInComponent;
 import com.krestone.savealife.presentation.di.components.VerificationComponent;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
+import com.krestone.savealife.presentation.di.modules.SignInModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
 import com.krestone.savealife.presentation.fragments.entry.PersonalInfoFragment;
 import com.krestone.savealife.presentation.fragments.entry.PhoneNumberFragment;
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class RegistrationActivity extends AppCompatActivity implements
         PersonalInfoFragment.PersonalInfoListener, PhoneNumberFragment.PhoneNumberListener,
-        VerificationFragment.VerificationListener {
+        VerificationFragment.VerificationListener, SignInFragment.SignInListener {
 
     private static final String PERSONAL_INFO_FRAGM = "personalInfoFragm";
     private static final String PHONE_NUMBER_FRAGM = "phoneNumberFragm";
@@ -41,6 +43,8 @@ public class RegistrationActivity extends AppCompatActivity implements
     private VerificationComponent verificationComponent;
 
     private PersonalInfoComponent personalInfoComponent;
+
+    private SignInComponent signInComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +91,11 @@ public class RegistrationActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onSignIn() {
+        startActivity(new Intent(this, DrawerActivity.class));
+    }
+
+    @Override
     public void onSignUpClick() {
         startActivity(new Intent(this, DrawerActivity.class));
     }
@@ -126,5 +135,13 @@ public class RegistrationActivity extends AppCompatActivity implements
                     .providePersonalInfoComponent(new PersonalInfoModule());
         }
         return personalInfoComponent;
+    }
+
+    public SignInComponent provideSignInComponent() {
+        if (signInComponent == null) {
+            signInComponent = SaveAlifeApplication.getAppComponent()
+                    .provideSignInComponent(new SignInModule());
+        }
+        return signInComponent;
     }
 }

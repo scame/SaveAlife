@@ -12,6 +12,7 @@ import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
+import com.krestone.savealife.presentation.di.modules.SignInModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
 
 import javax.inject.Singleton;
@@ -40,4 +41,6 @@ public interface ApplicationComponent {
     DrawerComponent provideDashboardComponent(DrawerModule drawerModule);
 
     MyProfileComponent provideMyProfileComponent(MyProfileModule myProfileModule);
+
+    SignInComponent provideSignInComponent(SignInModule signInModule);
 }
