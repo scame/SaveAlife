@@ -23,4 +23,6 @@ public interface EntryRepository {
     Completable signOut();
 
     Single<UserModel> getLastLoggedInUserInfo();
+
+    Single<Boolean> signIn(String password);
 }

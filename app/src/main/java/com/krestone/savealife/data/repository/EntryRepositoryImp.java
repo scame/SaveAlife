@@ -103,9 +103,27 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
     @Override
+    public Single<Boolean> signIn(String password) {
+        boolean passwordMatches = checkPassword(password);
+        if (passwordMatches) {
+            changeLoginStatus(true);
+        }
+        return Single.just(passwordMatches);
+    }
+
+    private boolean checkPassword(String enteredPassword) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPrefs.getString(getString(R.string.password), "").equals(enteredPassword);
+    }
+
+    @Override
     public Completable signOut() {
+        return changeLoginStatus(false);
+    }
+
+    private Completable changeLoginStatus(boolean isLoggedIn) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        editor.putBoolean(getString(R.string.isLoggedIn), false).apply();
+        editor.putBoolean(getString(R.string.isLoggedIn), isLoggedIn).apply();
         return Completable.complete();
     }
 
