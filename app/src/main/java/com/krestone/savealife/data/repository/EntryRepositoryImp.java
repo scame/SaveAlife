@@ -11,6 +11,7 @@ import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.presentation.models.UserModel;
 
 import okhttp3.ResponseBody;
 import rx.Completable;
@@ -78,6 +79,21 @@ public class EntryRepositoryImp implements EntryRepository {
         editor.putString(getString(R.string.med_qualification), personalInfoHolder.getMedicalQualification()).apply();
         editor.putBoolean(getString(R.string.isLoggedIn), true);
         return Completable.complete();
+    }
+
+    @Override
+    public Single<UserModel> getLastLoggedInUserInfo() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        UserModel userModel = new UserModel();
+
+        userModel.setFirstName(sharedPrefs.getString(getString(R.string.first_name), ""));
+        userModel.setLastName(sharedPrefs.getString(getString(R.string.last_name), ""));
+        userModel.setPassword(sharedPrefs.getString(getString(R.string.password), ""));
+        userModel.setPhoneNumber(sharedPrefs.getString(getString(R.string.phone_number), ""));
+        userModel.setMedicalQualification(sharedPrefs.getString(getString(R.string.med_qualification), ""));
+        // TODO: implement profile img URI fetching
+
+        return Single.just(userModel);
     }
 
     @Override

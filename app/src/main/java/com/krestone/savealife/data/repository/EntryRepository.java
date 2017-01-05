@@ -2,6 +2,7 @@ package com.krestone.savealife.data.repository;
 
 
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
+import com.krestone.savealife.presentation.models.UserModel;
 
 import okhttp3.ResponseBody;
 import rx.Completable;
@@ -20,4 +21,6 @@ public interface EntryRepository {
     Single<Boolean> getLoginStatus();
 
     Completable signOut();
+
+    Single<UserModel> getLastLoggedInUserInfo();
 }
