@@ -1,6 +1,7 @@
 package com.krestone.savealife.domain.usecases.entry;
 
 
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
@@ -12,6 +13,8 @@ public class SignInUseCase extends UseCaseSingle<Boolean> {
 
     private EntryRepository entryRepository;
 
+    private SomeoneProfileEntity profileEntity;
+
     private String password;
 
     public SignInUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, EntryRepository entryRepository) {
@@ -21,7 +24,7 @@ public class SignInUseCase extends UseCaseSingle<Boolean> {
 
     @Override
     protected Single<Boolean> getUseCaseSingle() {
-        return entryRepository.signIn(password);
+        return entryRepository.signIn(password, profileEntity);
     }
 
     public String getPassword() {
@@ -30,5 +33,13 @@ public class SignInUseCase extends UseCaseSingle<Boolean> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public SomeoneProfileEntity getProfileEntity() {
+        return profileEntity;
+    }
+
+    public void setProfileEntity(SomeoneProfileEntity profileEntity) {
+        this.profileEntity = profileEntity;
     }
 }

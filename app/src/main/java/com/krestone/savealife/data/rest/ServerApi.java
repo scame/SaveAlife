@@ -4,12 +4,15 @@ package com.krestone.savealife.data.rest;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
+import com.krestone.savealife.data.entities.requests.PasswordMatchingRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
+import com.krestone.savealife.data.entities.responses.PasswordMatchingResponse;
+import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 
 import okhttp3.ResponseBody;
@@ -39,7 +42,7 @@ public interface ServerApi {
                                                 @Header("x-auth-token") String token);
 
     @POST("http://10.0.1.94:8080/signUp")
-    Observable<ResponseBody> sendRegistrationNumber(@Body PhoneNumberHolder phoneNumber);
+    Observable<PhoneNumberResponse> sendRegistrationNumber(@Body PhoneNumberHolder phoneNumber);
 
     @POST("http://10.0.1.94:8080/confirmSignUp")
     Observable<ResponseBody> sendVerificationCode(@Body VerificationHolder verificationHolder);
@@ -68,4 +71,7 @@ public interface ServerApi {
     @POST("http://10.0.1.94:8080//updateProfile")
     Observable<ResponseBody> updateMyProfileInfo(@Header("x-auth-token") String token,
                                                  @Body UpdateMyProfileInfoRequest infoBody);
+
+    @POST("http://10.0.1.94:8080//matchPassword")
+    Observable<PasswordMatchingResponse> matchPasswords(@Body PasswordMatchingRequest request);
 }

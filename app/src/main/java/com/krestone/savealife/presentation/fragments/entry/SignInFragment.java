@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.presentation.activities.RegistrationActivity;
-import com.krestone.savealife.presentation.models.UserModel;
 import com.krestone.savealife.presentation.presenters.entry.SignInPresenter;
 
 import javax.inject.Inject;
@@ -22,12 +22,14 @@ public class SignInFragment extends Fragment implements SignInPresenter.SignInVi
 
     private SignInListener signInListener;
 
+    private SomeoneProfileEntity profileEntity;
+
     @Inject
     SignInPresenter<SignInPresenter.SignInView> presenter;
 
-    public static SignInFragment newInstance(String phoneNumber) {
+    public static SignInFragment newInstance(SomeoneProfileEntity profileEntity) {
         Bundle bundle = new Bundle();
-        bundle.putString(SignInFragment.class.getCanonicalName(), phoneNumber);
+        bundle.putParcelable(SignInFragment.class.getCanonicalName(), profileEntity);
 
         SignInFragment signInFragment = new SignInFragment();
         signInFragment.setArguments(bundle);
@@ -55,21 +57,20 @@ public class SignInFragment extends Fragment implements SignInPresenter.SignInVi
         ButterKnife.bind(this, fragmentView);
 
         inject();
+        parseArgs();
         presenter.setView(this);
-        presenter.requestUserInfo();
 
         return fragmentView;
+    }
+
+    private void parseArgs() {
+        profileEntity = getArguments().getParcelable(SignInFragment.class.getCanonicalName());
     }
 
     private void inject() {
         if (getActivity() instanceof RegistrationActivity) {
             ((RegistrationActivity) getActivity()).provideSignInComponent().inject(this);
         }
-    }
-
-    @Override
-    public void displayUserInfo(UserModel userModel) {
-        // TODO: implement UI part
     }
 
     @Override

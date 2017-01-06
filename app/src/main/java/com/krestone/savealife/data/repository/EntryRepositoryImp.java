@@ -7,11 +7,14 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.requests.PasswordMatchingRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
+import com.krestone.savealife.data.entities.responses.PasswordMatchingResponse;
+import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
-import com.krestone.savealife.presentation.models.UserModel;
 
 import okhttp3.ResponseBody;
 import rx.Completable;
@@ -43,7 +46,7 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
     @Override
-    public Single<ResponseBody> sendPhoneNumber(String phoneNumber) {
+    public Single<PhoneNumberResponse> sendPhoneNumber(String phoneNumber) {
         return serverApi.sendRegistrationNumber(new PhoneNumberHolder(phoneNumber)).toSingle();
     }
 
@@ -53,11 +56,12 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
     @Override
-    public Completable sendPersonalInfo(PersonalInfoHolder personalInfoHolder) {
-        return serverApi.sendPersonalInfo(personalInfoHolder).toSingle()
-                .flatMap(responseBody -> getAuthToken(personalInfoHolder.getPassword(), personalInfoHolder.getPhoneNumber()))
+    public Completable sendPersonalInfo(PersonalInfoHolder holder) {
+        return serverApi.sendPersonalInfo(holder).toSingle()
+                .flatMap(responseBody -> getAuthToken(holder.getPassword(), holder.getPhoneNumber()))
                 .map(this::cacheAuthToken)
-                .map(ignore -> cacheEntryInfo(personalInfoHolder))
+                .map(ignore -> cacheEntryInfo(holder.getPassword(), holder.getFirstName(), holder.getLastName(),
+                        holder.getPhoneNumber(), holder.getMedicalQualification()))
                 .toCompletable();
     }
 
@@ -68,33 +72,20 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
 
-    private Completable cacheEntryInfo(PersonalInfoHolder personalInfoHolder) {
+    private Completable cacheEntryInfo(String password, String firstName, String lastName,
+                                       String phoneNumber, String medicalQualification) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
-        editor.putString(getString(R.string.password), personalInfoHolder.getPassword()).apply();
-        editor.putString(getString(R.string.phone_number), personalInfoHolder.getPhoneNumber()).apply();
-        editor.putString(getString(R.string.first_name), personalInfoHolder.getFirstName()).apply();
-        editor.putString(getString(R.string.last_name), personalInfoHolder.getLastName()).apply();
-        editor.putString(getString(R.string.current_token), personalInfoHolder.getCurrentToken()).apply();
-        editor.putString(getString(R.string.med_qualification), personalInfoHolder.getMedicalQualification()).apply();
-        editor.putBoolean(getString(R.string.isLoggedIn), true);
+        editor.putString(getString(R.string.password), password).apply();
+        editor.putString(getString(R.string.phone_number), phoneNumber).apply();
+        editor.putString(getString(R.string.first_name), firstName).apply();
+        editor.putString(getString(R.string.last_name), lastName).apply();
+        editor.putString(getString(R.string.med_qualification), medicalQualification).apply();
+        changeLoginStatus(true);
+
         return Completable.complete();
     }
 
-    @Override
-    public Single<UserModel> getLastLoggedInUserInfo() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        UserModel userModel = new UserModel();
-
-        userModel.setFirstName(sharedPrefs.getString(getString(R.string.first_name), ""));
-        userModel.setLastName(sharedPrefs.getString(getString(R.string.last_name), ""));
-        userModel.setPassword(sharedPrefs.getString(getString(R.string.password), ""));
-        userModel.setPhoneNumber(sharedPrefs.getString(getString(R.string.phone_number), ""));
-        userModel.setMedicalQualification(sharedPrefs.getString(getString(R.string.med_qualification), ""));
-        // TODO: implement profile img URI fetching
-
-        return Single.just(userModel);
-    }
 
     @Override
     public Single<Boolean> getLoginStatus() {
@@ -103,17 +94,16 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
     @Override
-    public Single<Boolean> signIn(String password) {
-        boolean passwordMatches = checkPassword(password);
-        if (passwordMatches) {
-            changeLoginStatus(true);
-        }
-        return Single.just(passwordMatches);
-    }
-
-    private boolean checkPassword(String enteredPassword) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPrefs.getString(getString(R.string.password), "").equals(enteredPassword);
+    public Single<Boolean> signIn(String password, SomeoneProfileEntity profileEntity) {
+        return serverApi.matchPasswords(new PasswordMatchingRequest(password, profileEntity.getPhoneNumber()))
+                .map(PasswordMatchingResponse::isMatches)
+                .map(matches -> {
+                    if (matches) {
+                        cacheEntryInfo(password, profileEntity.getFirstName(), profileEntity.getLastName(),
+                                profileEntity.getPhoneNumber(), profileEntity.getMedicalQualification());
+                    }
+                    return matches;
+                }).toSingle();
     }
 
     @Override

@@ -3,39 +3,40 @@ package com.krestone.savealife.presentation.presenters.entry;
 
 import android.util.Log;
 
-import com.krestone.savealife.domain.usecases.entry.GetLastLoggedInUserInfoUseCase;
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.domain.usecases.entry.SignInUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 
 public class SignInPresenterImpl<T extends SignInPresenter.SignInView> implements SignInPresenter<T> {
 
     private T view;
 
-    private GetLastLoggedInUserInfoUseCase getLastLoggedInUserInfoUseCase;
-
     private SignInUseCase signInUseCase;
 
-    public SignInPresenterImpl(GetLastLoggedInUserInfoUseCase getLastLoggedInUserInfoUseCase,
-                               SignInUseCase signInUseCase) {
-        this.getLastLoggedInUserInfoUseCase = getLastLoggedInUserInfoUseCase;
+    public SignInPresenterImpl(SignInUseCase signInUseCase) {
         this.signInUseCase = signInUseCase;
     }
 
     @Override
-    public void requestUserInfo() {
-        getLastLoggedInUserInfoUseCase.executeSingle(userModel -> {
-            if (view != null) view.displayUserInfo(userModel);
-        }, throwable -> Log.i("onxUserInfoErr", throwable.getLocalizedMessage()));
+    public void requestSignIn(String password, SomeoneProfileEntity profileEntity) {
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            signInUseCase.setPassword(password);
+            signInUseCase.setProfileEntity(profileEntity);
+            requestSignIn();
+        } else if (view != null) {
+            view.onSignInErr(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
     }
 
-    @Override
-    public void requestSignIn(String password) {
-        signInUseCase.setPassword(password);
+    private void requestSignIn() {
         signInUseCase.executeSingle(passwordMatches -> {
             if (view != null) {
                 if (passwordMatches) {
                     view.onSignInSuccess();
                 } else {
-                    view.onSignInErr("Passwords don't match");
+                    view.onSignInErr(SaveAlifeApplication.application.getString(R.string.dont_match));
                 }
             }
         }, throwable -> Log.i("onxSignInErr", throwable.getLocalizedMessage()));
@@ -50,6 +51,5 @@ public class SignInPresenterImpl<T extends SignInPresenter.SignInView> implement
     public void destroy() {
         view = null;
         signInUseCase.unsubscribe();
-        getLastLoggedInUserInfoUseCase.unsubscribe();
     }
 }

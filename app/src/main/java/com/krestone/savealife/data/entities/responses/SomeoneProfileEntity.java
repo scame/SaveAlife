@@ -1,7 +1,10 @@
 package com.krestone.savealife.data.entities.responses;
 
 
-public class SomeoneProfileEntity {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class SomeoneProfileEntity implements Parcelable {
 
     private String phoneNumber;
 
@@ -52,4 +55,42 @@ public class SomeoneProfileEntity {
     public String getMedicalQualification() {
         return medicalQualification;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.phoneNumber);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.role);
+        dest.writeString(this.medicalQualification);
+    }
+
+    public SomeoneProfileEntity() {
+    }
+
+    protected SomeoneProfileEntity(Parcel in) {
+        this.phoneNumber = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.role = in.readString();
+        this.medicalQualification = in.readString();
+    }
+
+    public static final Creator<SomeoneProfileEntity> CREATOR = new Creator<SomeoneProfileEntity>() {
+        @Override
+        public SomeoneProfileEntity createFromParcel(Parcel source) {
+            return new SomeoneProfileEntity(source);
+        }
+
+        @Override
+        public SomeoneProfileEntity[] newArray(int size) {
+            return new SomeoneProfileEntity[size];
+        }
+    };
 }

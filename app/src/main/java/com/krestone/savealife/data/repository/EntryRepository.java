@@ -2,7 +2,8 @@ package com.krestone.savealife.data.repository;
 
 
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
-import com.krestone.savealife.presentation.models.UserModel;
+import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 
 import okhttp3.ResponseBody;
 import rx.Completable;
@@ -10,7 +11,7 @@ import rx.Single;
 
 public interface EntryRepository {
 
-    Single<ResponseBody> sendPhoneNumber(String phoneNumber);
+    Single<PhoneNumberResponse> sendPhoneNumber(String phoneNumber);
 
     Single<ResponseBody> sendVerificationCode(String phoneNumber, String code);
 
@@ -22,7 +23,5 @@ public interface EntryRepository {
 
     Completable signOut();
 
-    Single<UserModel> getLastLoggedInUserInfo();
-
-    Single<Boolean> signIn(String password);
+    Single<Boolean> signIn(String password, SomeoneProfileEntity profileEntity);
 }

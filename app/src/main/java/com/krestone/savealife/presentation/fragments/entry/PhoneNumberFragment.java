@@ -12,11 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.presentation.activities.RegistrationActivity;
 import com.krestone.savealife.presentation.presenters.entry.RegistrationNumberPresenter;
 
@@ -24,11 +24,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PhoneNumberFragment extends Fragment implements RegistrationNumberPresenter.RegistrationNumberView {
-
-    @BindView(R.id.phone_number_btn)
-    Button phoneNumberBtn;
 
     @BindView(R.id.phone_number_input)
     EditText phoneNumberInput;
@@ -42,9 +40,9 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     public interface PhoneNumberListener {
 
-        void onPhoneNumberContinue(String phoneNumber);
+        void onNewPhoneNumber(String phoneNumber);
 
-        void onAlreadyInUseContinue(String phoneNumber);
+        void onAlreadyInUse(SomeoneProfileEntity profileEntity);
     }
 
     @Override
@@ -66,9 +64,13 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
         setPhoneNumber();
         setupEditorActionListener();
-        setupPhoneNumberBtn();
 
         return fragmentView;
+    }
+
+    @OnClick(R.id.phone_number_btn)
+    public void onPhoneNumberBtnClick(View view) {
+        validateAndProcessNumber();
     }
 
     private void setupEditorActionListener() {
@@ -77,17 +79,13 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
             boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
 
             if (isValidKey || isValidAction) {
-                continueWithNumber();
+                validateAndProcessNumber();
             }
             return false;
         });
     }
 
-    private void setupPhoneNumberBtn() {
-        phoneNumberBtn.setOnClickListener(v -> continueWithNumber());
-    }
-
-    private void continueWithNumber() {
+    private void validateAndProcessNumber() {
         if (!phoneNumberInput.getText().toString().isEmpty()) {
             showProgressDialog();
             presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());
@@ -121,20 +119,19 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
     @Override
     public void onRegistrationNumberSent() {
         progressDialog.dismiss();
-        phoneNumberListener.onPhoneNumberContinue(phoneNumberInput.getText().toString());
+        phoneNumberListener.onNewPhoneNumber(phoneNumberInput.getText().toString());
     }
 
-    /** server's response is an error only if the entered number is already taken
-     * so we open login screen where user should provide a password */
     @Override
-    public void onRegistrationNumberError(String error, boolean alreadyInUseError) {
+    public void onAlreadyInUse(SomeoneProfileEntity profileEntity) {
         progressDialog.dismiss();
+        phoneNumberListener.onAlreadyInUse(profileEntity);
+    }
 
-        if (alreadyInUseError) {
-            phoneNumberListener.onAlreadyInUseContinue(phoneNumberInput.getText().toString());
-        } else {
-            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onRegistrationNumberError(String error) {
+        progressDialog.dismiss();
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,15 +1,15 @@
 package com.krestone.savealife.domain.usecases.entry;
 
 
+import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.repository.EntryRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseSingle;
 
-import okhttp3.ResponseBody;
 import rx.Single;
 
-public class RegistrationNumberUseCase extends UseCaseSingle<ResponseBody> {
+public class RegistrationNumberUseCase extends UseCaseSingle<PhoneNumberResponse> {
 
     private EntryRepository entryRepository;
 
@@ -22,7 +22,7 @@ public class RegistrationNumberUseCase extends UseCaseSingle<ResponseBody> {
     }
 
     @Override
-    protected Single<ResponseBody> getUseCaseSingle() {
+    protected Single<PhoneNumberResponse> getUseCaseSingle() {
         return entryRepository.sendPhoneNumber(phoneNumber);
     }
 

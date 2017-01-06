@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.presentation.di.components.PersonalInfoComponent;
 import com.krestone.savealife.presentation.di.components.RegistrationNumberComponent;
 import com.krestone.savealife.presentation.di.components.SignInComponent;
@@ -76,13 +77,13 @@ public class RegistrationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPhoneNumberContinue(String phoneNumber) {
+    public void onNewPhoneNumber(String phoneNumber) {
         replaceFragmentWithBackstack(VERIFICATION_FRAGM, VerificationFragment.newInstance(phoneNumber));
     }
 
     @Override
-    public void onAlreadyInUseContinue(String phoneNumber) {
-        replaceFragmentWithBackstack(SIGN_IN_FRAGM, SignInFragment.newInstance(phoneNumber));
+    public void onAlreadyInUse(SomeoneProfileEntity profileEntity) {
+        replaceFragmentWithBackstack(SIGN_IN_FRAGM, SignInFragment.newInstance(profileEntity));
     }
 
     @Override
