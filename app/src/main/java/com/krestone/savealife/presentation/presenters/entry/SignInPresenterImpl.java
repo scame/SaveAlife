@@ -39,7 +39,15 @@ public class SignInPresenterImpl<T extends SignInPresenter.SignInView> implement
                     view.onSignInErr(SaveAlifeApplication.application.getString(R.string.dont_match));
                 }
             }
-        }, throwable -> Log.i("onxSignInErr", throwable.getLocalizedMessage()));
+        }, throwable -> {
+            Log.i("onxSignInErr", throwable.getLocalizedMessage());
+            if (view != null) view.onSignInErr(throwable.getLocalizedMessage());
+        });
+    }
+
+    @Override
+    public void progressDialogCancel() {
+        signInUseCase.unsubscribe();
     }
 
     @Override

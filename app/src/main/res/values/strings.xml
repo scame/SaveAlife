@@ -65,4 +65,7 @@
     <string name="internet_connection_check">Check your internet connection</string>
 
     <string name="dont_match">Passwords don\'t match</string>
+    <string name="forgot_my_password">forgot my password</string>
+    <string name="sign_in_text">Hello %s. Please, provide your password</string>
+    <string name="sign_in">sign in</string>
 </resources>

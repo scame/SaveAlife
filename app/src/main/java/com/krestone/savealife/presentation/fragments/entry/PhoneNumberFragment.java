@@ -70,7 +70,7 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
 
     @OnClick(R.id.phone_number_btn)
     public void onPhoneNumberBtnClick(View view) {
-        validateAndProcessNumber();
+        continueWithNumber();
     }
 
     private void setupEditorActionListener() {
@@ -79,13 +79,13 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
             boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
 
             if (isValidKey || isValidAction) {
-                validateAndProcessNumber();
+                continueWithNumber();
             }
             return false;
         });
     }
 
-    private void validateAndProcessNumber() {
+    private void continueWithNumber() {
         if (!phoneNumberInput.getText().toString().isEmpty()) {
             showProgressDialog();
             presenter.sendRegistrationNumber(phoneNumberInput.getText().toString());

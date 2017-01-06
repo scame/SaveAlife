@@ -14,4 +14,6 @@ public interface SignInPresenter<T> extends Presenter<T> {
     }
 
     void requestSignIn(String password, SomeoneProfileEntity profileEntity);
+
+    void progressDialogCancel();
 }
