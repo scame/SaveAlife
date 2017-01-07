@@ -4,17 +4,18 @@ package com.krestone.savealife.presentation.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
+import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
 import com.krestone.savealife.presentation.presenters.EmergencyPresenter;
 
@@ -30,8 +31,8 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     @BindView(R.id.emergency_contacts_rv)
     RecyclerView contactsRv;
 
-    @BindView(R.id.edit_emergency_btn)
-    Button editEmergencyBtn;
+    @BindView(R.id.add_fab)
+    FloatingActionButton addFab;
 
     @Inject
     EmergencyPresenter<EmergencyPresenter.EmergencyView> emergencyPresenter;
@@ -44,7 +45,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
 
     public interface EmergencyListener {
 
-        void onEditEmergencyListClick();
+        void onAddToEmergencyListClick();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         ButterKnife.bind(this, fragmentView);
         inject();
 
-        editEmergencyBtn.setOnClickListener(v -> emergencyListener.onEditEmergencyListClick());
+        addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
         emergencyPresenter.requestEmergencyContacts();
 
@@ -79,8 +80,13 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     public void displayEmergencyList(List<ContactItem> contacts) {
         this.contacts = contacts;
 
-      //  contactsAdapter = new EmergencyContactsAdapter(contacts, getContext());
+        contactsAdapter = new EmergencyContactsAdapter(contacts, getContext(), adapterPosition -> {
+            // TODO: handle list item click
+        }, v -> {
+            // TODO: handle invite click
+        });
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);
     }

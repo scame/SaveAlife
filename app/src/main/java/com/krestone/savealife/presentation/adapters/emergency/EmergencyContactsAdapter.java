@@ -8,17 +8,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.presentation.models.ContactModel;
+import com.krestone.savealife.data.entities.responses.ContactItem;
+import com.krestone.savealife.presentation.adapters.ListItemClickListener;
 
 import java.util.List;
 
 public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ContactModel> contacts;
+    private static final int VIEW_TYPE_INVITE = 0;
+    private static final int VIEW_TYPE_CONTACT = 1;
+
+    private ListItemClickListener listItemClickListener;
+
+    private View.OnClickListener inviteClick;
+
+    private List<ContactItem> contacts;
 
     private Context context;
 
-    public EmergencyContactsAdapter(List<ContactModel> contacts, Context context) {
+    public EmergencyContactsAdapter(List<ContactItem> contacts, Context context,
+                                    ListItemClickListener listItemClickListener,
+                                    View.OnClickListener inviteClick) {
+        this.listItemClickListener = listItemClickListener;
+        this.inviteClick = inviteClick;
         this.contacts = contacts;
         this.context = context;
     }
@@ -26,18 +38,32 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.emergency_contact_item, parent, false);
+        RecyclerView.ViewHolder viewHolder = null;
 
-        return new EmergencyViewHolder(itemView, context);
+        if (viewType == VIEW_TYPE_INVITE) {
+            View itemView = inflater.inflate(R.layout.invite_item, parent, false);
+            viewHolder = new InviteViewHolder(itemView, inviteClick);
+        } else if (viewType == VIEW_TYPE_CONTACT) {
+            View itemView = inflater.inflate(R.layout.emergency_contact_item, parent, false);
+            viewHolder = new EmergencyViewHolder(itemView, context, listItemClickListener);
+        }
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((EmergencyViewHolder) holder).bindHolder(contacts, position);
+        if (holder instanceof EmergencyViewHolder) {
+            ((EmergencyViewHolder) holder).bindHolder(contacts, position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return contacts == null ? 0 : contacts.size();
+        return contacts == null ? 1 : contacts.size() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == contacts.size() ? VIEW_TYPE_INVITE : VIEW_TYPE_CONTACT;
     }
 }

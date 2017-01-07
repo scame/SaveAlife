@@ -1,7 +1,6 @@
 package com.krestone.savealife.presentation.activities;
 
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -113,9 +112,10 @@ public class DrawerActivity extends AppCompatActivity implements
 
     @Override
     public void startEntryProcess() {
-        Intent entryIntent = new Intent(this, RegistrationActivity.class);
+        goNormal();
+        /*Intent entryIntent = new Intent(this, RegistrationActivity.class);
         startActivity(entryIntent);
-        finish();
+        finish();*/
     }
 
     @Override
@@ -195,7 +195,7 @@ public class DrawerActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onEditEmergencyListClick() {
+    public void onAddToEmergencyListClick() {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.drawer_activity_fl, new AddToEmergencyListFragment(), CONTACTS_FRAG_TAG)

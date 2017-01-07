@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.responses.ContactItem;
+import com.krestone.savealife.presentation.adapters.ListItemClickListener;
 import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.List;
@@ -24,12 +26,16 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.contact_profile_image)
     ImageView contactImage;
 
+    @BindView(R.id.is_in_app)
+    TextView isInAppTv;
+
     private Context context;
 
-    public EmergencyViewHolder(View itemView, Context context) {
+    public EmergencyViewHolder(View itemView, Context context, ListItemClickListener itemClickListener) {
         super(itemView);
         this.context = context;
         ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(v -> itemClickListener.onItemClick(getAdapterPosition()));
     }
 
     private void handleProfileImage(List<ContactModel> contacts, int position) {
@@ -41,8 +47,14 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    protected void bindHolder(List<ContactModel> contacts, int position) {
-        contactName.setText(contacts.get(position).getName());
-        handleProfileImage(contacts, position);
+    protected void bindHolder(List<ContactItem> contacts, int position) {
+        ContactItem item = contacts.get(position);
+        contactName.setText(item.getFirstName() + " " + item.getLastName());
+        if (item.getInApp()) {
+            isInAppTv.setText(context.getString(R.string.in_app));
+        } else {
+            isInAppTv.setText(context.getString(R.string.not_in_app));
+        }
+        //handleProfileImage(contacts, position);
     }
 }

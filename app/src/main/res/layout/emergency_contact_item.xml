@@ -22,11 +22,11 @@
 
 
     <TextView
+        android:id="@+id/is_in_app"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_elem_margin"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:text="@string/in_app" />
+        android:layout_gravity="center_vertical" />
 
 </LinearLayout>

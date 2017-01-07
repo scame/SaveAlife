@@ -30,6 +30,7 @@
     <string name="event_details_btn_text">View details</string>
 
     <string name="in_app">IN APP</string>
+    <string name="not_in_app">NOT IN APP</string>
     <string name="invite">invite</string>
     <string name="emergency_header">In case of this situation we\'ll send a message with your location to these people:</string>
     <string name="edit_emergency_text">Edit list</string>
@@ -69,4 +70,5 @@
     <string name="sign_in_text">Hello %s. Please, provide your password</string>
     <string name="sign_in">sign in</string>
     <string name="new_account">register new account</string>
+    <string name="invite_friends">Invite friends</string>
 </resources>
