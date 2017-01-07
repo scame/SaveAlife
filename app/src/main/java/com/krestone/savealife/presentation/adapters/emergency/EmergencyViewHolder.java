@@ -2,7 +2,6 @@ package com.krestone.savealife.presentation.adapters.emergency;
 
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.presentation.adapters.ListItemClickListener;
-import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.List;
 
@@ -38,14 +36,7 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(v -> itemClickListener.onItemClick(getAdapterPosition()));
     }
 
-    private void handleProfileImage(List<ContactModel> contacts, int position) {
-        String thumbnailUri = contacts.get(position).getThumbnailUri();
-        if (thumbnailUri != null && !thumbnailUri.equals("")) {
-            contactImage.setImageURI(Uri.parse(thumbnailUri));
-        } else {
-            contactImage.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder));
-        }
-    }
+
 
     protected void bindHolder(List<ContactItem> contacts, int position) {
         ContactItem item = contacts.get(position);
@@ -55,6 +46,5 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
         } else {
             isInAppTv.setText(context.getString(R.string.not_in_app));
         }
-        //handleProfileImage(contacts, position);
     }
 }

@@ -87,7 +87,6 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         });
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
-        contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);
     }
 
