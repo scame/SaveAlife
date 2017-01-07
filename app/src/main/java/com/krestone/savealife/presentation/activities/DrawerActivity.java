@@ -113,7 +113,9 @@ public class DrawerActivity extends AppCompatActivity implements
 
     @Override
     public void startEntryProcess() {
-        startActivity(new Intent(this, RegistrationActivity.class));
+        Intent entryIntent = new Intent(this, RegistrationActivity.class);
+        startActivity(entryIntent);
+        finish();
     }
 
     @Override

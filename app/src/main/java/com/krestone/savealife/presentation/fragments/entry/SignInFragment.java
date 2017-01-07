@@ -80,6 +80,10 @@ public class SignInFragment extends Fragment implements SignInPresenter.SignInVi
         return fragmentView;
     }
 
+    @OnClick(R.id.register_new_acc_btn)
+    public void onNewAccountClick(View v) {
+        getFragmentManager().popBackStack();
+    }
 
     @OnClick(R.id.sign_in_btn)
     public void onSignInClick(View v) {

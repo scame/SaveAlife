@@ -68,4 +68,5 @@
     <string name="forgot_my_password">forgot my password</string>
     <string name="sign_in_text">Hello %s. Please, provide your password</string>
     <string name="sign_in">sign in</string>
+    <string name="new_account">register new account</string>
 </resources>

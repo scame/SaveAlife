@@ -39,9 +39,16 @@
 
     <Button
         android:id="@+id/sign_in_btn"
-        android:text="@string/sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_elem_margin"/>
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:text="@string/sign_in" />
+
+    <Button
+        android:id="@+id/register_new_acc_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:text="@string/new_account" />
 
 </LinearLayout>
