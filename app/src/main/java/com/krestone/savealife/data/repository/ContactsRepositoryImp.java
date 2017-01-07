@@ -10,8 +10,9 @@ import android.provider.ContactsContract;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
-import com.krestone.savealife.data.mappers.NumbersToContactsMapper;
-import com.krestone.savealife.data.mappers.PossibleEmergencyContactsFilter;
+import com.krestone.savealife.data.entities.responses.ContactsHolder;
+import com.krestone.savealife.data.mappers.MapContactModelToContactsHolder;
+import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Completable;
-import rx.Observable;
 import rx.Scheduler;
 import rx.Single;
 
@@ -40,32 +40,34 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private Context context;
 
-    private NumbersToContactsMapper numbersToContactsMapper;
+    private NotInEmergencyListFilter notInEmergencyListFilter;
 
-    private PossibleEmergencyContactsFilter possibleEmergencyContactsFilter;
+    private MapContactModelToContactsHolder mapContactModelToContactsHolder;
 
     private Scheduler scheduler;
 
-    public ContactsRepositoryImp(Context context, ServerApi serverApi, NumbersToContactsMapper numbersToContactsMapper,
-                                 PossibleEmergencyContactsFilter possibleEmergencyContactsFilter,
+    public ContactsRepositoryImp(Context context, ServerApi serverApi,
+                                 NotInEmergencyListFilter notInEmergencyListFilter,
+                                 MapContactModelToContactsHolder mapContactModelToContactsHolder,
                                  Scheduler scheduler) {
         this.context = context;
         this.serverApi = serverApi;
         this.scheduler = scheduler;
-        this.numbersToContactsMapper = numbersToContactsMapper;
-        this.possibleEmergencyContactsFilter = possibleEmergencyContactsFilter;
+        this.mapContactModelToContactsHolder = mapContactModelToContactsHolder;
+        this.notInEmergencyListFilter = notInEmergencyListFilter;
     }
 
     @Override
-    public Single<List<ContactModel>> getPossibleEmergencyContacts() {
-        return Single.zip(getContactsInApp().subscribeOn(scheduler),
+    public Single<List<ContactModel>> getContactsNotInEmergencyList() {
+        return Single.zip(
+                Single.just(queryContacts()).subscribeOn(scheduler),
                 serverApi.getEmergencyContacts(getAuthToken()).subscribeOn(scheduler).toSingle(),
-                possibleEmergencyContactsFilter::filter)
-                .map(filteredContactsNumbers -> numbersToContactsMapper.map(filteredContactsNumbers, queryContacts()));
+                notInEmergencyListFilter::filter
+        );
     }
 
     @Override
-    public Single<ContactsNumbersHolder> getContactsInApp() {
+    public Single<ContactsHolder> getContactsInApp() {
         return serverApi.getContactsInApp(getContactsNumbers(), getAuthToken()).toSingle();
     }
 
@@ -80,15 +82,14 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable addToEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
-        return serverApi.addToEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
+    public Completable addToEmergencyList(ContactModel contactModel) {
+        return serverApi.addToEmergencyList(mapContactModelToContactsHolder.map(contactModel),
+                getAuthToken()).toCompletable();
     }
 
     @Override
-    public Single<List<ContactModel>> getEmergencyContacts() {
-        return Observable.zip(serverApi.getEmergencyContacts(getAuthToken()).subscribeOn(scheduler),
-                Observable.just(queryContacts()).subscribeOn(scheduler),
-                numbersToContactsMapper::map).toSingle();
+    public Single<ContactsHolder> getEmergencyContacts() {
+        return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
     }
 
     @Override
@@ -96,10 +97,6 @@ public class ContactsRepositoryImp implements ContactsRepository {
         return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
     }
 
-    @Override
-    public Single<List<ContactModel>> getContacts() {
-        return Single.defer(() -> Single.just(queryContacts()));
-    }
 
     // TODO: duplicates are possible when a contact has more than one number
     // TODO: should be eliminated with contact_id field

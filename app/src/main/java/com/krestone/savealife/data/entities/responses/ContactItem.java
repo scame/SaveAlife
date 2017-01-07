@@ -11,6 +11,8 @@ public class ContactItem {
 
     private Integer status;
 
+    private Boolean isInApp;
+
     public void setNumber(String number) {
         this.number = number;
     }
@@ -41,5 +43,13 @@ public class ContactItem {
 
     public Integer getStatus() {
         return status;
+    }
+
+    public Boolean getInApp() {
+        return isInApp;
+    }
+
+    public void setInApp(Boolean inApp) {
+        isInApp = inApp;
     }
 }

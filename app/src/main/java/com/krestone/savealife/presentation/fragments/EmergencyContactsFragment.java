@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
-import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.EmergencyPresenter;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
 
     private EmergencyListener emergencyListener;
 
-    private List<ContactModel> contacts;
+    private List<ContactItem> contacts;
 
     public interface EmergencyListener {
 
@@ -76,10 +76,10 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     }
 
     @Override
-    public void displayEmergencyList(List<ContactModel> contacts) {
+    public void displayEmergencyList(List<ContactItem> contacts) {
         this.contacts = contacts;
 
-        contactsAdapter = new EmergencyContactsAdapter(contacts, getContext());
+      //  contactsAdapter = new EmergencyContactsAdapter(contacts, getContext());
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.setHasFixedSize(true);
         contactsRv.setAdapter(contactsAdapter);

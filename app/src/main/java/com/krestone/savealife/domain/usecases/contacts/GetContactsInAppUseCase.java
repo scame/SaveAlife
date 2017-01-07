@@ -1,7 +1,7 @@
 package com.krestone.savealife.domain.usecases.contacts;
 
 
-import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
@@ -9,7 +9,7 @@ import com.krestone.savealife.domain.usecases.base.UseCaseSingle;
 
 import rx.Single;
 
-public class GetContactsInAppUseCase extends UseCaseSingle<ContactsNumbersHolder> {
+public class GetContactsInAppUseCase extends UseCaseSingle<ContactsHolder> {
 
     private ContactsRepository contactsRepository;
 
@@ -20,7 +20,7 @@ public class GetContactsInAppUseCase extends UseCaseSingle<ContactsNumbersHolder
     }
 
     @Override
-    protected Single<ContactsNumbersHolder> getUseCaseSingle() {
+    protected Single<ContactsHolder> getUseCaseSingle() {
         return contactsRepository.getContactsInApp();
     }
 }

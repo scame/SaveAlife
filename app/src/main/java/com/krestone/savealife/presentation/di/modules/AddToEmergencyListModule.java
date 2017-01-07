@@ -5,7 +5,7 @@ import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.contacts.AddToEmergencyListUseCase;
-import com.krestone.savealife.domain.usecases.contacts.GetPossibleEmergencyContactsUseCase;
+import com.krestone.savealife.domain.usecases.contacts.GetContactsNotInEmergencyList;
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenter;
 import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenterImp;
@@ -21,16 +21,16 @@ public class AddToEmergencyListModule {
     @Provides
     @PerActivity
     AddToEmergencyListPresenter<AddToEmergencyListView> provideContactsPresenter(
-            GetPossibleEmergencyContactsUseCase getPossibleEmergencyContactsUseCase,
+            GetContactsNotInEmergencyList getContactsNotInEmergencyList,
             AddToEmergencyListUseCase addToEmergencyListUseCase) {
-        return new AddToEmergencyListPresenterImp<>(getPossibleEmergencyContactsUseCase, addToEmergencyListUseCase);
+        return new AddToEmergencyListPresenterImp<>(getContactsNotInEmergencyList, addToEmergencyListUseCase);
     }
 
     @Provides
     @PerActivity
-    GetPossibleEmergencyContactsUseCase provideGetPossibleEmergencyContacts(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                                                            ContactsRepository contactsRepository) {
-        return new GetPossibleEmergencyContactsUseCase(subscribeOn, observeOn, contactsRepository);
+    GetContactsNotInEmergencyList provideGetPossibleEmergencyContacts(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                                                      ContactsRepository contactsRepository) {
+        return new GetContactsNotInEmergencyList(subscribeOn, observeOn, contactsRepository);
     }
 
     @Provides

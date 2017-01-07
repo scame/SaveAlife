@@ -4,8 +4,8 @@ package com.krestone.savealife.data.di;
 import android.content.Context;
 
 import com.google.android.gms.location.LocationRequest;
-import com.krestone.savealife.data.mappers.NumbersToContactsMapper;
-import com.krestone.savealife.data.mappers.PossibleEmergencyContactsFilter;
+import com.krestone.savealife.data.mappers.MapContactModelToContactsHolder;
+import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.EntryRepository;
@@ -38,11 +38,11 @@ public class RepositoriesModule {
     @Provides
     @Singleton
     ContactsRepository provideContactsRepository(Context context, ServerApi serverApi,
-                                                 NumbersToContactsMapper numbersToContactsMapper,
-                                                 PossibleEmergencyContactsFilter possibleEmergencyContactsFilter,
+                                                 MapContactModelToContactsHolder mapper,
+                                                 NotInEmergencyListFilter notInEmergencyListFilter,
                                                  SubscribeOn subscribeOn) {
-        return new ContactsRepositoryImp(context, serverApi, numbersToContactsMapper,
-                possibleEmergencyContactsFilter, subscribeOn.getScheduler());
+        return new ContactsRepositoryImp(context, serverApi, notInEmergencyListFilter,
+                mapper,subscribeOn.getScheduler());
     }
 
     @Provides

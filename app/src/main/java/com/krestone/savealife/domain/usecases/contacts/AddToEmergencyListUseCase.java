@@ -1,11 +1,11 @@
 package com.krestone.savealife.domain.usecases.contacts;
 
 
-import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
+import com.krestone.savealife.presentation.models.ContactModel;
 
 import rx.Completable;
 
@@ -13,7 +13,7 @@ public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     private ContactsRepository contactsRepository;
 
-    private ContactsNumbersHolder contactsNumbersHolder;
+    private ContactModel contactModel;
 
     public AddToEmergencyListUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
                                      ContactsRepository contactsRepository) {
@@ -23,14 +23,14 @@ public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.addToEmergencyList(contactsNumbersHolder);
+        return contactsRepository.addToEmergencyList(contactModel);
     }
 
-    public ContactsNumbersHolder getContactsNumbersHolder() {
-        return contactsNumbersHolder;
+    public ContactModel getContactModel() {
+        return contactModel;
     }
 
-    public void setContactsNumbersHolder(ContactsNumbersHolder contactsNumbersHolder) {
-        this.contactsNumbersHolder = contactsNumbersHolder;
+    public void setContactModel(ContactModel contactModel) {
+        this.contactModel = contactModel;
     }
 }

@@ -9,6 +9,7 @@ import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
+import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.entities.responses.PasswordMatchingResponse;
@@ -27,18 +28,18 @@ public interface ServerApi {
 
 
     @POST("http://10.0.1.94:8080/contactsInApp")
-    Observable<ContactsNumbersHolder> getContactsInApp(@Body ContactsNumbersHolder numbersHolder,
-                                                       @Header("x-auth-token") String tokenHeader);
+    Observable<ContactsHolder> getContactsInApp(@Body ContactsNumbersHolder numbersHolder,
+                                                @Header("x-auth-token") String tokenHeader);
 
     @POST("http://10.0.1.94:8080/deleteFromEmergencyList")
     Observable<ResponseBody> deleteContactFromEmergencyList(@Body ContactsNumbersHolder numbersHolder,
                                                             @Header("x-auth-token") String token);
 
     @GET("http://10.0.1.94:8080/getEmergencyList")
-    Observable<ContactsNumbersHolder> getEmergencyContacts(@Header("x-auth-token") String token);
+    Observable<ContactsHolder> getEmergencyContacts(@Header("x-auth-token") String token);
 
     @POST("http://10.0.1.94:8080/addToEmergencyList")
-    Observable<ResponseBody> addToEmergencyList(@Body ContactsNumbersHolder numbersHolder,
+    Observable<ResponseBody> addToEmergencyList(@Body ContactsHolder contactsHolder,
                                                 @Header("x-auth-token") String token);
 
     @POST("http://10.0.1.94:8080/signUp")

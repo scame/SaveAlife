@@ -11,17 +11,19 @@ import java.util.List;
 
 import rx.Single;
 
-public class GetAllContactsUseCase extends UseCaseSingle<List<ContactModel>> {
+
+public class GetContactsNotInEmergencyList extends UseCaseSingle<List<ContactModel>> {
 
     private ContactsRepository contactsRepository;
 
-    public GetAllContactsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, ContactsRepository contactsRepository) {
+    public GetContactsNotInEmergencyList(SubscribeOn subscribeOn, ObserveOn observeOn,
+                                         ContactsRepository contactsRepository) {
         super(subscribeOn, observeOn);
         this.contactsRepository = contactsRepository;
     }
 
     @Override
     protected Single<List<ContactModel>> getUseCaseSingle() {
-        return contactsRepository.getContacts();
+        return contactsRepository.getContactsNotInEmergencyList();
     }
 }
