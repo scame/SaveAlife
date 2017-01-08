@@ -3,7 +3,6 @@ package com.krestone.savealife.presentation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,11 +22,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import icepick.Icepick;
 import icepick.State;
 
-public class AddToEmergencyListFragment extends Fragment implements AddToEmergencyListPresenter.AddToEmergencyListView {
+public class AddToEmergencyListFragment extends AbstractFragment implements AddToEmergencyListPresenter.AddToEmergencyListView {
 
     @BindView(R.id.possible_contacts_rv)
     RecyclerView contactsRv;
@@ -43,11 +40,7 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.add_to_emergency_layout, container, false);
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        ButterKnife.bind(this, fragmentView);
-        inject();
+        View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
         presenter.setView(this);
         instantiateFragment();
@@ -63,10 +56,15 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
         }
     }
 
-    private void inject() {
+    protected void inject() {
         if (getActivity() instanceof DrawerActivity) {
             ((DrawerActivity) getActivity()).provideContactsComponent().inject(this);
         }
+    }
+
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.add_to_emergency_layout;
     }
 
     @Override
@@ -82,11 +80,6 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
         contactsRv.setAdapter(addToEmergencyAdapter);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
 
     @Override
     public void onDestroyView() {

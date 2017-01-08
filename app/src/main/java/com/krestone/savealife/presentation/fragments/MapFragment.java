@@ -4,7 +4,6 @@ package com.krestone.savealife.presentation.fragments;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +34,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import icepick.Icepick;
 import icepick.State;
 
-public class MapFragment extends Fragment implements MapPresenter.MapView {
+public class MapFragment extends AbstractFragment implements MapPresenter.MapView {
 
     @Inject
     MapPresenter<MapPresenter.MapView> mapPresenter;
@@ -65,12 +62,11 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.map_fragment_layout, container, false);
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        ButterKnife.bind(this, fragmentView);
+        View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
-        initPresenter();
+        inject();
         initializeMap();
+        mapPresenter.setView(this);
         mapView.onCreate(savedInstanceState);
         setupAutocompleteView();
 
@@ -90,11 +86,15 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
         });
     }
 
-    private void initPresenter() {
+    protected void inject() {
         if (getActivity() instanceof DrawerActivity) {
             ((DrawerActivity) getActivity()).provideMapComponent().inject(this);
         }
-        mapPresenter.setView(this);
+    }
+
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.map_fragment_layout;
     }
 
     private void setupAutocompleteView() {
@@ -224,7 +224,6 @@ public class MapFragment extends Fragment implements MapPresenter.MapView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
     }
 
     private void restoreMapObjects() {

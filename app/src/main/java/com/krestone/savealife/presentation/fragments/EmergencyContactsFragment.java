@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,11 +24,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import icepick.Icepick;
 import icepick.State;
 
-public class EmergencyContactsFragment extends Fragment implements EmergencyPresenter.EmergencyView {
+public class EmergencyContactsFragment extends AbstractFragment implements EmergencyPresenter.EmergencyView {
 
     @BindView(R.id.emergency_contacts_rv)
     RecyclerView contactsRv;
@@ -63,11 +60,7 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.emergency_contacts_layout, container, false);
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        ButterKnife.bind(this, fragmentView);
-        inject();
+        View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
@@ -84,10 +77,15 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         }
     }
 
-    private void inject() {
+    protected void inject() {
         if (getActivity() instanceof DrawerActivity) {
             ((DrawerActivity) getActivity()).provideEmergencyComponent().inject(this);
         }
+    }
+
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.emergency_contacts_layout;
     }
 
     @Override
@@ -104,11 +102,6 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         contactsRv.setAdapter(contactsAdapter);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
 
     @Override
     public void onDestroyView() {
