@@ -1,7 +1,10 @@
 package com.krestone.savealife.presentation.models;
 
 
-public class ContactModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ContactModel implements Parcelable {
 
     private String id;
 
@@ -121,4 +124,45 @@ public class ContactModel {
         }
         return false;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.homeNumber);
+        dest.writeString(this.workNumber);
+        dest.writeString(this.mobileNumber);
+        dest.writeString(this.thumbnailUri);
+        dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.inEmergencyList ? (byte) 1 : (byte) 0);
+    }
+
+    protected ContactModel(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.homeNumber = in.readString();
+        this.workNumber = in.readString();
+        this.mobileNumber = in.readString();
+        this.thumbnailUri = in.readString();
+        this.inApp = in.readByte() != 0;
+        this.inEmergencyList = in.readByte() != 0;
+    }
+
+    public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {
+        @Override
+        public ContactModel createFromParcel(Parcel source) {
+            return new ContactModel(source);
+        }
+
+        @Override
+        public ContactModel[] newArray(int size) {
+            return new ContactModel[size];
+        }
+    };
 }

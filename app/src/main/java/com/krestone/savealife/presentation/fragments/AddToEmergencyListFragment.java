@@ -17,12 +17,15 @@ import com.krestone.savealife.presentation.adapters.emergency.AddToEmergencyAdap
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 
 public class AddToEmergencyListFragment extends Fragment implements AddToEmergencyListPresenter.AddToEmergencyListView {
 
@@ -34,19 +37,30 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
 
     private AddToEmergencyAdapter addToEmergencyAdapter;
 
-    private List<ContactModel> contacts;
+    @State
+    ArrayList<ContactModel> contacts;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.add_to_emergency_layout, container, false);
-        ButterKnife.bind(this, fragmentView);
 
+        Icepick.restoreInstanceState(this, savedInstanceState);
+        ButterKnife.bind(this, fragmentView);
         inject();
+
         presenter.setView(this);
-        presenter.requestContacts();
+        instantiateFragment();
 
         return fragmentView;
+    }
+
+    private void instantiateFragment() {
+        if (contacts == null) {
+            presenter.requestContacts();
+        } else {
+            displayContacts(contacts);
+        }
     }
 
     private void inject() {
@@ -56,15 +70,9 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
     }
 
     @Override
-    public void onDestroyView() {
-        presenter.destroy();
-        super.onDestroyView();
-    }
-
-    @Override
     public void displayContacts(List<ContactModel> contacts) {
-        this.contacts = contacts;
-        addToEmergencyAdapter = new AddToEmergencyAdapter(getContext(), contacts, adapterPosition -> {
+        this.contacts = new ArrayList<>(contacts);
+        addToEmergencyAdapter = new AddToEmergencyAdapter(getContext(), this.contacts, adapterPosition -> {
             // TODO: handle adding to emergency list
         });
 
@@ -72,5 +80,17 @@ public class AddToEmergencyListFragment extends Fragment implements AddToEmergen
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(addToEmergencyAdapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
     }
 }

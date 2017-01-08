@@ -19,12 +19,15 @@ import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
 import com.krestone.savealife.presentation.presenters.EmergencyPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 
 public class EmergencyContactsFragment extends Fragment implements EmergencyPresenter.EmergencyView {
 
@@ -41,7 +44,8 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
 
     private EmergencyListener emergencyListener;
 
-    private List<ContactItem> contacts;
+    @State
+    ArrayList<ContactItem> contacts;
 
     public interface EmergencyListener {
 
@@ -60,14 +64,24 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.emergency_contacts_layout, container, false);
+
+        Icepick.restoreInstanceState(this, savedInstanceState);
         ButterKnife.bind(this, fragmentView);
         inject();
 
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
-        emergencyPresenter.requestEmergencyContacts();
+        instantiateFragment();
 
         return fragmentView;
+    }
+
+    private void instantiateFragment() {
+        if (contacts == null) {
+            emergencyPresenter.requestEmergencyContacts();
+        } else {
+            displayEmergencyList(contacts);
+        }
     }
 
     private void inject() {
@@ -78,9 +92,9 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
 
     @Override
     public void displayEmergencyList(List<ContactItem> contacts) {
-        this.contacts = contacts;
+        this.contacts = new ArrayList<>(contacts);
 
-        contactsAdapter = new EmergencyContactsAdapter(contacts, getContext(), adapterPosition -> {
+        contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {
             // TODO: handle list item click
         }, v -> {
             // TODO: handle invite click
@@ -88,6 +102,12 @@ public class EmergencyContactsFragment extends Fragment implements EmergencyPres
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(contactsAdapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
