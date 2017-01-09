@@ -14,7 +14,7 @@ import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.AddToEmergencyAdapter;
 import com.krestone.savealife.presentation.models.ContactModel;
-import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenter;
+import com.krestone.savealife.presentation.presenters.contacts.AddToEmergencyListPresenter;
 
 import java.util.ArrayList;
 import java.util.List;

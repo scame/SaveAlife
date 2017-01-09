@@ -71,4 +71,9 @@
     <string name="sign_in">sign in</string>
     <string name="new_account">register new account</string>
     <string name="invite_friends">Invite friends</string>
+
+    <string name="driver">Driver</string>
+    <string name="rambler">Rambler</string>
+    <string name="ambulance">Ambulance</string>
+    <string name="sos">SOS</string>
 </resources>

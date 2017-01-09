@@ -7,13 +7,13 @@ import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.contacts.AddToEmergencyListUseCase;
 import com.krestone.savealife.domain.usecases.contacts.GetContactsNotInEmergencyList;
 import com.krestone.savealife.presentation.di.PerActivity;
-import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenter;
-import com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenterImp;
+import com.krestone.savealife.presentation.presenters.contacts.AddToEmergencyListPresenter;
+import com.krestone.savealife.presentation.presenters.contacts.AddToEmergencyListPresenterImp;
 
 import dagger.Module;
 import dagger.Provides;
 
-import static com.krestone.savealife.presentation.presenters.AddToEmergencyListPresenter.*;
+import static com.krestone.savealife.presentation.presenters.contacts.AddToEmergencyListPresenter.*;
 
 @Module
 public class AddToEmergencyListModule {

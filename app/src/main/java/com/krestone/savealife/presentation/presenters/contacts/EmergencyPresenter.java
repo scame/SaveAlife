@@ -1,7 +1,8 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.contacts;
 
 
 import com.krestone.savealife.data.entities.responses.ContactItem;
+import com.krestone.savealife.presentation.presenters.Presenter;
 
 import java.util.List;
 

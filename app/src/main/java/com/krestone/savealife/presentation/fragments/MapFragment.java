@@ -28,8 +28,8 @@ import com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -51,7 +51,7 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     private Marker currentLocationMarker;
 
-    private final List<Marker> mapObjects = new ArrayList<>();
+    private final Map<Marker, MapObject> mapObjectsMap = new HashMap<>();
 
     @State
     LatLng latestPosition;
@@ -64,7 +64,6 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
-        inject();
         initializeMap();
         mapPresenter.setView(this);
         mapView.onCreate(savedInstanceState);
@@ -73,16 +72,32 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         return fragmentView;
     }
 
+
     private void initializeMap() {
         mapView.getMapAsync(mapboxMap1 -> {
             MapFragment.this.mapboxMap = mapboxMap1;
+            setupOnMarkerClickListener();
+
             mapPresenter.requestLocationUpdates();
-            mapPresenter.requestMapObjects();
+            mapPresenter.requestMapObjectsUpdates();
 
             restoreMapObjects();
             if (latestPosition != null) {
-                updateMap(latestPosition.getLatitude(), latestPosition.getLongitude());
+                updateCurrentLocation(latestPosition.getLatitude(), latestPosition.getLongitude());
             }
+        });
+    }
+
+    private void setupOnMarkerClickListener() {
+        mapboxMap.setOnMarkerClickListener(marker -> {
+            MapObject mappedObject = mapObjectsMap.get(marker);
+
+            if (mappedObject != null && mappedObject.isSos()) {
+                // TODO: display custom view dialog
+            }
+
+            // will be shown default info dialog
+            return false;
         });
     }
 
@@ -102,11 +117,11 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         autocompleteView.setType(GeocodingCriteria.TYPE_POI);
         autocompleteView.setOnFeatureListener(feature -> {
             Position position = feature.asPosition();
-            updateMap(position.getLatitude(), position.getLongitude());
+            updateCurrentLocation(position.getLatitude(), position.getLongitude());
         });
     }
 
-    private void updateMap(double latitude, double longitude) {
+    private void updateCurrentLocation(double latitude, double longitude) {
         latestPosition = new LatLng(latitude, longitude);
 
         if (mapboxMap != null) {
@@ -138,7 +153,7 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     @Override
     public void displayLocation(LatLng latLng) {
-        updateMap(latLng.getLatitude(), latLng.getLongitude());
+        updateCurrentLocation(latLng.getLatitude(), latLng.getLongitude());
     }
 
     @Override
@@ -161,32 +176,46 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     // TODO: add status icons
     private void handlePlainObject(MapObject mapObject) {
         if (mapObject.getRole().equals("driver")) {
-            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_cancel_black_24dp);
+            addPlainObjectMarker(mapObject, getString(R.string.driver), R.drawable.ic_cancel_black_24dp);
         } else if (mapObject.getRole().equals("person")) {
-            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_arrow_back_black_24dp);
+            addPlainObjectMarker(mapObject, getString(R.string.rambler), R.drawable.ic_arrow_back_black_24dp);
         } else if (mapObject.getRole().equals("ambulance")) {
-            addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_near_me_black_24dp);
+            addPlainObjectMarker(mapObject, getString(R.string.ambulance), R.drawable.ic_near_me_black_24dp);
+        }
+    }
+
+    private void addPlainObjectMarker(MapObject plainObject, String title, int markerDrawable) {
+        if (mapboxMap != null) {
+            Marker marker = mapboxMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(plainObject.getLatitude(), plainObject.getLongitude()))
+                    .setIcon(getMapboxIcon(markerDrawable))
+                    .setTitle(title)
+                    .setSnippet(plainObject.getPhoneNumber()));
+
+            mapObjectsMap.put(marker, plainObject);
         }
     }
 
     // TODO: should provide additional info dialog
     private void handleSosCase(MapObject mapObject) {
-        addObjectMarker(mapObject.getLatitude(), mapObject.getLongitude(), R.drawable.ic_help_black_24dp);
+        addSosObjectMarker(mapObject, R.drawable.ic_help_black_24dp);
     }
 
-    private void addObjectMarker(double latitude, double longitude, int markerDrawable) {
+    private void addSosObjectMarker(MapObject sosObject, int markerDrawable) {
         if (mapboxMap != null) {
-            mapObjects.add(mapboxMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latitude, longitude))
-                    .setIcon(getMapboxIcon(markerDrawable))));
+            Marker marker = mapboxMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(sosObject.getLatitude(), sosObject.getLongitude()))
+                    .setIcon(getMapboxIcon(markerDrawable)));
+
+            mapObjectsMap.put(marker, sosObject);
         }
     }
 
     private void removeOldMapObjects() {
-        for (Marker marker : mapObjects) {
+        for (Marker marker : mapObjectsMap.keySet()) {
             marker.remove();
         }
-        mapObjects.clear();
+        mapObjectsMap.clear();
     }
 
     private Icon getMapboxIcon(int drawableId) {

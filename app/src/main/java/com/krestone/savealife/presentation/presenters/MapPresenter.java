@@ -17,5 +17,5 @@ public interface MapPresenter<T> extends Presenter<T> {
 
     void requestLocationUpdates();
 
-    void requestMapObjects();
+    void requestMapObjectsUpdates();
 }

@@ -6,8 +6,8 @@ import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.contacts.GetEmergencyContactsUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
-import com.krestone.savealife.presentation.presenters.EmergencyPresenter;
-import com.krestone.savealife.presentation.presenters.EmergencyPresenterImp;
+import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenter;
+import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenterImp;
 
 import dagger.Module;
 import dagger.Provides;

@@ -34,7 +34,7 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
     }
 
     @Override
-    public void requestMapObjects() {
+    public void requestMapObjectsUpdates() {
         mapObjectsUseCase.setUpdateArea(updateArea);
         mapObjectsUseCase.setUpdateIntervalSec(updateIntervalInSec);
         mapObjectsUseCase.executeObservable(new MapObjectsSubscriber());

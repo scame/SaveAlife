@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.contacts;
 
 
 import android.util.Log;
