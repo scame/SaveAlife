@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:columnCount="2"
+        app:rowCount="3">
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="0dp"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:text="Kyiv, Ukraine. Sechenova street, dorm 16, 424/3"
+            app:layout_columnWeight="1" />
+
+        <ImageButton
+            android:id="@+id/dismiss_window_btn"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_clear_black_24dp" />
+
+        <TextView
+            android:id="@+id/accident_time"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:text="Today 19:32"
+            app:layout_columnSpan="2" />
+
+        <Button
+            android:id="@+id/help_btn"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/standard_elem_margin"
+            android:text="@string/help"
+            app:layout_columnSpan="2" />
+
+    </android.support.v7.widget.GridLayout>
+
+</LinearLayout>
+

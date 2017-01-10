@@ -59,6 +59,7 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     @State
     MapObjectsEntity mapObjectsEntity;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,17 +89,25 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         });
     }
 
+
     private void setupOnMarkerClickListener() {
         mapboxMap.setOnMarkerClickListener(marker -> {
             MapObject mappedObject = mapObjectsMap.get(marker);
 
             if (mappedObject != null && mappedObject.isSos()) {
-                // TODO: display custom view dialog
+                displaySosWindow(mappedObject);
+                return true;
             }
-
             // will be shown default info dialog
             return false;
         });
+    }
+
+    private void displaySosWindow(MapObject mapObject) {
+        getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.drawer_activity_fl, SosWindowFragment.newInstance(mapObject), "TAG")
+                .commit();
     }
 
     protected void inject() {
@@ -190,13 +199,14 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
                     .position(new LatLng(plainObject.getLatitude(), plainObject.getLongitude()))
                     .setIcon(getMapboxIcon(markerDrawable))
                     .setTitle(title)
-                    .setSnippet(plainObject.getPhoneNumber()));
+                    .setSnippet(plainObject.getPhoneNumber())
+            );
 
             mapObjectsMap.put(marker, plainObject);
         }
     }
 
-    // TODO: should provide additional info dialog
+
     private void handleSosCase(MapObject mapObject) {
         addSosObjectMarker(mapObject, R.drawable.ic_help_black_24dp);
     }
