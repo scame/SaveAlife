@@ -2,7 +2,7 @@ package com.krestone.savealife.presentation.di.modules;
 
 
 import com.krestone.savealife.data.repository.LocationRepository;
-import com.krestone.savealife.data.repository.MapRepository;
+import com.krestone.savealife.data.repository.MapObjectsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
@@ -43,7 +43,7 @@ public class MapModule {
     @Provides
     @PerActivity
     GetMapObjectsUseCase provideMapObjectsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                                                  MapRepository mapRepository) {
+                                                  MapObjectsRepository mapRepository) {
         return new GetMapObjectsUseCase(subscribeOn, observeOn, mapRepository);
     }
 }

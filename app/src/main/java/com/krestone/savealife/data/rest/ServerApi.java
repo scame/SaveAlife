@@ -10,7 +10,7 @@ import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.entities.responses.PasswordMatchingResponse;
 import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;

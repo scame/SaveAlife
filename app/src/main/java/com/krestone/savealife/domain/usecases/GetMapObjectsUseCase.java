@@ -1,8 +1,8 @@
 package com.krestone.savealife.domain.usecases;
 
 
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
-import com.krestone.savealife.data.repository.MapRepository;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
+import com.krestone.savealife.data.repository.MapObjectsRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseStream;
@@ -11,13 +11,13 @@ import rx.Observable;
 
 public class GetMapObjectsUseCase extends UseCaseStream<MapObjectsEntity> {
 
-    private MapRepository mapRepository;
+    private MapObjectsRepository mapRepository;
 
     private int updateIntervalSec;
 
     private double updateArea;
 
-    public GetMapObjectsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, MapRepository mapRepository) {
+    public GetMapObjectsUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, MapObjectsRepository mapRepository) {
         super(subscribeOn, observeOn);
         this.mapRepository = mapRepository;
     }

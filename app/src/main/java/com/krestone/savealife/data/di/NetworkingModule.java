@@ -3,6 +3,7 @@ package com.krestone.savealife.data.di;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.krestone.savealife.data.rest.MapboxApi;
 import com.krestone.savealife.data.rest.ServerApi;
 
 import java.util.concurrent.TimeUnit;
@@ -64,7 +65,13 @@ public class NetworkingModule {
 
     @Singleton
     @Provides
-    ServerApi provideserverApi(Retrofit retrofit) {
+    ServerApi provideServerApi(Retrofit retrofit) {
         return retrofit.create(ServerApi.class);
+    }
+
+    @Singleton
+    @Provides
+    MapboxApi provideMapboxApi(Retrofit retrofit) {
+        return retrofit.create(MapboxApi.class);
     }
 }

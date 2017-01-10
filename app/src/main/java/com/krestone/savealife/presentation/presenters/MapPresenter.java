@@ -1,7 +1,7 @@
 package com.krestone.savealife.presentation.presenters;
 
 
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 public interface MapPresenter<T> extends Presenter<T> {

@@ -1,4 +1,4 @@
-package com.krestone.savealife.data.entities.responses;
+package com.krestone.savealife.data.entities.responses.map;
 
 
 import android.os.Parcel;

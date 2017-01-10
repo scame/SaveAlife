@@ -4,7 +4,7 @@ package com.krestone.savealife.presentation.presenters;
 import android.location.Location;
 import android.util.Log;
 
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
 import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;

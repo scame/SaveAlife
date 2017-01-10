@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.responses.MapObject;
+import com.krestone.savealife.data.entities.responses.map.MapObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;

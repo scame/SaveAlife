@@ -7,14 +7,14 @@ import android.preference.PreferenceManager;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 
-public class MapRepositoryImpl implements MapRepository {
+public class MapObjectsRepositoryImpl implements MapObjectsRepository {
 
     private ServerApi serverApi;
 
@@ -24,7 +24,7 @@ public class MapRepositoryImpl implements MapRepository {
 
     private double updateArea;
 
-    public MapRepositoryImpl(ServerApi serverApi, Context context) {
+    public MapObjectsRepositoryImpl(ServerApi serverApi, Context context) {
         this.serverApi = serverApi;
         this.context = context;
     }
@@ -43,6 +43,7 @@ public class MapRepositoryImpl implements MapRepository {
         double longitude = sharedPrefs.getFloat(context.getString(R.string.longitude_key), (float) 0.0);
         return new MapObjectsRequest(latitude, longitude, updateArea);
     }
+
 
     @Override
     public void setUpdateArea(double updateArea) {

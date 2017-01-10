@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.responses.MapObject;
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObject;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;

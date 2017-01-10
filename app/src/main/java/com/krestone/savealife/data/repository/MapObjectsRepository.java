@@ -1,11 +1,11 @@
 package com.krestone.savealife.data.repository;
 
 
-import com.krestone.savealife.data.entities.responses.MapObjectsEntity;
+import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 
 import rx.Observable;
 
-public interface MapRepository {
+public interface MapObjectsRepository {
 
     void setUpdateArea(double updateArea);
 
