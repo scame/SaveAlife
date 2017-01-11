@@ -35,6 +35,7 @@ import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
 import com.krestone.savealife.presentation.presenters.DrawerActivityPresenter;
+import com.krestone.savealife.util.InvitationUtil;
 
 import javax.inject.Inject;
 
@@ -182,6 +183,9 @@ public class DrawerActivity extends AppCompatActivity implements
                 break;
             case R.id.settings_drawer_item:
                 replaceFragment(SETTINGS_FRAG_TAG, new SettingsFragment());
+                break;
+            case R.id.invite_drawer_item:
+                InvitationUtil.showInviteWindow(getApplicationContext(), "");
                 break;
             default:
                 replaceFragment(DASHBOARD_FRAG_TAG, new DashboardFragment());

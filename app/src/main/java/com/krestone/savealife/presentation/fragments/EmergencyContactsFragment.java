@@ -17,6 +17,7 @@ import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
 import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenter;
+import com.krestone.savealife.util.InvitationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +95,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
 
         contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {
             // TODO: handle list item click
-        }, v -> {
-            // TODO: handle invite click
-        });
+        }, v -> InvitationUtil.showInviteWindow(getContext(), ""));
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(contactsAdapter);

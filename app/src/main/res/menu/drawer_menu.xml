@@ -23,6 +23,10 @@
             android:checkableBehavior="single">
 
             <item
+                android:id="@+id/invite_drawer_item"
+                android:title="@string/invite"/>
+
+            <item
                 android:id="@+id/settings_drawer_item"
                 android:title="@string/settings_item" />
         </group>
