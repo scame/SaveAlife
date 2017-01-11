@@ -20,7 +20,7 @@ public class ContactModel implements Parcelable {
 
     private boolean inApp;
 
-    private boolean inEmergencyList;
+    private boolean isConsistent;
 
     public ContactModel() { }
 
@@ -32,7 +32,7 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = contactModel.getMobileNumber() == null ? null : contactModel.getMobileNumber();
         this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
         this.inApp = contactModel.isInApp();
-        this.inEmergencyList = contactModel.isInEmergencyList();
+        this.isConsistent = contactModel.isConsistent();
     }
 
     public ContactModel(String id, String name, String thumbnailUri, String mobileNumber) {
@@ -42,8 +42,8 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = mobileNumber;
     }
 
-    public boolean isInEmergencyList() {
-        return inEmergencyList;
+    public boolean isConsistent() {
+        return isConsistent;
     }
 
     public boolean isInApp() {
@@ -78,8 +78,8 @@ public class ContactModel implements Parcelable {
         this.thumbnailUri = thumbnailUri;
     }
 
-    public void setInEmergencyList(boolean inEmergencyList) {
-        this.inEmergencyList = inEmergencyList;
+    public void setConsistent(boolean consistent) {
+        this.isConsistent = consistent;
     }
 
     public void setInApp(boolean inApp) {
@@ -119,8 +119,7 @@ public class ContactModel implements Parcelable {
                     (contact.getHomeNumber() == null ? this.homeNumber == null : contact.getHomeNumber().equals(this.homeNumber)) &&
                     (contact.getWorkNumber() == null ? this.workNumber == null : contact.getWorkNumber().equals(this.workNumber)) &&
                     (contact.getMobileNumber() == null ? this.mobileNumber == null : contact.getMobileNumber().equals(this.mobileNumber)) &&
-                    (contact.getThumbnailUri() == null ? this.thumbnailUri == null : contact.getThumbnailUri().equals(this.thumbnailUri)) &&
-                    (contact.isInApp() == this.inApp && contact.isInEmergencyList() == this.inEmergencyList);
+                    (contact.getThumbnailUri() == null ? this.thumbnailUri == null : contact.getThumbnailUri().equals(this.thumbnailUri));
         }
         return false;
     }
@@ -140,7 +139,7 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.mobileNumber);
         dest.writeString(this.thumbnailUri);
         dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.inEmergencyList ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isConsistent ? (byte) 1 : (byte) 0);
     }
 
     protected ContactModel(Parcel in) {
@@ -151,7 +150,7 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = in.readString();
         this.thumbnailUri = in.readString();
         this.inApp = in.readByte() != 0;
-        this.inEmergencyList = in.readByte() != 0;
+        this.isConsistent = in.readByte() != 0;
     }
 
     public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {
