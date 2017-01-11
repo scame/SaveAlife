@@ -77,4 +77,6 @@
     <string name="ambulance">Ambulance</string>
     <string name="sos">SOS</string>
     <string name="help">help</string>
+
+    <string name="address_dialog_title"></string>
 </resources>

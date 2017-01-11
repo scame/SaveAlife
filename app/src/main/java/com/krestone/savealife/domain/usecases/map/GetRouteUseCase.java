@@ -19,6 +19,7 @@ public class GetRouteUseCase extends UseCaseSingle<RouteModel> {
 
     public GetRouteUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, MapboxRepository mapboxRepository) {
         super(subscribeOn, observeOn);
+        this.mapboxRepository = mapboxRepository;
     }
 
     @Override

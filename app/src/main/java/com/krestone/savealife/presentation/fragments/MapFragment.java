@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.map.MapObject;
@@ -19,6 +20,8 @@ import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -49,12 +52,19 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     private MapboxMap mapboxMap;
 
+    private Polyline routePolyline;
+
     private Marker currentLocationMarker;
+
+    private Marker destinationMarker;
 
     private final Map<Marker, MapObject> mapObjectsMap = new HashMap<>();
 
     @State
     LatLng latestPosition;
+
+    @State
+    LatLng destinationPosition;
 
     @State
     MapObjectsEntity mapObjectsEntity;
@@ -73,11 +83,33 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         return fragmentView;
     }
 
+    private void setupOnLongClickListener() {
+        mapboxMap.setOnMapLongClickListener(this::updateDestinationPoint);
+    }
+
+
+    private void recomputeDirectionPolyline() {
+        if (destinationPosition != null && latestPosition != null) {
+            mapPresenter.requestRoute(latestPosition, destinationPosition);
+        }
+    }
+
+    // FIXME: 11.01.2017 shouldn't recompute every time device' position changes
+    private void updateDestinationPoint(LatLng newDestination) {
+        this.destinationPosition = newDestination;
+
+        if (destinationMarker != null) {
+            destinationMarker.remove();
+        }
+        destinationMarker = mapboxMap.addMarker(new MarkerOptions().position(newDestination));
+        recomputeDirectionPolyline();
+    }
 
     private void initializeMap() {
         mapView.getMapAsync(mapboxMap1 -> {
             MapFragment.this.mapboxMap = mapboxMap1;
             setupOnMarkerClickListener();
+            setupOnLongClickListener();
 
             mapPresenter.requestLocationUpdates();
             mapPresenter.requestMapObjectsUpdates();
@@ -85,6 +117,9 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
             restoreMapObjects();
             if (latestPosition != null) {
                 updateCurrentLocation(latestPosition.getLatitude(), latestPosition.getLongitude());
+            }
+            if (destinationPosition != null) {
+                updateDestinationPoint(destinationPosition);
             }
         });
     }
@@ -121,12 +156,30 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         return R.layout.map_fragment_layout;
     }
 
+    @Override
+    public void displayHumanReadableAddress(String address) {
+
+    }
+
+    @Override
+    public void displayRoute(PolylineOptions polylineOptions) {
+        if (routePolyline != null) {
+            routePolyline.remove();
+        }
+        routePolyline = mapboxMap.addPolyline(polylineOptions);
+    }
+
+    @Override
+    public void onError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
     private void setupAutocompleteView() {
         autocompleteView.setAccessToken(MapboxAccountManager.getInstance().getAccessToken());
         autocompleteView.setType(GeocodingCriteria.TYPE_POI);
         autocompleteView.setOnFeatureListener(feature -> {
             Position position = feature.asPosition();
-            updateCurrentLocation(position.getLatitude(), position.getLongitude());
+            updateDestinationPoint(new LatLng(position.getLatitude(), position.getLongitude()));
         });
     }
 
@@ -161,7 +214,7 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     }
 
     @Override
-    public void displayLocation(LatLng latLng) {
+    public void displayCurrentLocation(LatLng latLng) {
         updateCurrentLocation(latLng.getLatitude(), latLng.getLongitude());
     }
 

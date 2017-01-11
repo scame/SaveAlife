@@ -9,7 +9,10 @@ import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
 import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
 import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
+import com.krestone.savealife.domain.usecases.map.GetHumanReadableAddressUseCase;
+import com.krestone.savealife.domain.usecases.map.GetRouteUseCase;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.services.commons.models.Position;
 
 public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPresenter<T> {
 
@@ -23,14 +26,22 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
 
     private GetMapObjectsUseCase mapObjectsUseCase;
 
+    private GetHumanReadableAddressUseCase getHumanReadableAddressUseCase;
+
+    private GetRouteUseCase getRouteUseCase;
+
     private T view;
 
     public MapPresenterImp(LastKnownLocationUseCase lastKnownLocationUseCase,
                            LocationUpdatesUseCase locationUpdatesUseCase,
-                           GetMapObjectsUseCase mapObjectsUseCase) {
+                           GetMapObjectsUseCase mapObjectsUseCase,
+                           GetHumanReadableAddressUseCase getHumanReadableAddressUseCase,
+                           GetRouteUseCase getRouteUseCase) {
         this.lastKnownLocationUseCase = lastKnownLocationUseCase;
         this.locationUpdatesUseCase = locationUpdatesUseCase;
         this.mapObjectsUseCase = mapObjectsUseCase;
+        this.getHumanReadableAddressUseCase = getHumanReadableAddressUseCase;
+        this.getRouteUseCase = getRouteUseCase;
     }
 
     @Override
@@ -51,14 +62,44 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
     }
 
     @Override
+    public void requestHumanReadableAddress(Position position) {
+        getHumanReadableAddressUseCase.setPosition(position);
+        getHumanReadableAddressUseCase.executeSingle(addressModel -> {
+            if (view != null) {
+                view.displayHumanReadableAddress(addressModel.getFormattedAddress());
+            }
+        }, throwable -> {
+            if (view != null) {
+                view.onError(throwable.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void requestRoute(LatLng origin, LatLng dest) {
+        getRouteUseCase.setEndpoints(origin, dest);
+        getRouteUseCase.executeSingle(routeModel -> {
+            if (view != null) {
+                view.displayRoute(routeModel.getPolyline());
+            }
+        }, throwable -> {
+            if (view != null) {
+                view.onError(throwable.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
     public void setView(T view) {
         this.view = view;
     }
 
     @Override
     public void destroy() {
+        getHumanReadableAddressUseCase.unsubscribe();
         lastKnownLocationUseCase.unsubscribe();
         locationUpdatesUseCase.unsubscribe();
+        getRouteUseCase.unsubscribe();
         view = null;
     }
 
@@ -86,7 +127,7 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
             super.onNext(location);
 
             if (view != null) {
-                view.displayLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                view.displayCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
             }
         }
 
@@ -110,7 +151,7 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
             super.onNext(location);
 
             if (view != null) {
-                view.displayLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                view.displayCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
             }
         }
     }
