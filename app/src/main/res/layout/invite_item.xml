@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_elem_padding"
+        android:layout_margin="@dimen/standard_elem_margin"
         android:src="@drawable/ic_add_circle_outline_black_24dp" />
 
     <TextView

@@ -27,21 +27,11 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/contact_profile_image" />
 
-            <TextView
-                android:id="@+id/points_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/separator"
-                android:layout_margin="@dimen/standard_elem_margin"
-                android:gravity="center_horizontal"
-                android:text="62 points"
-                android:textSize="@dimen/text_size_large" />
-
             <Switch
                 android:id="@+id/status_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/points_tv"
+                android:layout_below="@id/separator"
                 android:layout_centerHorizontal="true"
                 android:text="@string/driver_mode" />
         </RelativeLayout>

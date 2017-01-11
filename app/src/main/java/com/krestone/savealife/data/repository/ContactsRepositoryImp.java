@@ -10,7 +10,6 @@ import android.provider.ContactsContract;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
-import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.mappers.MapContactModelToContactsHolder;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
@@ -90,50 +89,9 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Single<ContactsHolder> getEmergencyContacts() {
-        //return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
-        return Single.just(testPopulation());
+        return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
     }
 
-    private ContactsHolder testPopulation() {
-        List<ContactItem> contactItems = new ArrayList<>();
-        ContactItem contactItem1 = new ContactItem();
-        ContactItem contactItem2 = new ContactItem();
-        ContactItem contactItem3 = new ContactItem();
-        ContactItem contactItem4 = new ContactItem();
-        ContactItem contactItem5 = new ContactItem();
-
-        contactItems.add(contactItem1);
-        contactItems.add(contactItem2);
-        contactItems.add(contactItem3);
-        contactItems.add(contactItem4);
-        contactItems.add(contactItem5);
-
-        contactItem1.setNumber("+1423523");
-        contactItem2.setNumber("+2423523");
-        contactItem3.setNumber("+3423523");
-        contactItem4.setNumber("+43423523");
-        contactItem5.setNumber("+53423523");
-
-        contactItem1.setFirstName("Slava");
-        contactItem2.setFirstName("Rick");
-        contactItem3.setFirstName("Fred");
-        contactItem4.setFirstName("Mike");
-        contactItem5.setFirstName("Joshua");
-
-        contactItem1.setLastName("R");
-        contactItem2.setLastName("D");
-        contactItem3.setLastName("S");
-        contactItem4.setLastName("M");
-        contactItem5.setLastName("A");
-
-        contactItem1.setInApp(true);
-        contactItem2.setInApp(true);
-        contactItem3.setInApp(false);
-        contactItem4.setInApp(true);
-        contactItem5.setInApp(false);
-
-        return new ContactsHolder(contactItems);
-    }
 
     @Override
     public Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {

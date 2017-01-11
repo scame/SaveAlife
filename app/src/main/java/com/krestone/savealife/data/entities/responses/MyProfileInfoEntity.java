@@ -10,9 +10,7 @@ public class MyProfileInfoEntity implements Parcelable {
 
     private String role;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String medicalQualification;
 
@@ -32,20 +30,12 @@ public class MyProfileInfoEntity implements Parcelable {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMedicalQualification() {
@@ -56,7 +46,6 @@ public class MyProfileInfoEntity implements Parcelable {
         this.medicalQualification = medicalQualification;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -66,8 +55,7 @@ public class MyProfileInfoEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.phoneNumber);
         dest.writeString(this.role);
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
+        dest.writeString(this.name);
         dest.writeString(this.medicalQualification);
     }
 
@@ -77,8 +65,7 @@ public class MyProfileInfoEntity implements Parcelable {
     protected MyProfileInfoEntity(Parcel in) {
         this.phoneNumber = in.readString();
         this.role = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
+        this.name = in.readString();
         this.medicalQualification = in.readString();
     }
 

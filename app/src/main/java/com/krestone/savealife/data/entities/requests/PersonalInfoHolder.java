@@ -4,9 +4,7 @@ package com.krestone.savealife.data.entities.requests;
 
 public class PersonalInfoHolder {
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String password;
 
@@ -19,11 +17,9 @@ public class PersonalInfoHolder {
 
     public PersonalInfoHolder() { }
 
-    public PersonalInfoHolder(String firstName, String lastName,
-                              String password, String medicalQualification,
+    public PersonalInfoHolder(String name, String password, String medicalQualification,
                               String phoneNumber, String currentToken) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.password = password;
         this.medicalQualification = medicalQualification;
         this.phoneNumber = phoneNumber;
@@ -34,12 +30,8 @@ public class PersonalInfoHolder {
         return currentToken;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {
@@ -54,12 +46,8 @@ public class PersonalInfoHolder {
         return phoneNumber;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPassword(String password) {

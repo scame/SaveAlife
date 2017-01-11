@@ -36,11 +36,9 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(v -> itemClickListener.onItemClick(getAdapterPosition()));
     }
 
-
-
     protected void bindHolder(List<ContactItem> contacts, int position) {
         ContactItem item = contacts.get(position);
-        contactName.setText(item.getFirstName() + " " + item.getLastName());
+        contactName.setText(item.getName());
         if (item.getInApp()) {
             isInAppTv.setText(context.getString(R.string.in_app));
         } else {

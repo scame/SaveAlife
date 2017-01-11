@@ -60,7 +60,7 @@ public class EntryRepositoryImp implements EntryRepository {
         return serverApi.sendPersonalInfo(holder).toSingle()
                 .flatMap(responseBody -> getAuthToken(holder.getPassword(), holder.getPhoneNumber()))
                 .map(this::cacheAuthToken)
-                .map(ignore -> cacheEntryInfo(holder.getPassword(), holder.getFirstName(), holder.getLastName(),
+                .map(ignore -> cacheEntryInfo(holder.getPassword(), holder.getName(),
                         holder.getPhoneNumber(), holder.getMedicalQualification()))
                 .toCompletable();
     }
@@ -72,14 +72,13 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
 
-    private Completable cacheEntryInfo(String password, String firstName, String lastName,
+    private Completable cacheEntryInfo(String password, String name,
                                        String phoneNumber, String medicalQualification) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         editor.putString(getString(R.string.password), password).apply();
         editor.putString(getString(R.string.phone_number), phoneNumber).apply();
-        editor.putString(getString(R.string.first_name), firstName).apply();
-        editor.putString(getString(R.string.last_name), lastName).apply();
+        editor.putString(getString(R.string.name), name).apply();
         editor.putString(getString(R.string.med_qualification), medicalQualification).apply();
         changeLoginStatus(true);
 
@@ -99,8 +98,8 @@ public class EntryRepositoryImp implements EntryRepository {
                 .map(PasswordMatchingResponse::isMatches)
                 .map(matches -> {
                     if (matches) {
-                        cacheEntryInfo(password, profileEntity.getFirstName(), profileEntity.getLastName(),
-                                profileEntity.getPhoneNumber(), profileEntity.getMedicalQualification());
+                        cacheEntryInfo(password, profileEntity.getName(), profileEntity.getPhoneNumber(),
+                                profileEntity.getMedicalQualification());
                     }
                     return matches;
                 }).toSingle();

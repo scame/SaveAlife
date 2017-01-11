@@ -6,9 +6,7 @@ import android.os.Parcelable;
 
 public class ContactItem implements Parcelable {
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String number;
 
@@ -20,12 +18,8 @@ public class ContactItem implements Parcelable {
         this.number = number;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setStatus(Integer status) {
@@ -36,12 +30,8 @@ public class ContactItem implements Parcelable {
         return number;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getName() {
+        return name;
     }
 
     public Integer getStatus() {
@@ -64,8 +54,7 @@ public class ContactItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
+        dest.writeString(this.name);
         dest.writeString(this.number);
         dest.writeValue(this.status);
         dest.writeValue(this.isInApp);
@@ -75,8 +64,7 @@ public class ContactItem implements Parcelable {
     }
 
     protected ContactItem(Parcel in) {
-        this.firstName = in.readString();
-        this.lastName = in.readString();
+        this.name = in.readString();
         this.number = in.readString();
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
         this.isInApp = (Boolean) in.readValue(Boolean.class.getClassLoader());

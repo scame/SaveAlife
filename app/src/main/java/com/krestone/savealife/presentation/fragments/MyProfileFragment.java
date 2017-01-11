@@ -27,9 +27,6 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     @BindView(R.id.contact_profile_image)
     ImageView contactImage;
 
-    @BindView(R.id.points_tv)
-    TextView pointsTv;
-
     @BindView(R.id.status_switch)
     Switch statusSwitch;
 
@@ -109,7 +106,7 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     public void displayMyProfileInfo(MyProfileInfoEntity profileInfo) {
         this.profileInfo = profileInfo;
 
-        profileName.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
+        profileName.setText(profileInfo.getName());
         profileNumber.setText(profileInfo.getPhoneNumber());
         if (profileInfo.getRole().equals("driver")) {
             statusSwitch.setChecked(true);

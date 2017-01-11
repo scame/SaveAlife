@@ -11,7 +11,7 @@ public class MapContactModelToContactsHolder {
 
     public ContactsHolder map(ContactModel contactModel) {
         ContactItem contactItem = new ContactItem();
-        contactItem.setFirstName(contactModel.getName());
+        contactItem.setName(contactModel.getName());
         contactItem.setNumber(contactModel.getMobileNumber());
         return new ContactsHolder(Collections.singletonList(contactItem));
     }

@@ -24,7 +24,7 @@ public class PersonalInfoPresenterImpl<T extends PersonalInfoPresenter.PersonalI
                                  String medicalQualification, String verifCode) {
         if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
             personalInfoUseCase.setPersonalInfoHolder(new PersonalInfoHolder
-                    (firstName, lastName, password, medicalQualification, phoneNumber, verifCode));
+                    (firstName + " " + lastName, password, medicalQualification, phoneNumber, verifCode));
             sendPersonalInfo();
         } else if (view != null) {
             view.onPersonalInfoErr(SaveAlifeApplication.application.getString(R.string.internet_connection_check));

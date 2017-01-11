@@ -6,9 +6,7 @@ public class UpdateMyProfileInfoRequest {
 
     private String role;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String medicalQualification;
 
@@ -24,20 +22,12 @@ public class UpdateMyProfileInfoRequest {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMedicalQualification() {
