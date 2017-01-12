@@ -20,8 +20,8 @@ public abstract class AbstractSync {
         if (ConnectivityUtil.isNetworkOn(context)) {
             SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context);
             post();
-            get();
-            SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context);
+            /*get();
+            SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context);*/
         }
     }
 

@@ -7,6 +7,8 @@ import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
 import com.krestone.savealife.presentation.models.ContactModel;
 
+import java.util.Collections;
+
 import rx.Completable;
 
 public class AddToEmergencyListUseCase extends UseCaseCompletable {
@@ -23,7 +25,7 @@ public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.addToEmergencyList(contactModel);
+        return contactsRepository.addToEmergencyList(Collections.singletonList(contactModel));
     }
 
     public ContactModel getContactModel() {

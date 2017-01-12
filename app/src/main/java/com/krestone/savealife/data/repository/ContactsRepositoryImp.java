@@ -82,8 +82,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable addToEmergencyList(ContactModel contactModel) {
-        return serverApi.addToEmergencyList(mapContactModelToContactsHolder.map(contactModel),
+    public Completable addToEmergencyList(List<ContactModel> contactModels) {
+        return serverApi.addToEmergencyList(mapContactModelToContactsHolder.map(contactModels),
                 getAuthToken()).toCompletable();
     }
 

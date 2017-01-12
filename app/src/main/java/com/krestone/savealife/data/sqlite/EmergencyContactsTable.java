@@ -21,7 +21,7 @@ public class EmergencyContactsTable {
     static final String KEY_CONTACT_NUMBER = "number";
     static final String KEY_PROFILE_IMAGE_URI = "thumbnail";
     static final String KEY_IS_IN_APP = "isinapp";
-    static final String KEY_IS_CONSISTENT = "isconsistent";
+    static final String KEY_IS_MODIFIED = "ismodified";
 
     private SaveAlifeDatabaseHelper helper;
 
@@ -38,7 +38,7 @@ public class EmergencyContactsTable {
             contentValues.put(KEY_CONTACT_NAME, contact.getName());
             contentValues.put(KEY_CONTACT_NUMBER, contact.getMobileNumber());
             contentValues.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
-            contentValues.put(KEY_IS_CONSISTENT, contact.isConsistent() ? 1 : 0);
+            contentValues.put(KEY_IS_MODIFIED, contact.isModified() ? 1 : 0);
             contentValues.put(KEY_IS_IN_APP, contact.isInApp() ? 1 : 0);
 
             db.insertOrThrow(TABLE_CONTACTS, null, contentValues);
@@ -64,7 +64,7 @@ public class EmergencyContactsTable {
                 if (contact.getThumbnailUri() != null) { // default bind value is null, so it's fine to just skip this one
                     sqLiteStatement.bindString(4, contact.getThumbnailUri());
                 }
-                sqLiteStatement.bindLong(5, contact.isConsistent() ? 1 : 0);
+                sqLiteStatement.bindLong(5, contact.isModified() ? 1 : 0);
                 sqLiteStatement.bindLong(6, contact.isInApp() ? 1 : 0);
 
                 sqLiteStatement.execute();
@@ -75,13 +75,21 @@ public class EmergencyContactsTable {
         }
     }
 
-    public List<ContactModel> getAllEmergencyContacts() {
+    public List<ContactModel> getEmergencyContacts(boolean onlyModified) {
+        String contactsSelectQuery;
+        if (onlyModified) {
+            contactsSelectQuery = String.format("SELECT * FROM %S WHERE " + KEY_IS_MODIFIED + " = 1", TABLE_CONTACTS);
+        } else {
+            contactsSelectQuery = String.format("SELECT * FROM %S", TABLE_CONTACTS);
+        }
+        return getEmergencyContacts(contactsSelectQuery);
+    }
+
+    private List<ContactModel> getEmergencyContacts(String selectQuery) {
         List<ContactModel> contacts = new ArrayList<>();
 
-        String CONTACTS_SELECT_QUERY = String.format("SELECT * FROM %S", TABLE_CONTACTS);
-
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(CONTACTS_SELECT_QUERY, null);
+        Cursor cursor = db.rawQuery(selectQuery, null);
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -89,7 +97,7 @@ public class EmergencyContactsTable {
                     contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
                     contactModel.setMobileNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                     contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
-                    contactModel.setConsistent(cursor.getInt(cursor.getColumnIndex(KEY_IS_CONSISTENT)) == 1);
+                    contactModel.setModified(cursor.getInt(cursor.getColumnIndex(KEY_IS_MODIFIED)) == 1);
                     contactModel.setInApp(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP)) == 1);
                     contacts.add(contactModel);
                 } while (cursor.moveToNext());
@@ -110,6 +118,18 @@ public class EmergencyContactsTable {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+        }
+    }
+
+    public void markAsNotModified(List<ContactModel> contacts) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues(contacts.size());
+        contentValues.put(KEY_IS_MODIFIED, 0);
+
+        for (ContactModel contactModel : contacts) {
+            db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
+                    new String[]{contactModel.getMobileNumber()});
         }
     }
 }

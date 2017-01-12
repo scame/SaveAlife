@@ -20,7 +20,7 @@ public class ContactModel implements Parcelable {
 
     private boolean inApp;
 
-    private boolean isConsistent;
+    private boolean isModified;
 
     public ContactModel() { }
 
@@ -32,7 +32,7 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = contactModel.getMobileNumber() == null ? null : contactModel.getMobileNumber();
         this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
         this.inApp = contactModel.isInApp();
-        this.isConsistent = contactModel.isConsistent();
+        this.isModified = contactModel.isModified();
     }
 
     public ContactModel(String id, String name, String thumbnailUri, String mobileNumber) {
@@ -42,8 +42,8 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = mobileNumber;
     }
 
-    public boolean isConsistent() {
-        return isConsistent;
+    public boolean isModified() {
+        return isModified;
     }
 
     public boolean isInApp() {
@@ -78,8 +78,8 @@ public class ContactModel implements Parcelable {
         this.thumbnailUri = thumbnailUri;
     }
 
-    public void setConsistent(boolean consistent) {
-        this.isConsistent = consistent;
+    public void setModified(boolean modified) {
+        this.isModified = modified;
     }
 
     public void setInApp(boolean inApp) {
@@ -139,7 +139,7 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.mobileNumber);
         dest.writeString(this.thumbnailUri);
         dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isConsistent ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isModified ? (byte) 1 : (byte) 0);
     }
 
     protected ContactModel(Parcel in) {
@@ -150,7 +150,7 @@ public class ContactModel implements Parcelable {
         this.mobileNumber = in.readString();
         this.thumbnailUri = in.readString();
         this.inApp = in.readByte() != 0;
-        this.isConsistent = in.readByte() != 0;
+        this.isModified = in.readByte() != 0;
     }
 
     public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {

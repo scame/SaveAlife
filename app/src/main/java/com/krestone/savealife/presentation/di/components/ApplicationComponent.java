@@ -4,6 +4,8 @@ package com.krestone.savealife.presentation.di.components;
 import com.krestone.savealife.LocationService;
 import com.krestone.savealife.data.di.DataModule;
 import com.krestone.savealife.data.di.NetworkingModule;
+import com.krestone.savealife.data.di.SyncManagerComponent;
+import com.krestone.savealife.data.di.SyncManagerModule;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
@@ -43,4 +45,6 @@ public interface ApplicationComponent {
     MyProfileComponent provideMyProfileComponent(MyProfileModule myProfileModule);
 
     SignInComponent provideSignInComponent(SignInModule signInModule);
+
+    SyncManagerComponent provideSyncManagerComponent(SyncManagerModule syncManagerModule);
 }

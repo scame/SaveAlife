@@ -11,23 +11,35 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.di.SyncManagerModule;
 import com.krestone.savealife.data.sync.events.SyncType;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
 public class SyncService extends Service {
 
+    public static final String SYNC_REQUEST = "syncRequest";
+
+    @Inject
+    SyncManager syncManager;
+
     private ExecutorService executorService;
-    private SyncManager syncManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         executorService = Executors.newSingleThreadExecutor();
-        syncManager = new SyncManager(getApplicationContext());
+        inject();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(syncEventReceiver, new IntentFilter("syncRequest"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(syncEventReceiver, new IntentFilter(SYNC_REQUEST));
+    }
+
+    private void inject() {
+        SaveAlifeApplication.getAppComponent().provideSyncManagerComponent(new SyncManagerModule()).inject(this);
     }
 
     @Override
@@ -52,7 +64,7 @@ public class SyncService extends Service {
     }
 
     public static void requestSync(@NonNull SyncType syncType, Context context) {
-        Intent syncIntent = new Intent();
+        Intent syncIntent = new Intent(SYNC_REQUEST);
         syncIntent.putExtra("syncType", syncType);
         LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(syncIntent);
     }

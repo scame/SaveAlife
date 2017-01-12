@@ -18,7 +18,7 @@ public interface ContactsRepository {
 
     Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder);
 
-    Completable addToEmergencyList(ContactModel contactModel);
+    Completable addToEmergencyList(List<ContactModel> contactModels);
 
     Single<ContactsHolder> getEmergencyContacts();
 }

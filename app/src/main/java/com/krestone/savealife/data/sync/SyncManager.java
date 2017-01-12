@@ -1,8 +1,7 @@
 package com.krestone.savealife.data.sync;
 
 
-import android.content.Context;
-
+import com.krestone.savealife.data.sync.events.EmergencyContactsSync;
 import com.krestone.savealife.data.sync.events.SyncType;
 
 import java.util.HashMap;
@@ -12,9 +11,9 @@ public class SyncManager {
 
     private final Map<SyncType, AbstractSync> syncMap;
 
-    SyncManager(Context context) {
+    public SyncManager(EmergencyContactsSync emergencyContactsSync) {
         syncMap = new HashMap<>();
-        // all sync implementations go into syncMap
+        syncMap.put(SyncType.CONTACTS, emergencyContactsSync);
     }
 
     void doSync(SyncType syncType) {
