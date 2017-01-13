@@ -8,6 +8,8 @@ import com.krestone.savealife.data.sync.events.SyncStatus;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.util.ConnectivityUtil;
 
+import rx.Completable;
+
 public abstract class AbstractSync {
 
     private Context context;
@@ -18,15 +20,23 @@ public abstract class AbstractSync {
 
     void sync() {
         if (ConnectivityUtil.isNetworkOn(context)) {
-            SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context);
-            post();
-            /*get();
-            SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context);*/
+            sendInProgressEvent()
+                    .andThen(post())
+                    .andThen(get())
+                    .andThen(sendCompletedEvent());
         }
+    }
+
+    private Completable sendInProgressEvent() {
+        return Completable.fromAction(() -> SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context));
+    }
+
+    private Completable sendCompletedEvent() {
+        return Completable.fromAction(() -> SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context));
     }
 
     protected abstract SyncType getSyncType();
 
-    protected abstract void post();
-    protected abstract void get();
+    protected abstract Completable post();
+    protected abstract Completable get();
 }

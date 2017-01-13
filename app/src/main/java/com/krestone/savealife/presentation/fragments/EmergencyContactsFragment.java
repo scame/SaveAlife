@@ -1,10 +1,15 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +18,10 @@ import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.ContactItem;
+import com.krestone.savealife.data.sync.SyncService;
+import com.krestone.savealife.data.sync.events.SyncEvent;
+import com.krestone.savealife.data.sync.events.SyncStatus;
+import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
@@ -32,6 +41,9 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @BindView(R.id.emergency_contacts_rv)
     RecyclerView contactsRv;
 
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout swipeView;
+
     @BindView(R.id.add_fab)
     FloatingActionButton addFab;
 
@@ -44,6 +56,21 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
 
     @State
     ArrayList<ContactItem> contacts;
+
+    private final BroadcastReceiver syncEventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SyncEvent event = intent.getParcelableExtra(SyncEvent.SYNC_EVENT);
+            if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.IN_PROGRESS) {
+                if (!swipeView.isRefreshing()) {
+                    swipeView.setRefreshing(true);
+                }
+            } else if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.COMPLETED) {
+                swipeView.setRefreshing(false);
+                // TODO: fetch new data from local storage
+            }
+        }
+    };
 
     public interface EmergencyListener {
 
@@ -63,11 +90,29 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        swipeView.setOnRefreshListener(() -> SyncService.requestSync(SyncType.CONTACTS, getContext()));
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
         instantiateFragment();
 
         return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerSyncEventReceiver();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(syncEventReceiver);
+    }
+
+    private void registerSyncEventReceiver() {
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(syncEventReceiver, new IntentFilter(SyncEvent.SYNC_EVENT));
     }
 
     private void instantiateFragment() {

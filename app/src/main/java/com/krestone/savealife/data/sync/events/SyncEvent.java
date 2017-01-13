@@ -10,6 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public class SyncEvent implements Parcelable {
 
+    public static final String SYNC_EVENT = "syncEvent";
+
     private SyncType syncType;
     private SyncStatus syncStatus;
 
@@ -21,7 +23,7 @@ public class SyncEvent implements Parcelable {
     public static void send(@NonNull final SyncType type, @NonNull final SyncStatus status,
                             @NonNull final Context context) {
         Intent intent = new Intent();
-        intent.putExtra("syncEvent", new SyncEvent(type, status));
+        intent.putExtra(SYNC_EVENT, new SyncEvent(type, status));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

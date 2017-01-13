@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.krestone.savealife.data.di.DataModule;
+import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.websockets.SocketTest;
 import com.krestone.savealife.presentation.di.components.ApplicationComponent;
 import com.krestone.savealife.presentation.di.components.DaggerApplicationComponent;
@@ -26,6 +27,7 @@ public class SaveAlifeApplication extends Application {
         SaveAlifeApplication.application = this;
         MapboxAccountManager.start(this, getString(R.string.default_access_token));
         startService(new Intent(this, LocationService.class));
+        SyncService.start(this);
         buildAppComponent();
     }
 

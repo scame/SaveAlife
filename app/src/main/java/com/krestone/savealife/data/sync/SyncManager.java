@@ -1,7 +1,6 @@
 package com.krestone.savealife.data.sync;
 
 
-import com.krestone.savealife.data.sync.events.EmergencyContactsSync;
 import com.krestone.savealife.data.sync.events.SyncType;
 
 import java.util.HashMap;

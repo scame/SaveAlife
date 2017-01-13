@@ -5,7 +5,7 @@ import android.content.Context;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
 import com.krestone.savealife.data.sync.SyncManager;
-import com.krestone.savealife.data.sync.events.EmergencyContactsSync;
+import com.krestone.savealife.data.sync.EmergencyContactsSync;
 
 import dagger.Module;
 import dagger.Provides;
