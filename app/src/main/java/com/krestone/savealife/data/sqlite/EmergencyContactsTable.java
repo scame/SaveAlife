@@ -36,7 +36,7 @@ public class EmergencyContactsTable {
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(KEY_CONTACT_NAME, contact.getName());
-            contentValues.put(KEY_CONTACT_NUMBER, contact.getMobileNumber());
+            contentValues.put(KEY_CONTACT_NUMBER, contact.getPhoneNumber());
             contentValues.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
             contentValues.put(KEY_IS_MODIFIED, contact.isModified() ? 1 : 0);
             contentValues.put(KEY_IS_IN_APP, contact.isInApp() ? 1 : 0);
@@ -60,7 +60,7 @@ public class EmergencyContactsTable {
             for (ContactModel contact : contacts) {
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindString(2, contact.getName());
-                sqLiteStatement.bindString(3, contact.getMobileNumber());
+                sqLiteStatement.bindString(3, contact.getPhoneNumber());
                 if (contact.getThumbnailUri() != null) { // default bind value is null, so it's fine to just skip this one
                     sqLiteStatement.bindString(4, contact.getThumbnailUri());
                 }
@@ -95,7 +95,7 @@ public class EmergencyContactsTable {
                 do {
                     ContactModel contactModel = new ContactModel();
                     contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
-                    contactModel.setMobileNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
+                    contactModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                     contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
                     contactModel.setModified(cursor.getInt(cursor.getColumnIndex(KEY_IS_MODIFIED)) == 1);
                     contactModel.setInApp(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP)) == 1);
@@ -129,7 +129,7 @@ public class EmergencyContactsTable {
 
         for (ContactModel contactModel : contacts) {
             db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
-                    new String[]{contactModel.getMobileNumber()});
+                    new String[]{contactModel.getPhoneNumber()});
         }
     }
 }

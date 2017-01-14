@@ -8,13 +8,13 @@ public class ContactModel implements Parcelable {
 
     private String id;
 
-    private String name;
+    private String firstName;
 
     private String homeNumber;
 
     private String workNumber;
 
-    private String mobileNumber;
+    private String phoneNumber;
 
     private String thumbnailUri;
 
@@ -26,20 +26,20 @@ public class ContactModel implements Parcelable {
 
     public ContactModel(ContactModel contactModel) {
         this.id = contactModel.getId() == null ? null : contactModel.getId();
-        this.name = contactModel.getName() == null ? null : contactModel.getName();
+        this.firstName = contactModel.getName() == null ? null : contactModel.getName();
         this.homeNumber = contactModel.getHomeNumber() == null ? null : contactModel.getHomeNumber();
         this.workNumber = contactModel.getWorkNumber() == null ? null : contactModel.getWorkNumber();
-        this.mobileNumber = contactModel.getMobileNumber() == null ? null : contactModel.getMobileNumber();
+        this.phoneNumber = contactModel.getPhoneNumber() == null ? null : contactModel.getPhoneNumber();
         this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
         this.inApp = contactModel.isInApp();
         this.isModified = contactModel.isModified();
     }
 
-    public ContactModel(String id, String name, String thumbnailUri, String mobileNumber) {
+    public ContactModel(String id, String name, String thumbnailUri, String phoneNumber) {
         this.id = id;
-        this.name = name;
+        this.firstName = name;
         this.thumbnailUri = thumbnailUri;
-        this.mobileNumber = mobileNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean isModified() {
@@ -55,7 +55,7 @@ public class ContactModel implements Parcelable {
     }
 
     public String getName() {
-        return name;
+        return firstName;
     }
 
     public String getHomeNumber() {
@@ -66,8 +66,8 @@ public class ContactModel implements Parcelable {
         return workNumber;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getThumbnailUri() {
@@ -91,7 +91,7 @@ public class ContactModel implements Parcelable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.firstName = name;
     }
 
     public void setHomeNumber(String homeNumber) {
@@ -102,8 +102,8 @@ public class ContactModel implements Parcelable {
         this.workNumber = workNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -115,10 +115,10 @@ public class ContactModel implements Parcelable {
             ContactModel contact = (ContactModel) obj;
 
             return  (contact.getId() == null ? this.id == null : contact.getId().equals(this.id)) &&
-                    (contact.getName() == null ? this.name == null : contact.getName().equals(this.name)) &&
+                    (contact.getName() == null ? this.firstName == null : contact.getName().equals(this.firstName)) &&
                     (contact.getHomeNumber() == null ? this.homeNumber == null : contact.getHomeNumber().equals(this.homeNumber)) &&
                     (contact.getWorkNumber() == null ? this.workNumber == null : contact.getWorkNumber().equals(this.workNumber)) &&
-                    (contact.getMobileNumber() == null ? this.mobileNumber == null : contact.getMobileNumber().equals(this.mobileNumber)) &&
+                    (contact.getPhoneNumber() == null ? this.phoneNumber == null : contact.getPhoneNumber().equals(this.phoneNumber)) &&
                     (contact.getThumbnailUri() == null ? this.thumbnailUri == null : contact.getThumbnailUri().equals(this.thumbnailUri));
         }
         return false;
@@ -133,10 +133,10 @@ public class ContactModel implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
-        dest.writeString(this.name);
+        dest.writeString(this.firstName);
         dest.writeString(this.homeNumber);
         dest.writeString(this.workNumber);
-        dest.writeString(this.mobileNumber);
+        dest.writeString(this.phoneNumber);
         dest.writeString(this.thumbnailUri);
         dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isModified ? (byte) 1 : (byte) 0);
@@ -144,10 +144,10 @@ public class ContactModel implements Parcelable {
 
     protected ContactModel(Parcel in) {
         this.id = in.readString();
-        this.name = in.readString();
+        this.firstName = in.readString();
         this.homeNumber = in.readString();
         this.workNumber = in.readString();
-        this.mobileNumber = in.readString();
+        this.phoneNumber = in.readString();
         this.thumbnailUri = in.readString();
         this.inApp = in.readByte() != 0;
         this.isModified = in.readByte() != 0;

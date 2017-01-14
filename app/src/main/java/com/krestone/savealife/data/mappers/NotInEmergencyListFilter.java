@@ -13,7 +13,7 @@ public class NotInEmergencyListFilter {
 
         for (ContactModel queriedContact : queriedContacts) {
             for (ContactItem emergencyContact : emergencyContacts.getContacts()) {
-                if (queriedContact.getMobileNumber().equals(emergencyContact.getNumber())) {
+                if (queriedContact.getPhoneNumber().equals(emergencyContact.getNumber())) {
                     queriedContacts.remove(queriedContact);
                     break;
                 }

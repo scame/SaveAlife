@@ -7,11 +7,9 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.requests.PasswordMatchingRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
-import com.krestone.savealife.data.entities.responses.PasswordMatchingResponse;
 import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
@@ -19,7 +17,6 @@ import com.krestone.savealife.data.rest.ServerApi;
 import okhttp3.ResponseBody;
 import rx.Completable;
 import rx.Single;
-
 
 
 public class EntryRepositoryImp implements EntryRepository {
@@ -60,8 +57,8 @@ public class EntryRepositoryImp implements EntryRepository {
         return serverApi.sendPersonalInfo(holder).toSingle()
                 .flatMap(responseBody -> getAuthToken(holder.getPassword(), holder.getPhoneNumber()))
                 .map(this::cacheAuthToken)
-                .map(ignore -> cacheEntryInfo(holder.getPassword(), holder.getName(),
-                        holder.getPhoneNumber(), holder.getMedicalQualification()))
+                .map(ignore -> cacheEntryInfo(holder.getPassword(), holder.getFirstName(),
+                        holder.getLastName(), holder.getPhoneNumber(), holder.getMedicalQualification()))
                 .toCompletable();
     }
 
@@ -72,13 +69,14 @@ public class EntryRepositoryImp implements EntryRepository {
     }
 
 
-    private Completable cacheEntryInfo(String password, String name,
+    private Completable cacheEntryInfo(String password, String firstName, String lastName,
                                        String phoneNumber, String medicalQualification) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
         editor.putString(getString(R.string.password), password).apply();
         editor.putString(getString(R.string.phone_number), phoneNumber).apply();
-        editor.putString(getString(R.string.name), name).apply();
+        editor.putString(getString(R.string.lastName), lastName).apply();
+        editor.putString(getString(R.string.firstName), firstName).apply();
         editor.putString(getString(R.string.med_qualification), medicalQualification).apply();
         changeLoginStatus(true);
 
@@ -92,17 +90,20 @@ public class EntryRepositoryImp implements EntryRepository {
         return Single.just(sharedPrefs.getBoolean(getString(R.string.isLoggedIn), false));
     }
 
+    // FIXME: server's response 401 should be automatically propagated to onError callback
     @Override
     public Single<Boolean> signIn(String password, SomeoneProfileEntity profileEntity) {
-        return serverApi.matchPasswords(new PasswordMatchingRequest(password, profileEntity.getPhoneNumber()))
-                .map(PasswordMatchingResponse::isMatches)
-                .map(matches -> {
-                    if (matches) {
-                        cacheEntryInfo(password, profileEntity.getName(), profileEntity.getPhoneNumber(),
-                                profileEntity.getMedicalQualification());
+        return getAuthToken(password, profileEntity.getPhoneNumber())
+                .map(token -> {
+                    if (token != null) {
+                        cacheEntryInfo(password, profileEntity.getFirstName(), profileEntity.getLastName(),
+                                profileEntity.getPhoneNumber(), profileEntity.getMedicalQualification());
+                        cacheAuthToken(token);
+
+                        return true;
                     }
-                    return matches;
-                }).toSingle();
+                    return false;
+                });
     }
 
     @Override

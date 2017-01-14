@@ -13,6 +13,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.util.PrefsUtil;
 
 import okhttp3.ResponseBody;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
@@ -39,7 +40,7 @@ public class LocationRepositoryImp implements LocationRepository {
 
     @Override
     public Single<ResponseBody> sendLocationToServer(LocationHolder locationHolder) {
-        return serverApi.sendLocation(locationHolder, "Basic Mjoy").toSingle();
+        return serverApi.sendLocation(locationHolder, PrefsUtil.getAuthToken(context)).toSingle();
     }
 
     @Override

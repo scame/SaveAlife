@@ -39,10 +39,10 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
     protected void bindHolder(List<ContactItem> contacts, int position) {
         ContactItem item = contacts.get(position);
         contactName.setText(item.getName());
-        if (item.getInApp()) {
+        /*if (item.getInApp()) {
             isInAppTv.setText(context.getString(R.string.in_app));
         } else {
             isInAppTv.setText(context.getString(R.string.not_in_app));
-        }
+        }*/
     }
 }

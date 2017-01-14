@@ -3,18 +3,16 @@ package com.krestone.savealife.data.repository;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 
-import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.mappers.MapContactModelToContactsHolder;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.presentation.models.ContactModel;
+import com.krestone.savealife.util.PrefsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +59,14 @@ public class ContactsRepositoryImp implements ContactsRepository {
     public Single<List<ContactModel>> getContactsNotInEmergencyList() {
         return Single.zip(
                 Single.just(queryContacts()).subscribeOn(scheduler),
-                serverApi.getEmergencyContacts(getAuthToken()).subscribeOn(scheduler).toSingle(),
+                serverApi.getEmergencyContacts(PrefsUtil.getAuthToken(context)).subscribeOn(scheduler).toSingle(),
                 notInEmergencyListFilter::filter
         );
     }
 
     @Override
     public Single<ContactsHolder> getContactsInApp() {
-        return serverApi.getContactsInApp(getContactsNumbers(), getAuthToken()).toSingle();
+        return serverApi.getContactsInApp(getContactsNumbers(), PrefsUtil.getAuthToken(context)).toSingle();
     }
 
     private ContactsNumbersHolder getContactsNumbers() {
@@ -76,7 +74,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
         List<ContactModel> detailedContacts = queryContacts();
 
         for (ContactModel contactModel : detailedContacts) {
-            numbers.add(contactModel.getMobileNumber());
+            numbers.add(contactModel.getPhoneNumber());
         }
         return new ContactsNumbersHolder(numbers);
     }
@@ -84,18 +82,19 @@ public class ContactsRepositoryImp implements ContactsRepository {
     @Override
     public Completable addToEmergencyList(List<ContactModel> contactModels) {
         return serverApi.addToEmergencyList(mapContactModelToContactsHolder.map(contactModels),
-                getAuthToken()).toCompletable();
+                PrefsUtil.getAuthToken(context)).toCompletable();
     }
 
     @Override
     public Single<ContactsHolder> getEmergencyContacts() {
-        return serverApi.getEmergencyContacts(getAuthToken()).toSingle();
+        return serverApi.getEmergencyContacts(PrefsUtil.getAuthToken(context)).toSingle();
     }
 
 
     @Override
     public Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
-        return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder, getAuthToken()).toCompletable();
+        return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder,
+                PrefsUtil.getAuthToken(context)).toCompletable();
     }
 
 
@@ -124,10 +123,5 @@ public class ContactsRepositoryImp implements ContactsRepository {
         }
 
         return contacts;
-    }
-
-    private String getAuthToken() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPrefs.getString(context.getString(R.string.auth_token), "");
     }
 }

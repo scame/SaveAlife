@@ -56,6 +56,8 @@
     <string name="password">password</string>
     <string name="phone_number">phone_number</string>
     <string name="name">name</string>
+    <string name="firstName">firstName</string>
+    <string name="lastName">lastName</string>
     <string name="med_qualification">med_qualification</string>
     <string name="current_token">current_token</string>
     <string name="isLoggedIn">isLoggedIn</string>

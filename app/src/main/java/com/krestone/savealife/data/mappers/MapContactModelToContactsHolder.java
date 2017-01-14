@@ -16,7 +16,7 @@ public class MapContactModelToContactsHolder {
         for (ContactModel contactModel : contactModels) {
             ContactItem contactItem = new ContactItem();
             contactItem.setName(contactModel.getName());
-            contactItem.setNumber(contactModel.getMobileNumber());
+            contactItem.setNumber(contactModel.getPhoneNumber());
             //contactItem.setStatus()
 
             contactItems.add(contactItem);
