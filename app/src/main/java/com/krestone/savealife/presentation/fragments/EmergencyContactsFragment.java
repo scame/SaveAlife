@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.sync.SyncService;
+import com.krestone.savealife.data.sync.events.BroadcastsMeta;
 import com.krestone.savealife.data.sync.events.SyncEvent;
 import com.krestone.savealife.data.sync.events.SyncStatus;
 import com.krestone.savealife.data.sync.events.SyncType;
@@ -60,7 +61,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     private final BroadcastReceiver syncEventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SyncEvent event = intent.getParcelableExtra(SyncEvent.SYNC_EVENT);
+            SyncEvent event = intent.getParcelableExtra(BroadcastsMeta.SYNC_RESPONSE_EXTRA);
             if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.IN_PROGRESS) {
                 if (!swipeView.isRefreshing()) {
                     swipeView.setRefreshing(true);
@@ -101,18 +102,14 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @Override
     public void onStart() {
         super.onStart();
-        registerSyncEventReceiver();
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(syncEventReceiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
     }
 
     @Override
     public void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(syncEventReceiver);
-    }
-
-    private void registerSyncEventReceiver() {
-        LocalBroadcastManager.getInstance(getContext())
-                .registerReceiver(syncEventReceiver, new IntentFilter(SyncEvent.SYNC_EVENT));
     }
 
     private void instantiateFragment() {
@@ -137,7 +134,6 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @Override
     public void displayEmergencyList(List<ContactModel> contacts) {
         this.contacts = new ArrayList<>(contacts);
-
         contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {
             // TODO: handle list item click
         }, v -> InvitationUtil.showInviteWindow(getContext(), ""));

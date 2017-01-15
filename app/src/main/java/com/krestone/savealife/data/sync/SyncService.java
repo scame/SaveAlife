@@ -13,6 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.data.di.SyncManagerModule;
+import com.krestone.savealife.data.sync.events.BroadcastsMeta;
 import com.krestone.savealife.data.sync.events.SyncType;
 
 import java.util.concurrent.ExecutorService;
@@ -20,9 +21,9 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-public class SyncService extends Service {
+import static com.krestone.savealife.data.sync.events.BroadcastsMeta.SYNC_REQUEST;
 
-    public static final String SYNC_REQUEST = "syncRequest";
+public class SyncService extends Service {
 
     @Inject
     SyncManager syncManager;
@@ -52,7 +53,7 @@ public class SyncService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             executorService.execute(() -> {
-                SyncType syncType = intent.getExtras().getParcelable("syncType");
+                SyncType syncType = (SyncType) intent.getSerializableExtra(BroadcastsMeta.SYNC_REQUEST_EXTRA);
                 syncManager.doSync(syncType);
             });
         }
@@ -65,7 +66,8 @@ public class SyncService extends Service {
 
     public static void requestSync(@NonNull SyncType syncType, Context context) {
         Intent syncIntent = new Intent(SYNC_REQUEST);
-        syncIntent.putExtra("syncType", syncType);
+
+        syncIntent.putExtra(BroadcastsMeta.SYNC_REQUEST_EXTRA, syncType);
         LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(syncIntent);
     }
 

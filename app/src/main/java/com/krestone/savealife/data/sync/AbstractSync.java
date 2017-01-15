@@ -28,11 +28,11 @@ public abstract class AbstractSync {
     }
 
     private Completable sendInProgressEvent() {
-        return Completable.fromAction(() -> SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context));
+        return SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context);
     }
 
     private Completable sendCompletedEvent() {
-        return Completable.fromAction(() -> SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context));
+        return SyncEvent.send(getSyncType(), SyncStatus.COMPLETED, context);
     }
 
     protected abstract SyncType getSyncType();

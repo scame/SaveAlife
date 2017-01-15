@@ -8,9 +8,9 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-public class SyncEvent implements Parcelable {
+import rx.Completable;
 
-    public static final String SYNC_EVENT = "syncEvent";
+public class SyncEvent implements Parcelable {
 
     private SyncType syncType;
     private SyncStatus syncStatus;
@@ -20,11 +20,12 @@ public class SyncEvent implements Parcelable {
         this.syncType = syncType;
     }
 
-    public static void send(@NonNull final SyncType type, @NonNull final SyncStatus status,
-                            @NonNull final Context context) {
-        Intent intent = new Intent();
-        intent.putExtra(SYNC_EVENT, new SyncEvent(type, status));
+    public static Completable send(@NonNull final SyncType type, @NonNull final SyncStatus status,
+                                   @NonNull final Context context) {
+        Intent intent = new Intent(BroadcastsMeta.SYNC_RESPONSE);
+        intent.putExtra(BroadcastsMeta.SYNC_RESPONSE_EXTRA, new SyncEvent(type, status));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        return Completable.complete();
     }
 
     public SyncStatus getSyncStatus() {
