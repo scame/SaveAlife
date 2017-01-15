@@ -3,9 +3,7 @@ package com.krestone.savealife.data.sync;
 
 import android.content.Context;
 
-import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.repository.ContactsRepository;
-import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -13,21 +11,14 @@ import java.util.List;
 
 import rx.Completable;
 
-// TODO: use synchronous approach, get rid of ContactItem (ContactModel should incorporate all fields)
-public class EmergencyContactsSync extends AbstractSync {
 
-    private EmergencyContactsTable emergencyTable;
+public class EmergencyContactsSync extends AbstractSync {
 
     private ContactsRepository contactsRepository;
 
-    private Context context;
-
-    public EmergencyContactsSync(Context context, EmergencyContactsTable emergencyTable,
-                                 ContactsRepository contactsRepository) {
+    public EmergencyContactsSync(Context context, ContactsRepository contactsRepository) {
         super(context);
-        this.emergencyTable = emergencyTable;
         this.contactsRepository = contactsRepository;
-        this.context = context;
     }
 
     @Override
@@ -37,18 +28,26 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        List<ContactModel> modifiedContacts = emergencyTable.getLocalEmergencyContacts(true);
+        List<ContactModel> modifiedContacts = contactsRepository
+                .getEmergencyContactsLocal(true)
+                .toBlocking().value()
+                .getContacts();
+
         contactsRepository.addToEmergencyList(modifiedContacts).await();
-        emergencyTable.markAsNotModified(modifiedContacts);
+        contactsRepository.markAsNotModified(modifiedContacts).await();
 
         return Completable.complete();
     }
 
     @Override
     protected Completable get() {
-        ContactsHolder contactsHolder = contactsRepository.getEmergencyContacts().toBlocking().value();
-        emergencyTable.deleteLocalAllContacts();
-        //emergencyTable.addContacts(contactsHolder.getContacts());
+        List<ContactModel> freshContacts = contactsRepository
+                .getEmergencyContacts()
+                .toBlocking().value()
+                .getContacts();
+
+        contactsRepository.cleanLocalContactsList().await();
+        contactsRepository.addToEmergencyListLocal(freshContacts).await();
 
         return Completable.complete();
     }

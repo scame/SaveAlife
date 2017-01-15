@@ -24,6 +24,6 @@ public class GetContactsNotInEmergencyList extends UseCaseSingle<List<ContactMod
 
     @Override
     protected Single<List<ContactModel>> getUseCaseSingle() {
-        return contactsRepository.getContactsNotInEmergencyList();
+        return contactsRepository.getContactsNotInEmergencyListLocal();
     }
 }

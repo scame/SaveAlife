@@ -20,6 +20,7 @@ import com.krestone.savealife.data.repository.ProfileRepository;
 import com.krestone.savealife.data.repository.ProfileRepositoryImpl;
 import com.krestone.savealife.data.rest.MapboxApi;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 
 import javax.inject.Singleton;
@@ -42,8 +43,10 @@ public class RepositoriesModule {
     @Singleton
     ContactsRepository provideContactsRepository(Context context, ServerApi serverApi,
                                                  NotInEmergencyListFilter notInEmergencyListFilter,
+                                                 EmergencyContactsTable contactsTable,
                                                  SubscribeOn subscribeOn) {
-        return new ContactsRepositoryImp(context, serverApi, notInEmergencyListFilter, subscribeOn.getScheduler());
+        return new ContactsRepositoryImp(context, serverApi, contactsTable, notInEmergencyListFilter,
+                subscribeOn.getScheduler());
     }
 
     @Provides

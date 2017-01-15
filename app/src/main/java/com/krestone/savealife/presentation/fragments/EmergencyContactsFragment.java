@@ -67,7 +67,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
                 }
             } else if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.COMPLETED) {
                 swipeView.setRefreshing(false);
-                // TODO: fetch new data from local storage
+                emergencyPresenter.requestEmergencyContacts();
             }
         }
     };

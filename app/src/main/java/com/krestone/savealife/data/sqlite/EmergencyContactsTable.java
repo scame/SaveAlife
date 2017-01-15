@@ -12,6 +12,8 @@ import com.krestone.savealife.presentation.models.ContactModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Completable;
+
 public class EmergencyContactsTable {
 
     static final String TABLE_CONTACTS = "contacts";
@@ -50,7 +52,7 @@ public class EmergencyContactsTable {
         }
     }
 
-    public void addLocalContacts(List<ContactModel> contacts) {
+    public Completable addLocalContacts(List<ContactModel> contacts) {
         String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?, ?, ?);";
         SQLiteDatabase db = helper.getWritableDatabase();
         SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
@@ -73,6 +75,7 @@ public class EmergencyContactsTable {
         } finally {
             db.endTransaction();
         }
+        return Completable.complete();
     }
 
     public List<ContactModel> getLocalEmergencyContacts(boolean onlyModified) {
@@ -110,7 +113,7 @@ public class EmergencyContactsTable {
         return contacts;
     }
 
-    public void deleteLocalAllContacts() {
+    public Completable deleteAllLocalContacts() {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -119,9 +122,25 @@ public class EmergencyContactsTable {
         } finally {
             db.endTransaction();
         }
+        return Completable.complete();
     }
 
-    public void markAsNotModified(List<ContactModel> contacts) {
+    public Completable deleteLocalContacts(List<ContactModel> contacts) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            for (ContactModel contact : contacts) {
+                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getPhoneNumber()});
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return Completable.complete();
+    }
+
+    public Completable markAsNotModified(List<ContactModel> contacts) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues(contacts.size());
@@ -131,5 +150,6 @@ public class EmergencyContactsTable {
             db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
                     new String[]{contactModel.getPhoneNumber()});
         }
+        return Completable.complete();
     }
 }

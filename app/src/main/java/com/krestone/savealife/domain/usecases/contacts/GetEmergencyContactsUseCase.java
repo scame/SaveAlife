@@ -20,6 +20,6 @@ public class GetEmergencyContactsUseCase extends UseCaseSingle<ContactsHolder> {
 
     @Override
     protected Single<ContactsHolder> getUseCaseSingle() {
-        return contactsRepository.getEmergencyContacts();
+        return contactsRepository.getEmergencyContactsLocal(false);
     }
 }

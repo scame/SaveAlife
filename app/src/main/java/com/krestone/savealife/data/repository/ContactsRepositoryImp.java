@@ -10,6 +10,7 @@ import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.util.PrefsUtil;
 
@@ -39,15 +40,23 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private NotInEmergencyListFilter notInEmergencyListFilter;
 
+    private EmergencyContactsTable emergencyContactsTable;
+
     private Scheduler scheduler;
 
-    public ContactsRepositoryImp(Context context, ServerApi serverApi,
+    public ContactsRepositoryImp(Context context, ServerApi serverApi, EmergencyContactsTable emergencyContactsTable,
                                  NotInEmergencyListFilter notInEmergencyListFilter,
                                  Scheduler scheduler) {
         this.context = context;
         this.serverApi = serverApi;
         this.scheduler = scheduler;
         this.notInEmergencyListFilter = notInEmergencyListFilter;
+        this.emergencyContactsTable = emergencyContactsTable;
+    }
+
+    @Override
+    public Completable markAsNotModified(List<ContactModel> contacts) {
+        return Completable.fromCallable(() -> emergencyContactsTable.markAsNotModified(contacts));
     }
 
     @Override
@@ -57,6 +66,11 @@ public class ContactsRepositoryImp implements ContactsRepository {
                 serverApi.getEmergencyContacts(PrefsUtil.getAuthToken(context)).subscribeOn(scheduler).toSingle(),
                 notInEmergencyListFilter::filter
         );
+    }
+
+    @Override
+    public Single<List<ContactModel>> getContactsNotInEmergencyListLocal() {
+        return null;
     }
 
     @Override
@@ -81,10 +95,20 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
+    public Completable addToEmergencyListLocal(List<ContactModel> contactModels) {
+        return Completable.fromCallable(() -> emergencyContactsTable.addLocalContacts(contactModels));
+    }
+
+    @Override
     public Single<ContactsHolder> getEmergencyContacts() {
         return serverApi.getEmergencyContacts(PrefsUtil.getAuthToken(context)).toSingle();
     }
 
+    @Override
+    public Single<ContactsHolder> getEmergencyContactsLocal(boolean onlyModified) {
+        return Single.fromCallable(() -> new ContactsHolder(emergencyContactsTable
+                .getLocalEmergencyContacts(onlyModified)));
+    }
 
     @Override
     public Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
@@ -92,6 +116,15 @@ public class ContactsRepositoryImp implements ContactsRepository {
                 PrefsUtil.getAuthToken(context)).toCompletable();
     }
 
+    @Override
+    public Completable deleteFromEmergencyListLocal(List<ContactModel> contacts) {
+        return Completable.fromCallable(() -> emergencyContactsTable.deleteLocalContacts(contacts));
+    }
+
+    @Override
+    public Completable cleanLocalContactsList() {
+        return Completable.fromCallable(() -> emergencyContactsTable.deleteAllLocalContacts());
+    }
 
     // TODO: duplicates are possible when a contact has more than one number
     // TODO: should be eliminated with contact_id field
