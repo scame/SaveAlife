@@ -52,7 +52,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
             View itemView = inflater.inflate(R.layout.emergency_contact_item, parent, false);
             viewHolder = new EmergencyViewHolder(itemView, context, listItemClickListener);
         } else if (viewType == VIEW_TYPE_EMPTY) {
-            View itemView = inflater.inflate(R.layout.empty_rv_layout, parent, false);
+            View itemView = inflater.inflate(R.layout.empty_contacts_rv_layout, parent, false);
             viewHolder = new RefreshViewHolder(itemView, refreshClick);
         }
         return viewHolder;

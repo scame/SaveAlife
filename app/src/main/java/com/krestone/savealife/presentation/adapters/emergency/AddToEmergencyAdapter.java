@@ -15,13 +15,17 @@ import java.util.List;
 
 public class AddToEmergencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_NORMAL = 0;
+    private static final int VIEW_TYPE_EMPTY = 1;
+
     private ListItemClickListener addToListListener;
 
     private List<ContactModel> contacts;
 
     private Context context;
 
-    public AddToEmergencyAdapter(Context context, List<ContactModel> contacts, ListItemClickListener addToListListener) {
+    public AddToEmergencyAdapter(Context context, List<ContactModel> contacts,
+                                 ListItemClickListener addToListListener) {
         this.addToListListener = addToListListener;
         this.contacts = contacts;
         this.context = context;
@@ -30,9 +34,17 @@ public class AddToEmergencyAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.possible_contact_item, parent, false);
+        RecyclerView.ViewHolder viewHolder = null;
 
-        return new AddToEmergencyViewHolder(itemView, addToListListener, context);
+        if (viewType == VIEW_TYPE_NORMAL) {
+            View itemView = inflater.inflate(R.layout.possible_contact_item, parent, false);
+            viewHolder = new AddToEmergencyViewHolder(itemView, addToListListener, context);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View itemView = inflater.inflate(R.layout.empty_possible_contacts_rv, parent, false);
+            viewHolder = new EmptyViewHolder(itemView);
+        }
+
+        return viewHolder;
     }
 
     @Override
@@ -42,6 +54,11 @@ public class AddToEmergencyAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return contacts == null ? 0 : contacts.size();
+        return contacts == null ? 1 : contacts.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return contacts.size() == 0 ? VIEW_TYPE_EMPTY : VIEW_TYPE_NORMAL;
     }
 }
