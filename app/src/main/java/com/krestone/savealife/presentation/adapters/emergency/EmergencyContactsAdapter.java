@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.presentation.adapters.ListItemClickListener;
+import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.List;
 
@@ -22,11 +22,11 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private View.OnClickListener inviteClick;
 
-    private List<ContactItem> contacts;
+    private List<ContactModel> contacts;
 
     private Context context;
 
-    public EmergencyContactsAdapter(List<ContactItem> contacts, Context context,
+    public EmergencyContactsAdapter(List<ContactModel> contacts, Context context,
                                     ListItemClickListener listItemClickListener,
                                     View.OnClickListener inviteClick) {
         this.listItemClickListener = listItemClickListener;

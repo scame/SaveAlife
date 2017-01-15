@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.responses.ContactItem;
 import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.sync.events.SyncEvent;
 import com.krestone.savealife.data.sync.events.SyncStatus;
@@ -25,6 +24,7 @@ import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
+import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenter;
 import com.krestone.savealife.util.InvitationUtil;
 
@@ -55,7 +55,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     private EmergencyListener emergencyListener;
 
     @State
-    ArrayList<ContactItem> contacts;
+    ArrayList<ContactModel> contacts;
 
     private final BroadcastReceiver syncEventReceiver = new BroadcastReceiver() {
         @Override
@@ -135,7 +135,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     }
 
     @Override
-    public void displayEmergencyList(List<ContactItem> contacts) {
+    public void displayEmergencyList(List<ContactModel> contacts) {
         this.contacts = new ArrayList<>(contacts);
 
         contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {

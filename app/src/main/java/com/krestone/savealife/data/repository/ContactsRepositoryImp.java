@@ -8,7 +8,6 @@ import android.provider.ContactsContract;
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
-import com.krestone.savealife.data.mappers.MapContactModelToContactsHolder;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.presentation.models.ContactModel;
@@ -40,18 +39,14 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     private NotInEmergencyListFilter notInEmergencyListFilter;
 
-    private MapContactModelToContactsHolder mapContactModelToContactsHolder;
-
     private Scheduler scheduler;
 
     public ContactsRepositoryImp(Context context, ServerApi serverApi,
                                  NotInEmergencyListFilter notInEmergencyListFilter,
-                                 MapContactModelToContactsHolder mapContactModelToContactsHolder,
                                  Scheduler scheduler) {
         this.context = context;
         this.serverApi = serverApi;
         this.scheduler = scheduler;
-        this.mapContactModelToContactsHolder = mapContactModelToContactsHolder;
         this.notInEmergencyListFilter = notInEmergencyListFilter;
     }
 
@@ -81,7 +76,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Completable addToEmergencyList(List<ContactModel> contactModels) {
-        return serverApi.addToEmergencyList(mapContactModelToContactsHolder.map(contactModels),
+        return serverApi.addToEmergencyList(new ContactsHolder(contactModels),
                 PrefsUtil.getAuthToken(context)).toCompletable();
     }
 

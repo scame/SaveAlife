@@ -3,20 +3,23 @@ package com.krestone.savealife.presentation.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 public class ContactModel implements Parcelable {
 
     private String id;
 
+    @NonNull // concatenated name (first + last names)
     private String firstName;
 
-    private String homeNumber;
-
-    private String workNumber;
+    // used only for current user profile (otherwise - null)
+    private String lastName;
 
     private String phoneNumber;
 
     private String thumbnailUri;
+
+    private Integer status;
 
     private boolean inApp;
 
@@ -26,18 +29,25 @@ public class ContactModel implements Parcelable {
 
     public ContactModel(ContactModel contactModel) {
         this.id = contactModel.getId() == null ? null : contactModel.getId();
-        this.firstName = contactModel.getName() == null ? null : contactModel.getName();
-        this.homeNumber = contactModel.getHomeNumber() == null ? null : contactModel.getHomeNumber();
-        this.workNumber = contactModel.getWorkNumber() == null ? null : contactModel.getWorkNumber();
+        this.firstName = contactModel.getFirstName();
         this.phoneNumber = contactModel.getPhoneNumber() == null ? null : contactModel.getPhoneNumber();
         this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
         this.inApp = contactModel.isInApp();
         this.isModified = contactModel.isModified();
     }
 
-    public ContactModel(String id, String name, String thumbnailUri, String phoneNumber) {
+    public ContactModel(String id, @NonNull String name, String thumbnailUri, String phoneNumber) {
         this.id = id;
         this.firstName = name;
+        this.thumbnailUri = thumbnailUri;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public ContactModel(String id, @NonNull String firstName, @NonNull String lastName,
+                        String thumbnailUri, String phoneNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.thumbnailUri = thumbnailUri;
         this.phoneNumber = phoneNumber;
     }
@@ -56,14 +66,6 @@ public class ContactModel implements Parcelable {
 
     public String getName() {
         return firstName;
-    }
-
-    public String getHomeNumber() {
-        return homeNumber;
-    }
-
-    public String getWorkNumber() {
-        return workNumber;
     }
 
     public String getPhoneNumber() {
@@ -94,36 +96,34 @@ public class ContactModel implements Parcelable {
         this.firstName = name;
     }
 
-    public void setHomeNumber(String homeNumber) {
-        this.homeNumber = homeNumber;
-    }
-
-    public void setWorkNumber(String workNumber) {
-        this.workNumber = workNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-
-        if (obj.getClass().equals(this.getClass())) {
-            ContactModel contact = (ContactModel) obj;
-
-            return  (contact.getId() == null ? this.id == null : contact.getId().equals(this.id)) &&
-                    (contact.getName() == null ? this.firstName == null : contact.getName().equals(this.firstName)) &&
-                    (contact.getHomeNumber() == null ? this.homeNumber == null : contact.getHomeNumber().equals(this.homeNumber)) &&
-                    (contact.getWorkNumber() == null ? this.workNumber == null : contact.getWorkNumber().equals(this.workNumber)) &&
-                    (contact.getPhoneNumber() == null ? this.phoneNumber == null : contact.getPhoneNumber().equals(this.phoneNumber)) &&
-                    (contact.getThumbnailUri() == null ? this.thumbnailUri == null : contact.getThumbnailUri().equals(this.thumbnailUri));
-        }
-        return false;
+    @NonNull
+    public String getFirstName() {
+        return firstName;
     }
 
+    public void setFirstName(@NonNull String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     @Override
     public int describeContents() {
@@ -134,10 +134,10 @@ public class ContactModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.firstName);
-        dest.writeString(this.homeNumber);
-        dest.writeString(this.workNumber);
+        dest.writeString(this.lastName);
         dest.writeString(this.phoneNumber);
         dest.writeString(this.thumbnailUri);
+        dest.writeValue(this.status);
         dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isModified ? (byte) 1 : (byte) 0);
     }
@@ -145,10 +145,10 @@ public class ContactModel implements Parcelable {
     protected ContactModel(Parcel in) {
         this.id = in.readString();
         this.firstName = in.readString();
-        this.homeNumber = in.readString();
-        this.workNumber = in.readString();
+        this.lastName = in.readString();
         this.phoneNumber = in.readString();
         this.thumbnailUri = in.readString();
+        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
         this.inApp = in.readByte() != 0;
         this.isModified = in.readByte() != 0;
     }

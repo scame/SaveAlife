@@ -29,7 +29,7 @@ public class EmergencyContactsTable {
         this.helper = helper;
     }
 
-    public void addContact(ContactModel contact) {
+    public void addLocalContact(ContactModel contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.beginTransaction();
@@ -50,7 +50,7 @@ public class EmergencyContactsTable {
         }
     }
 
-    public void addContacts(List<ContactModel> contacts) {
+    public void addLocalContacts(List<ContactModel> contacts) {
         String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?, ?, ?);";
         SQLiteDatabase db = helper.getWritableDatabase();
         SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
@@ -75,17 +75,17 @@ public class EmergencyContactsTable {
         }
     }
 
-    public List<ContactModel> getEmergencyContacts(boolean onlyModified) {
+    public List<ContactModel> getLocalEmergencyContacts(boolean onlyModified) {
         String contactsSelectQuery;
         if (onlyModified) {
             contactsSelectQuery = String.format("SELECT * FROM %S WHERE " + KEY_IS_MODIFIED + " = 1", TABLE_CONTACTS);
         } else {
             contactsSelectQuery = String.format("SELECT * FROM %S", TABLE_CONTACTS);
         }
-        return getEmergencyContacts(contactsSelectQuery);
+        return getLocalEmergencyContacts(contactsSelectQuery);
     }
 
-    private List<ContactModel> getEmergencyContacts(String selectQuery) {
+    private List<ContactModel> getLocalEmergencyContacts(String selectQuery) {
         List<ContactModel> contacts = new ArrayList<>();
 
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -110,7 +110,7 @@ public class EmergencyContactsTable {
         return contacts;
     }
 
-    public void deleteAllContacts() {
+    public void deleteLocalAllContacts() {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();
         try {

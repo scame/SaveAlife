@@ -37,7 +37,7 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        List<ContactModel> modifiedContacts = emergencyTable.getEmergencyContacts(true);
+        List<ContactModel> modifiedContacts = emergencyTable.getLocalEmergencyContacts(true);
         contactsRepository.addToEmergencyList(modifiedContacts).await();
         emergencyTable.markAsNotModified(modifiedContacts);
 
@@ -47,7 +47,7 @@ public class EmergencyContactsSync extends AbstractSync {
     @Override
     protected Completable get() {
         ContactsHolder contactsHolder = contactsRepository.getEmergencyContacts().toBlocking().value();
-        emergencyTable.deleteAllContacts();
+        emergencyTable.deleteLocalAllContacts();
         //emergencyTable.addContacts(contactsHolder.getContacts());
 
         return Completable.complete();
