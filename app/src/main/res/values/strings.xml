@@ -80,4 +80,6 @@
     <string name="help">help</string>
 
     <string name="address_dialog_title"></string>
+    <string name="no_contacts">No contacts yet</string>
+    <string name="refresh">refresh</string>
 </resources>

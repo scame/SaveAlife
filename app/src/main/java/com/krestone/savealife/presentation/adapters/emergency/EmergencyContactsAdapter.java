@@ -17,10 +17,13 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private static final int VIEW_TYPE_INVITE = 0;
     private static final int VIEW_TYPE_CONTACT = 1;
+    private static final int VIEW_TYPE_EMPTY = 2;
 
     private ListItemClickListener listItemClickListener;
 
     private View.OnClickListener inviteClick;
+
+    private View.OnClickListener refreshClick;
 
     private List<ContactModel> contacts;
 
@@ -28,9 +31,11 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public EmergencyContactsAdapter(List<ContactModel> contacts, Context context,
                                     ListItemClickListener listItemClickListener,
-                                    View.OnClickListener inviteClick) {
+                                    View.OnClickListener inviteClick,
+                                    View.OnClickListener refreshClick) {
         this.listItemClickListener = listItemClickListener;
         this.inviteClick = inviteClick;
+        this.refreshClick = refreshClick;
         this.contacts = contacts;
         this.context = context;
     }
@@ -46,6 +51,9 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
         } else if (viewType == VIEW_TYPE_CONTACT) {
             View itemView = inflater.inflate(R.layout.emergency_contact_item, parent, false);
             viewHolder = new EmergencyViewHolder(itemView, context, listItemClickListener);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View itemView = inflater.inflate(R.layout.empty_rv_layout, parent, false);
+            viewHolder = new RefreshViewHolder(itemView, refreshClick);
         }
         return viewHolder;
     }
@@ -64,6 +72,9 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
+        if (contacts.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        }
         return position == contacts.size() ? VIEW_TYPE_INVITE : VIEW_TYPE_CONTACT;
     }
 }
