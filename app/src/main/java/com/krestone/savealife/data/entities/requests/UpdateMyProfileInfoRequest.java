@@ -1,18 +1,30 @@
 package com.krestone.savealife.data.entities.requests;
 
 
+import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 
 public class UpdateMyProfileInfoRequest {
 
-    private String role;
+    private String role = "";
 
-    private String name;
+    private String firstName = "";
 
-    private String medicalQualification;
+    private String lastName = "";
 
-    private String password;
+    private String medicalQualification = "";
 
-    private String newPassword;
+    private String password = "";
+
+    private String newPassword = "";
+
+    public UpdateMyProfileInfoRequest(MyProfileInfoEntity profileInfo) {
+        this.role = profileInfo.getRole();
+        this.firstName = profileInfo.getFirstName();
+        this.lastName = profileInfo.getLastName();
+        this.medicalQualification = profileInfo.getMedicalQualification();
+        this.password = profileInfo.getPassword();
+        this.newPassword = profileInfo.getNewPassword();
+    }
 
     public String getRole() {
         return role;
@@ -22,12 +34,20 @@ public class UpdateMyProfileInfoRequest {
         this.role = role;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getMedicalQualification() {

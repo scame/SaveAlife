@@ -14,5 +14,9 @@ public interface ProfileRepository {
 
     Single<MyProfileInfoEntity> getMyProfileInfo();
 
-    Completable updateMyProfileInfo(UpdateMyProfileInfoRequest updateMyProfileInfoRequest);
+    Single<MyProfileInfoEntity> getMyProfileInfoLocal();
+
+    Completable updateMyProfileInfo();
+
+    Completable updateMyProfileInfoLocal(UpdateMyProfileInfoRequest updateMyProfileInfoRequest);
 }

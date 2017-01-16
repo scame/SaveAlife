@@ -106,7 +106,7 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     public void displayMyProfileInfo(MyProfileInfoEntity profileInfo) {
         this.profileInfo = profileInfo;
 
-        profileName.setText(profileInfo.getName());
+        profileName.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
         profileNumber.setText(profileInfo.getPhoneNumber());
         if (profileInfo.getRole().equals("driver")) {
             statusSwitch.setChecked(true);

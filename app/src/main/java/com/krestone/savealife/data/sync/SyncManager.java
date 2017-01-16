@@ -10,9 +10,10 @@ public class SyncManager {
 
     private final Map<SyncType, AbstractSync> syncMap;
 
-    public SyncManager(EmergencyContactsSync emergencyContactsSync) {
+    public SyncManager(EmergencyContactsSync emergencyContactsSync, ProfileSync profileSync) {
         syncMap = new HashMap<>();
         syncMap.put(SyncType.CONTACTS, emergencyContactsSync);
+        syncMap.put(SyncType.PROFILE, profileSync);
     }
 
     void doSync(SyncType syncType) {

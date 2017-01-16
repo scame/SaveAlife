@@ -6,13 +6,19 @@ import android.os.Parcelable;
 
 public class MyProfileInfoEntity implements Parcelable {
 
-    private String phoneNumber;
+    private String phoneNumber = "";
 
-    private String role;
+    private String role = "";
 
-    private String name;
+    private String firstName = "";
 
-    private String medicalQualification;
+    private String lastName = "";
+
+    private String medicalQualification = "";
+
+    private String password = "";
+
+    private String newPassword = "";
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -30,13 +36,6 @@ public class MyProfileInfoEntity implements Parcelable {
         this.role = role;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getMedicalQualification() {
         return medicalQualification;
@@ -44,6 +43,38 @@ public class MyProfileInfoEntity implements Parcelable {
 
     public void setMedicalQualification(String medicalQualification) {
         this.medicalQualification = medicalQualification;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     @Override
@@ -55,8 +86,11 @@ public class MyProfileInfoEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.phoneNumber);
         dest.writeString(this.role);
-        dest.writeString(this.name);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
         dest.writeString(this.medicalQualification);
+        dest.writeString(this.password);
+        dest.writeString(this.newPassword);
     }
 
     public MyProfileInfoEntity() {
@@ -65,8 +99,11 @@ public class MyProfileInfoEntity implements Parcelable {
     protected MyProfileInfoEntity(Parcel in) {
         this.phoneNumber = in.readString();
         this.role = in.readString();
-        this.name = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
         this.medicalQualification = in.readString();
+        this.password = in.readString();
+        this.newPassword = in.readString();
     }
 
     public static final Creator<MyProfileInfoEntity> CREATOR = new Creator<MyProfileInfoEntity>() {

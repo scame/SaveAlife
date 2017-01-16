@@ -31,13 +31,41 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     @Override
+    public Single<MyProfileInfoEntity> getMyProfileInfoLocal() {
+        MyProfileInfoEntity profileInfo = new MyProfileInfoEntity();
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        profileInfo.setFirstName(sharedPrefs.getString(context.getString(R.string.firstName), ""));
+        profileInfo.setLastName(sharedPrefs.getString(context.getString(R.string.lastName), ""));
+        profileInfo.setMedicalQualification(sharedPrefs.getString(context.getString(R.string.medical_skills), ""));
+        profileInfo.setRole(sharedPrefs.getString(context.getString(R.string.profile_role), ""));
+
+        return Single.just(profileInfo);
+    }
+
+    @Override
+    public Completable updateMyProfileInfoLocal(UpdateMyProfileInfoRequest profileInfo) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+        editor.putString(context.getString(R.string.firstName), profileInfo.getFirstName()).apply();
+        editor.putString(context.getString(R.string.lastName), profileInfo.getLastName()).apply();
+        editor.putString(context.getString(R.string.medical_skills), profileInfo.getMedicalQualification()).apply();
+        editor.putString(context.getString(R.string.profile_role), profileInfo.getRole());
+
+        return Completable.complete();
+    }
+
+    @Override
     public Single<MyProfileInfoEntity> getMyProfileInfo() {
         return serverApi.getMyProfileInfo(getAuthToken()).toSingle();
     }
 
     @Override
-    public Completable updateMyProfileInfo(UpdateMyProfileInfoRequest updateMyProfileInfoRequest) {
-        return serverApi.updateMyProfileInfo(getAuthToken(), updateMyProfileInfoRequest).toCompletable();
+    public Completable updateMyProfileInfo() {
+        MyProfileInfoEntity profileInfo = getMyProfileInfoLocal().toBlocking().value();
+        UpdateMyProfileInfoRequest request = new UpdateMyProfileInfoRequest(profileInfo);
+
+        return serverApi.updateMyProfileInfo(getAuthToken(), request).toCompletable();
     }
 
     private String getAuthToken() {
