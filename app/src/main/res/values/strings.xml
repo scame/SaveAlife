@@ -31,6 +31,7 @@
 
     <string name="in_app">IN APP</string>
     <string name="not_in_app">NOT IN APP</string>
+    <string name="unspecified">unspecified</string>
     <string name="invite">Invite</string>
     <string name="emergency_header">In case of this situation we\'ll send a message with your location to these people:</string>
     <string name="edit_emergency_text">Edit list</string>

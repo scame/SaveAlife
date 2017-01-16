@@ -11,6 +11,7 @@ import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
+import com.krestone.savealife.data.sync.states.DataStates;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.util.PrefsUtil;
 
@@ -55,8 +56,8 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable markAsNotModified(List<ContactModel> contacts) {
-        return Completable.fromCallable(() -> emergencyContactsTable.markAsNotModified(contacts));
+    public Completable updateDataState(List<ContactModel> contacts, DataStates dataState) {
+        return Completable.fromCallable(() -> emergencyContactsTable.updateDataState(contacts));
     }
 
     @Override
@@ -89,14 +90,14 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable addToEmergencyList(List<ContactModel> contactModels) {
-        return serverApi.addToEmergencyList(new ContactsHolder(contactModels),
-                PrefsUtil.getAuthToken(context)).toCompletable();
+    public Completable addOrUpdateToEmergencyList(List<ContactModel> contactModels) {
+        return Completable.fromCallable(() -> emergencyContactsTable.addOrUpdateLocalContacts(contactModels));
     }
 
     @Override
-    public Completable addToEmergencyListLocal(List<ContactModel> contactModels) {
-        return Completable.fromCallable(() -> emergencyContactsTable.addLocalContacts(contactModels));
+    public Completable addToEmergencyList(List<ContactModel> contactModels) {
+        return serverApi.addToEmergencyList(new ContactsHolder(contactModels),
+                PrefsUtil.getAuthToken(context)).toCompletable();
     }
 
     @Override
@@ -105,9 +106,15 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Single<ContactsHolder> getEmergencyContactsLocal(boolean onlyModified) {
+    public Single<ContactsHolder> getEmergencyContactsLocalByState(DataStates dataState) {
         return Single.fromCallable(() -> new ContactsHolder(emergencyContactsTable
-                .getLocalEmergencyContacts(onlyModified)));
+                .getLocalEmergencyContactsByState(dataState)));
+    }
+
+    @Override
+    public Single<ContactsHolder> getEmergencyContactsLocal() {
+        return Single.fromCallable(() -> new ContactsHolder(emergencyContactsTable
+                .getLocalEmergencyContacts()));
     }
 
     @Override

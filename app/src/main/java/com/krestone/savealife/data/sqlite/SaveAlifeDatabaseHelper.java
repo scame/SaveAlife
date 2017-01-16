@@ -10,7 +10,7 @@ import android.support.annotation.RequiresApi;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_CONTACT_ID;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_CONTACT_NAME;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_CONTACT_NUMBER;
-import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_IS_MODIFIED;
+import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_DATA_STATE;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_IS_IN_APP;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_PROFILE_IMAGE_URI;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.TABLE_CONTACTS;
@@ -49,7 +49,7 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
                 KEY_CONTACT_NAME + " TEXT," +
                 KEY_CONTACT_NUMBER + " TEXT," +
                 KEY_PROFILE_IMAGE_URI + " TEXT," +
-                KEY_IS_MODIFIED + " INTEGER," +
+                KEY_DATA_STATE + " INTEGER," +
                 KEY_IS_IN_APP + " INTEGER" +
                 ")";
 

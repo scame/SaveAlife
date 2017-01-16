@@ -36,7 +36,7 @@ public interface ServerApi {
     @GET("http://10.0.1.94:8080/getEmergencyList")
     Observable<ContactsHolder> getEmergencyContacts(@Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080/addToEmergencyList")
+    @POST("http://10.0.1.94:8080/addOrUpdateToEmergencyList")
     Observable<ResponseBody> addToEmergencyList(@Body ContactsHolder contactsHolder,
                                                 @Header("x-auth-token") String token);
 

@@ -3,6 +3,7 @@ package com.krestone.savealife.data.repository;
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
+import com.krestone.savealife.data.sync.states.DataStates;
 import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.List;
@@ -24,13 +25,15 @@ public interface ContactsRepository {
 
     Completable cleanLocalContactsList();
 
-    Completable addToEmergencyList(List<ContactModel> contactModels);
+    Completable addOrUpdateToEmergencyList(List<ContactModel> contactModels);
 
-    Completable addToEmergencyListLocal(List<ContactModel> contactModels);
+    Completable addToEmergencyList(List<ContactModel> contactModels);
 
     Single<ContactsHolder> getEmergencyContacts();
 
-    Single<ContactsHolder> getEmergencyContactsLocal(boolean onlyModified);
+    Single<ContactsHolder> getEmergencyContactsLocal();
 
-    Completable markAsNotModified(List<ContactModel> contacts);
+    Single<ContactsHolder> getEmergencyContactsLocalByState(DataStates dataState);
+
+    Completable updateDataState(List<ContactModel> contacts, DataStates dataState);
 }

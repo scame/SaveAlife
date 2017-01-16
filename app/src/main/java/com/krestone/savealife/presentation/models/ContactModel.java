@@ -5,6 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.krestone.savealife.data.sync.states.DataStates;
+import com.krestone.savealife.data.sync.states.InAppContact;
+
 public class ContactModel implements Parcelable {
 
     private String id;
@@ -21,19 +24,19 @@ public class ContactModel implements Parcelable {
 
     private Integer status;
 
-    private boolean inApp;
+    private InAppContact inAppState;
 
-    private boolean isModified;
+    private DataStates dataState;
 
     public ContactModel() { }
 
     public ContactModel(ContactModel contactModel) {
-        this.id = contactModel.getId() == null ? null : contactModel.getId();
+        this.id = contactModel.getId();
         this.firstName = contactModel.getFirstName();
-        this.phoneNumber = contactModel.getPhoneNumber() == null ? null : contactModel.getPhoneNumber();
-        this.thumbnailUri = contactModel.getThumbnailUri() == null ? null : contactModel.getThumbnailUri();
-        this.inApp = contactModel.isInApp();
-        this.isModified = contactModel.isModified();
+        this.phoneNumber = contactModel.getPhoneNumber();
+        this.thumbnailUri = contactModel.getThumbnailUri();
+        this.inAppState = contactModel.getInAppState();
+        this.dataState = contactModel.getDataState();
     }
 
     public ContactModel(String id, @NonNull String name, String thumbnailUri, String phoneNumber) {
@@ -52,13 +55,6 @@ public class ContactModel implements Parcelable {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isModified() {
-        return isModified;
-    }
-
-    public boolean isInApp() {
-        return inApp;
-    }
 
     public String getId() {
         return id;
@@ -80,13 +76,6 @@ public class ContactModel implements Parcelable {
         this.thumbnailUri = thumbnailUri;
     }
 
-    public void setModified(boolean modified) {
-        this.isModified = modified;
-    }
-
-    public void setInApp(boolean inApp) {
-        this.inApp = inApp;
-    }
 
     public void setId(String id) {
         this.id = id;
@@ -125,6 +114,23 @@ public class ContactModel implements Parcelable {
         this.status = status;
     }
 
+    public DataStates getDataState() {
+        return dataState;
+    }
+
+    public void setDataState(DataStates dataState) {
+        this.dataState = dataState;
+    }
+
+    public InAppContact getInAppState() {
+        return inAppState;
+    }
+
+    public void setInAppState(InAppContact inAppState) {
+        this.inAppState = inAppState;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -138,8 +144,8 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.phoneNumber);
         dest.writeString(this.thumbnailUri);
         dest.writeValue(this.status);
-        dest.writeByte(this.inApp ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isModified ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.inAppState == null ? -1 : this.inAppState.ordinal());
+        dest.writeInt(this.dataState == null ? -1 : this.dataState.ordinal());
     }
 
     protected ContactModel(Parcel in) {
@@ -149,8 +155,10 @@ public class ContactModel implements Parcelable {
         this.phoneNumber = in.readString();
         this.thumbnailUri = in.readString();
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.inApp = in.readByte() != 0;
-        this.isModified = in.readByte() != 0;
+        int tmpInAppState = in.readInt();
+        this.inAppState = tmpInAppState == -1 ? null : InAppContact.values()[tmpInAppState];
+        int tmpDataState = in.readInt();
+        this.dataState = tmpDataState == -1 ? null : DataStates.values()[tmpDataState];
     }
 
     public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {

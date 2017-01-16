@@ -4,9 +4,9 @@ package com.krestone.savealife.data.sqlite;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
-import android.util.Log;
 
+import com.krestone.savealife.data.sync.states.DataStates;
+import com.krestone.savealife.data.sync.states.InAppContact;
 import com.krestone.savealife.presentation.models.ContactModel;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class EmergencyContactsTable {
     static final String KEY_CONTACT_NUMBER = "number";
     static final String KEY_PROFILE_IMAGE_URI = "thumbnail";
     static final String KEY_IS_IN_APP = "isinapp";
-    static final String KEY_IS_MODIFIED = "ismodified";
+    static final String KEY_DATA_STATE = "datastate";
 
     private SaveAlifeDatabaseHelper helper;
 
@@ -31,45 +31,43 @@ public class EmergencyContactsTable {
         this.helper = helper;
     }
 
-    public void addLocalContact(ContactModel contact) {
+
+    public Completable addOrUpdateLocalContacts(List<ContactModel> contacts) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.beginTransaction();
         try {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(KEY_CONTACT_NAME, contact.getName());
-            contentValues.put(KEY_CONTACT_NUMBER, contact.getPhoneNumber());
-            contentValues.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
-            contentValues.put(KEY_IS_MODIFIED, contact.isModified() ? 1 : 0);
-            contentValues.put(KEY_IS_IN_APP, contact.isInApp() ? 1 : 0);
+            ContentValues cv = new ContentValues();
 
-            db.insertOrThrow(TABLE_CONTACTS, null, contentValues);
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.i("onxAddContactErr", e.getLocalizedMessage());
-        } finally {
-            db.endTransaction();
-        }
-    }
-
-    public Completable addLocalContacts(List<ContactModel> contacts) {
-        String insertStatement = "INSERT INTO " + TABLE_CONTACTS + " VALUES (?, ?, ?, ?, ?, ?);";
-        SQLiteDatabase db = helper.getWritableDatabase();
-        SQLiteStatement sqLiteStatement = db.compileStatement(insertStatement);
-
-        db.beginTransaction();
-        try {
             for (ContactModel contact : contacts) {
-                sqLiteStatement.clearBindings();
-                sqLiteStatement.bindString(2, contact.getName());
-                sqLiteStatement.bindString(3, contact.getPhoneNumber());
-                if (contact.getThumbnailUri() != null) { // default bind value is null, so it's fine to just skip this one
-                    sqLiteStatement.bindString(4, contact.getThumbnailUri());
-                }
-                sqLiteStatement.bindLong(5, contact.isModified() ? 1 : 0);
-                sqLiteStatement.bindLong(6, contact.isInApp() ? 1 : 0);
+                cv.put(KEY_CONTACT_NAME, contact.getName());
+                cv.put(KEY_CONTACT_NUMBER, contact.getPhoneNumber());
 
-                sqLiteStatement.execute();
+                if (contact.getThumbnailUri() == null) {
+                    cv.put(KEY_PROFILE_IMAGE_URI, "");
+                } else {
+                    cv.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
+                }
+
+                if (contact.getInAppState() == null) {
+                    cv.put(KEY_IS_IN_APP, InAppContact.UNSPECIFIED.ordinal());
+                } else {
+                    cv.put(KEY_IS_IN_APP, contact.getInAppState().ordinal());
+                }
+
+                // null data state is possible only in case of server's response
+                if (contact.getDataState() == null) {
+                    cv.put(KEY_DATA_STATE, DataStates.UP_TO_DATE.ordinal());
+                } else {
+                    cv.put(KEY_DATA_STATE, contact.getDataState().ordinal());
+                }
+
+                int rows = db.update(TABLE_CONTACTS, cv,
+                        KEY_CONTACT_NUMBER + " = ?", new String[] {contact.getPhoneNumber()});
+
+                if (rows != 1) {
+                    db.insert(TABLE_CONTACTS, null, cv);
+                }
             }
             db.setTransactionSuccessful();
         } finally {
@@ -78,13 +76,22 @@ public class EmergencyContactsTable {
         return Completable.complete();
     }
 
-    public List<ContactModel> getLocalEmergencyContacts(boolean onlyModified) {
+    public List<ContactModel> getLocalEmergencyContactsByState(DataStates dataState) {
         String contactsSelectQuery;
-        if (onlyModified) {
-            contactsSelectQuery = String.format("SELECT * FROM %S WHERE " + KEY_IS_MODIFIED + " = 1", TABLE_CONTACTS);
-        } else {
-            contactsSelectQuery = String.format("SELECT * FROM %S", TABLE_CONTACTS);
-        }
+
+        contactsSelectQuery = String.format("SELECT * FROM %S WHERE " +
+                KEY_DATA_STATE + " = " + dataState.ordinal(), TABLE_CONTACTS);
+
+        return getLocalEmergencyContacts(contactsSelectQuery);
+    }
+
+    public List<ContactModel> getLocalEmergencyContacts() {
+        String contactsSelectQuery;
+
+        contactsSelectQuery = String.format("SELECT * FROM %S WHERE " +
+                KEY_DATA_STATE + " = " + DataStates.UP_TO_DATE + " OR " +
+                KEY_DATA_STATE + " = " + DataStates.NEW, TABLE_CONTACTS);
+
         return getLocalEmergencyContacts(contactsSelectQuery);
     }
 
@@ -100,8 +107,8 @@ public class EmergencyContactsTable {
                     contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
                     contactModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                     contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
-                    contactModel.setModified(cursor.getInt(cursor.getColumnIndex(KEY_IS_MODIFIED)) == 1);
-                    contactModel.setInApp(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP)) == 1);
+                    contactModel.setDataState(DataStates.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_DATA_STATE))));
+                    contactModel.setInAppState(InAppContact.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP))));
                     contacts.add(contactModel);
                 } while (cursor.moveToNext());
             }
@@ -130,8 +137,12 @@ public class EmergencyContactsTable {
 
         db.beginTransaction();
         try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(KEY_DATA_STATE, DataStates.REMOVED.ordinal());
+
             for (ContactModel contact : contacts) {
-                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getPhoneNumber()});
+                db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
+                        new String[]{contact.getPhoneNumber()});
             }
             db.setTransactionSuccessful();
         } finally {
@@ -140,13 +151,13 @@ public class EmergencyContactsTable {
         return Completable.complete();
     }
 
-    public Completable markAsNotModified(List<ContactModel> contacts) {
+    public Completable updateDataState(List<ContactModel> contacts) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues(contacts.size());
-        contentValues.put(KEY_IS_MODIFIED, 0);
 
         for (ContactModel contactModel : contacts) {
+            contentValues.put(KEY_DATA_STATE, contactModel.getDataState().ordinal());
             db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
                     new String[]{contactModel.getPhoneNumber()});
         }

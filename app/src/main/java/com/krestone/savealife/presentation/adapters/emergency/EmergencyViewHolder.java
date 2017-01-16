@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.data.sync.states.InAppContact;
 import com.krestone.savealife.presentation.adapters.ListItemClickListener;
 import com.krestone.savealife.presentation.models.ContactModel;
 
@@ -39,10 +40,12 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
     protected void bindHolder(List<ContactModel> contacts, int position) {
         ContactModel item = contacts.get(position);
         contactName.setText(item.getName());
-        if (item.isInApp()) {
+        if (item.getInAppState() == InAppContact.TRUE) {
             isInAppTv.setText(context.getString(R.string.in_app));
-        } else {
+        } else if (item.getInAppState() == InAppContact.FALSE) {
             isInAppTv.setText(context.getString(R.string.not_in_app));
+        } else {
+            isInAppTv.setText(context.getString(R.string.unspecified));
         }
     }
 }

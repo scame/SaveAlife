@@ -25,7 +25,7 @@ public class AddToEmergencyListUseCase extends UseCaseCompletable {
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.addToEmergencyListLocal(Collections.singletonList(contactModel));
+        return contactsRepository.addToEmergencyList(Collections.singletonList(contactModel));
     }
 
     public ContactModel getContactModel() {
