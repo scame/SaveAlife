@@ -3,6 +3,7 @@ package com.krestone.savealife.presentation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +30,9 @@ public class AddToEmergencyListFragment extends AbstractFragment implements AddT
     @BindView(R.id.possible_contacts_rv)
     RecyclerView contactsRv;
 
+    @BindView(R.id.swipe_view)
+    SwipeRefreshLayout swipeView;
+
     @Inject
     AddToEmergencyListPresenter<AddToEmergencyListPresenter.AddToEmergencyListView> presenter;
 
@@ -44,6 +48,7 @@ public class AddToEmergencyListFragment extends AbstractFragment implements AddT
 
         presenter.setView(this);
         instantiateFragment();
+        swipeView.setOnRefreshListener(() -> presenter.requestContacts());
 
         return fragmentView;
     }
@@ -70,14 +75,18 @@ public class AddToEmergencyListFragment extends AbstractFragment implements AddT
     @Override
     public void displayContacts(List<ContactModel> contacts) {
         this.contacts = new ArrayList<>(contacts);
-        addToEmergencyAdapter = new AddToEmergencyAdapter(getContext(), this.contacts, adapterPosition -> {
-            // TODO: handle adding to emergency list
-        });
+        addToEmergencyAdapter = new AddToEmergencyAdapter(getContext(), this.contacts,
+                adapterPosition -> {
+                    presenter.addToEmergencyList(contacts.get(adapterPosition));
+                    addToEmergencyAdapter.notifyItemRemoved(adapterPosition);
+                });
 
         contactsRv.setHasFixedSize(true);
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(addToEmergencyAdapter);
+
+        swipeView.setRefreshing(false);
     }
 
 

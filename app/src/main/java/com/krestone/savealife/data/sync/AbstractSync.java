@@ -26,6 +26,8 @@ public abstract class AbstractSync {
                     .andThen(get())
                     .andThen(sendCompletedEvent())
                     .doOnError(throwable -> Log.i("onxSyncError", throwable.getLocalizedMessage()));
+        } else {
+            sendCompletedEvent();
         }
     }
 

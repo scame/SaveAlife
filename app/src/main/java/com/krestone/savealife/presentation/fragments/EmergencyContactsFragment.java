@@ -136,8 +136,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         this.contacts = new ArrayList<>(contacts);
         contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {
             // TODO: handle list item click
-        }, v -> InvitationUtil.showInviteWindow(getContext(), ""),
-                v -> SyncService.requestSync(SyncType.CONTACTS, getContext()));
+        }, v -> InvitationUtil.showInviteWindow(getContext(), ""));
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(contactsAdapter);

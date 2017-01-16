@@ -23,19 +23,15 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private View.OnClickListener inviteClick;
 
-    private View.OnClickListener refreshClick;
-
     private List<ContactModel> contacts;
 
     private Context context;
 
     public EmergencyContactsAdapter(List<ContactModel> contacts, Context context,
                                     ListItemClickListener listItemClickListener,
-                                    View.OnClickListener inviteClick,
-                                    View.OnClickListener refreshClick) {
+                                    View.OnClickListener inviteClick) {
         this.listItemClickListener = listItemClickListener;
         this.inviteClick = inviteClick;
-        this.refreshClick = refreshClick;
         this.contacts = contacts;
         this.context = context;
     }
@@ -53,7 +49,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
             viewHolder = new EmergencyViewHolder(itemView, context, listItemClickListener);
         } else if (viewType == VIEW_TYPE_EMPTY) {
             View itemView = inflater.inflate(R.layout.empty_contacts_rv_layout, parent, false);
-            viewHolder = new RefreshViewHolder(itemView, refreshClick);
+            viewHolder = new EmptyViewHolder(itemView);
         }
         return viewHolder;
     }

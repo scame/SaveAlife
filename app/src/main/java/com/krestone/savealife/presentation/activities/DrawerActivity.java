@@ -1,7 +1,6 @@
 package com.krestone.savealife.presentation.activities;
 
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -114,9 +113,10 @@ public class DrawerActivity extends AppCompatActivity implements
 
     @Override
     public void startEntryProcess() {
+        goNormal();/*
         Intent entryIntent = new Intent(this, RegistrationActivity.class);
         startActivity(entryIntent);
-        finish();
+        finish();*/
     }
 
     @Override

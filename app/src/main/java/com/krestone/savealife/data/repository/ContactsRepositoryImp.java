@@ -71,7 +71,11 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Single<List<ContactModel>> getContactsNotInEmergencyListLocal() {
-        return null;
+        return Single.zip(
+                Single.just(queryContacts()).subscribeOn(scheduler),
+                getEmergencyContactsLocal().subscribeOn(scheduler),
+                notInEmergencyListFilter::filter
+        );
     }
 
     @Override
