@@ -30,13 +30,13 @@ public interface ServerApi {
                                                 @Header("x-auth-token") String tokenHeader);
 
     @POST("http://10.0.1.94:8080/deleteFromEmergencyList")
-    Observable<ResponseBody> deleteContactFromEmergencyList(@Body ContactsNumbersHolder numbersHolder,
-                                                            @Header("x-auth-token") String token);
+    Observable<ResponseBody> deleteContactsFromEmergencyList(@Body ContactsNumbersHolder numbersHolder,
+                                                             @Header("x-auth-token") String token);
 
     @GET("http://10.0.1.94:8080/getEmergencyList")
     Observable<ContactsHolder> getEmergencyContacts(@Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080/addOrUpdateToEmergencyList")
+    @POST("http://10.0.1.94:8080/addOrUpdateEmergencyContacts")
     Observable<ResponseBody> addToEmergencyList(@Body ContactsHolder contactsHolder,
                                                 @Header("x-auth-token") String token);
 

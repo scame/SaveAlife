@@ -90,7 +90,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
     }
 
     @Override
-    public Completable addOrUpdateToEmergencyList(List<ContactModel> contactModels) {
+    public Completable addOrUpdateEmergencyContacts(List<ContactModel> contactModels) {
         return Completable.fromCallable(() -> emergencyContactsTable.addOrUpdateLocalContacts(contactModels));
     }
 
@@ -119,7 +119,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Completable deleteFromEmergencyList(ContactsNumbersHolder contactsNumbersHolder) {
-        return serverApi.deleteContactFromEmergencyList(contactsNumbersHolder,
+        return serverApi.deleteContactsFromEmergencyList(contactsNumbersHolder,
                 PrefsUtil.getAuthToken(context)).toCompletable();
     }
 

@@ -89,8 +89,8 @@ public class EmergencyContactsTable {
         String contactsSelectQuery;
 
         contactsSelectQuery = String.format("SELECT * FROM %S WHERE " +
-                KEY_DATA_STATE + " = " + DataStates.UP_TO_DATE + " OR " +
-                KEY_DATA_STATE + " = " + DataStates.NEW, TABLE_CONTACTS);
+                KEY_DATA_STATE + " = " + DataStates.UP_TO_DATE.ordinal() + " OR " +
+                KEY_DATA_STATE + " = " + DataStates.NEW.ordinal(), TABLE_CONTACTS);
 
         return getLocalEmergencyContacts(contactsSelectQuery);
     }
@@ -137,12 +137,8 @@ public class EmergencyContactsTable {
 
         db.beginTransaction();
         try {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(KEY_DATA_STATE, DataStates.REMOVED.ordinal());
-
             for (ContactModel contact : contacts) {
-                db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
-                        new String[]{contact.getPhoneNumber()});
+                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getPhoneNumber()});
             }
             db.setTransactionSuccessful();
         } finally {

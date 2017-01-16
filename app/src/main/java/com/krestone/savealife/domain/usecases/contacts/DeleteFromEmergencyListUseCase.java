@@ -2,6 +2,7 @@ package com.krestone.savealife.domain.usecases.contacts;
 
 
 import com.krestone.savealife.data.repository.ContactsRepository;
+import com.krestone.savealife.data.sync.states.DataStates;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseCompletable;
@@ -24,7 +25,7 @@ public class DeleteFromEmergencyListUseCase extends UseCaseCompletable {
 
     @Override
     protected Completable getUseCaseCompletable() {
-        return contactsRepository.deleteFromEmergencyListLocal(contacts);
+        return contactsRepository.updateDataState(contacts, DataStates.REMOVED);
     }
 
     public List<ContactModel> getContacts() {

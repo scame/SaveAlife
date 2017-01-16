@@ -25,7 +25,7 @@ public interface ContactsRepository {
 
     Completable cleanLocalContactsList();
 
-    Completable addOrUpdateToEmergencyList(List<ContactModel> contactModels);
+    Completable addOrUpdateEmergencyContacts(List<ContactModel> contactModels);
 
     Completable addToEmergencyList(List<ContactModel> contactModels);
 
