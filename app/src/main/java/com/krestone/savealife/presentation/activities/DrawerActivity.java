@@ -102,9 +102,14 @@ public class DrawerActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this::selectDrawerItem);
         setupDrawerToggle();
 
-        configureToolbar();
         bindHeaderViews();
         configureHeaderView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        configureToolbar();
     }
 
     private void inject() {
@@ -149,18 +154,30 @@ public class DrawerActivity extends AppCompatActivity implements
     private void configureToolbar() {
         setSupportActionBar(toolbar);
 
+        notEmptyStackCheck();
+
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                toolbar.setNavigationOnClickListener(v -> onBackPressed());
-            } else {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                drawerToggle.syncState();
-                toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-            }
+            notEmptyStackCheck();
+            emptyStackCheck();
         });
     }
 
+    private void notEmptyStackCheck() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            drawerToggle.setDrawerIndicatorEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        }
+    }
+
+    private void emptyStackCheck() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            drawerToggle.setDrawerIndicatorEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            drawerToggle.syncState();
+            toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        }
+    }
 
     private void setupDrawerToggle() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
