@@ -20,6 +20,7 @@ import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.sync.events.BroadcastsMeta;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
+import com.krestone.savealife.presentation.fragments.AbstractFragment;
 import com.krestone.savealife.presentation.presenters.MyProfilePresenter;
 import com.krestone.savealife.presentation.receivers.SyncEventReceiver;
 

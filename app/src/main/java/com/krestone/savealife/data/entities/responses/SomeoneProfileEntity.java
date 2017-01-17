@@ -6,15 +6,15 @@ import android.os.Parcelable;
 
 public class SomeoneProfileEntity implements Parcelable {
 
-    private String phoneNumber;
+    private String phoneNumber = "";
 
-    private String firstName;
+    private String firstName = "";
 
-    private String lastName;
+    private String lastName = "";
 
-    private String role;
+    private String role = "";
 
-    private String medicalQualification;
+    private String medicalQualification = "";
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;

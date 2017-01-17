@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.fragments;
+package com.krestone.savealife.presentation.fragments.contacts;
 
 
 import android.content.Context;
@@ -21,6 +21,7 @@ import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
+import com.krestone.savealife.presentation.fragments.AbstractFragment;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenter;
 import com.krestone.savealife.presentation.receivers.SyncEventReceiver;

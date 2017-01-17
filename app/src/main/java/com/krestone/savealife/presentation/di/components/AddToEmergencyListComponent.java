@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.di.components;
 
 import com.krestone.savealife.presentation.di.PerActivity;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
-import com.krestone.savealife.presentation.fragments.AddToEmergencyListFragment;
+import com.krestone.savealife.presentation.fragments.contacts.AddToEmergencyListFragment;
 
 import dagger.Subcomponent;
 
