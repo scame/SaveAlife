@@ -8,6 +8,7 @@ import com.krestone.savealife.data.di.SyncManagerComponent;
 import com.krestone.savealife.data.di.SyncManagerModule;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
+import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
@@ -47,4 +48,6 @@ public interface ApplicationComponent {
     SignInComponent provideSignInComponent(SignInModule signInModule);
 
     SyncManagerComponent provideSyncManagerComponent(SyncManagerModule syncManagerModule);
+
+    ContactProfileComponent provideContactProfileComponent(ContactProfileModule profileModule);
 }

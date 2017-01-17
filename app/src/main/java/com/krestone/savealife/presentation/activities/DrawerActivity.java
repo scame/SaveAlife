@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
+import com.krestone.savealife.presentation.di.components.ContactProfileComponent;
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.components.MyProfileComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
+import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
@@ -30,6 +32,7 @@ import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.fragments.contacts.AddToEmergencyListFragment;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
+import com.krestone.savealife.presentation.fragments.contacts.ContactProfileFragment;
 import com.krestone.savealife.presentation.fragments.contacts.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
@@ -49,9 +52,10 @@ public class DrawerActivity extends AppCompatActivity implements
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
     private static final String CHATS_FRAG_TAG = "chatsFragment";
-    private static final String CONTACTS_FRAG_TAG = "contactsFragment";
+    private static final String ADD_TO_CONTACTS_FRAG_TAG = "contactsFragment";
     private static final String EMERGENCY_CONTACTS_TAG = "emergencyContacts";
     private static final String MY_PROFILE_TAG = "myProfile";
+    private static final String CONTACT_PROFILE_TAG = "contactProfile";
 
     private static final String SETTINGS_FRAG_TAG = "settingsFragment";
 
@@ -88,6 +92,8 @@ public class DrawerActivity extends AppCompatActivity implements
     private EmergencyComponent emergencyComponent;
 
     private MyProfileComponent myProfileComponent;
+
+    private ContactProfileComponent contactProfileComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -216,10 +222,19 @@ public class DrawerActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onContactProfileClick(String phoneNumber) {
+        replaceFragmentWithBackstack(ContactProfileFragment.newInstance(phoneNumber), CONTACT_PROFILE_TAG);
+    }
+
+    @Override
     public void onAddToEmergencyListClick() {
+        replaceFragmentWithBackstack(new AddToEmergencyListFragment(), ADD_TO_CONTACTS_FRAG_TAG);
+    }
+
+    private void replaceFragmentWithBackstack(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.drawer_activity_fl, new AddToEmergencyListFragment(), CONTACTS_FRAG_TAG)
+                .replace(R.id.drawer_activity_fl, fragment, tag)
                 .commit();
     }
 
@@ -249,6 +264,14 @@ public class DrawerActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.drawer_activity_fl, fragment, fragmentTag)
                 .commit();
+    }
+
+    public ContactProfileComponent provideContactProfileComponent() {
+        if (contactProfileComponent == null) {
+            contactProfileComponent = SaveAlifeApplication.getAppComponent()
+                    .provideContactProfileComponent(new ContactProfileModule());
+        }
+        return contactProfileComponent;
     }
 
     public MapComponent provideMapComponent() {

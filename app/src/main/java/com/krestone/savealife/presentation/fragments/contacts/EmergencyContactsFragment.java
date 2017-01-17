@@ -61,6 +61,8 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     public interface EmergencyListener {
 
         void onAddToEmergencyListClick();
+
+        void onContactProfileClick(String phoneNumber);
     }
 
     @Override
@@ -129,9 +131,11 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @Override
     public void displayEmergencyList(List<ContactModel> contacts) {
         this.contacts = new ArrayList<>(contacts);
-        contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition -> {
-            // TODO: handle list item click
-        }, v -> InvitationUtil.showInviteWindow(getContext(), ""));
+
+        contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition ->
+                emergencyListener.onContactProfileClick(contacts.get(adapterPosition).getPhoneNumber()),
+                v -> InvitationUtil.showInviteWindow(getContext(), ""));
+
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         contactsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         contactsRv.setAdapter(contactsAdapter);
