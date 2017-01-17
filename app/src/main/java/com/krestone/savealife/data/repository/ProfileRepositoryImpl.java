@@ -50,7 +50,7 @@ public class ProfileRepositoryImpl implements ProfileRepository {
         editor.putString(context.getString(R.string.firstName), profileInfo.getFirstName()).apply();
         editor.putString(context.getString(R.string.lastName), profileInfo.getLastName()).apply();
         editor.putString(context.getString(R.string.medical_skills), profileInfo.getMedicalQualification()).apply();
-        editor.putString(context.getString(R.string.profile_role), profileInfo.getRole());
+        editor.putString(context.getString(R.string.profile_role), profileInfo.getRole()).apply();
 
         return Completable.complete();
     }

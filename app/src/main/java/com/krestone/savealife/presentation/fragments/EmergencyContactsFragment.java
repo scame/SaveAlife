@@ -1,9 +1,7 @@
 package com.krestone.savealife.presentation.fragments;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,14 +17,13 @@ import android.view.ViewGroup;
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.sync.events.BroadcastsMeta;
-import com.krestone.savealife.data.sync.events.SyncEvent;
-import com.krestone.savealife.data.sync.events.SyncStatus;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.adapters.DividerItemDecoration;
 import com.krestone.savealife.presentation.adapters.emergency.EmergencyContactsAdapter;
 import com.krestone.savealife.presentation.models.ContactModel;
 import com.krestone.savealife.presentation.presenters.contacts.EmergencyPresenter;
+import com.krestone.savealife.presentation.receivers.SyncEventReceiver;
 import com.krestone.savealife.util.InvitationUtil;
 
 import java.util.ArrayList;
@@ -58,20 +55,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @State
     ArrayList<ContactModel> contacts;
 
-    private final BroadcastReceiver syncEventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            SyncEvent event = intent.getParcelableExtra(BroadcastsMeta.SYNC_RESPONSE_EXTRA);
-            if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.IN_PROGRESS) {
-                if (!swipeView.isRefreshing()) {
-                    swipeView.setRefreshing(true);
-                }
-            } else if (event.getSyncType() == SyncType.CONTACTS && event.getSyncStatus() == SyncStatus.COMPLETED) {
-                swipeView.setRefreshing(false);
-                emergencyPresenter.requestEmergencyContacts();
-            }
-        }
-    };
+    private SyncEventReceiver receiver;
 
     public interface EmergencyListener {
 
@@ -95,21 +79,31 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
         instantiateFragment();
+        createReceiver();
 
         return fragmentView;
+    }
+
+    private void createReceiver() {
+        receiver = new SyncEventReceiver(swipeView, SyncType.CONTACTS) {
+            @Override
+            public void syncLocally() {
+                emergencyPresenter.requestEmergencyContacts();
+            }
+        };
     }
 
     @Override
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(getContext())
-                .registerReceiver(syncEventReceiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
+                .registerReceiver(receiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(syncEventReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 
     private void instantiateFragment() {

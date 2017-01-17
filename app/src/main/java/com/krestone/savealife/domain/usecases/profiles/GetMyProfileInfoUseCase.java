@@ -20,6 +20,6 @@ public class GetMyProfileInfoUseCase extends UseCaseSingle<MyProfileInfoEntity> 
 
     @Override
     protected Single<MyProfileInfoEntity> getUseCaseSingle() {
-        return profileRepository.getMyProfileInfo();
+        return profileRepository.getMyProfileInfoLocal();
     }
 }

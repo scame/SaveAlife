@@ -1,8 +1,11 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,12 @@ import android.widget.TextView;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
+import com.krestone.savealife.data.sync.SyncService;
+import com.krestone.savealife.data.sync.events.BroadcastsMeta;
+import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.MyProfilePresenter;
+import com.krestone.savealife.presentation.receivers.SyncEventReceiver;
 
 import javax.inject.Inject;
 
@@ -23,6 +30,9 @@ import butterknife.OnClick;
 import icepick.State;
 
 public class MyProfileFragment extends AbstractFragment implements MyProfilePresenter.MyProfileView {
+
+    @BindView(R.id.swipe_view)
+    SwipeRefreshLayout swipeView;
 
     @BindView(R.id.contact_profile_image)
     ImageView contactImage;
@@ -59,6 +69,8 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
 
     private MyProfileListener myProfileListener;
 
+    private SyncEventReceiver receiver;
+
     public interface MyProfileListener {
 
         void onSignOutClick();
@@ -73,8 +85,19 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
         presenter.setView(this);
         instantiateFragment();
         qualificationSpinner.setItems("No medical qualification", "Surgeon", "Nurse");
+        swipeView.setOnRefreshListener(() -> SyncService.requestSync(SyncType.PROFILE, getContext()));
+        createReceiver();
 
         return fragmentView;
+    }
+
+    private void createReceiver() {
+        receiver = new SyncEventReceiver(swipeView, SyncType.PROFILE) {
+            @Override
+            public void syncLocally() {
+                presenter.requestMyProfileInfo();
+            }
+        };
     }
 
     private void instantiateFragment() {
@@ -95,6 +118,19 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
         if (getActivity() instanceof DrawerActivity) {
             ((DrawerActivity) getActivity()).provideMyProfileComponent().inject(this);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(receiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 
     @Override
