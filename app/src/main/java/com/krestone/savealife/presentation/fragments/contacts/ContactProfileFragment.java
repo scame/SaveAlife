@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,15 @@ import butterknife.OnClick;
 import icepick.State;
 
 public class ContactProfileFragment extends AbstractFragment implements ContactProfilePresenter.ContactProfileView {
+
+    @BindView(R.id.refresh_btn)
+    Button refreshButton;
+
+    @BindView(R.id.filled_profile_ll)
+    LinearLayout filledProfileLl;
+
+    @BindView(R.id.not_filled_profile_ll)
+    LinearLayout notFilledProfileLl;
 
     @BindView(R.id.remove_contact_btn)
     ImageButton removeContactBtn;
@@ -87,6 +98,8 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
 
     @Override
     public void displayProfileInfo(SomeoneProfileEntity profileEntity) {
+        checkVisibility();
+
         // TODO: handle profile image
         username.setText(profileEntity.getFirstName());
         statusTv.setText(profileEntity.getRole());
@@ -94,10 +107,28 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
         medicalSkills.setText(profileEntity.getMedicalQualification());
     }
 
+    private void checkVisibility() {
+        if (filledProfileLl.getVisibility() == View.GONE) {
+            filledProfileLl.setVisibility(View.VISIBLE);
+            notFilledProfileLl.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.refresh_btn)
+    public void onRefreshClick(View v) {
+        presenter.requestProfileInfo(parsedNumber);
+    }
+
     @Override
     public void onError(String error) {
-        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+        if (error.equals(getString(R.string.internet_connection_check))) {
+            filledProfileLl.setVisibility(View.GONE);
+            notFilledProfileLl.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+        }
     }
+
 
     @Override
     protected void inject() {
@@ -108,7 +139,7 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.others_profile_layout;
+        return R.layout.contact_profile_layout;
     }
 
     @OnClick(R.id.call_btn)

@@ -84,5 +84,5 @@
     <string name="address_dialog_title"></string>
     <string name="no_contacts">No contacts yet. Swipe to refresh. And don\'t forget to check your Internet connection</string>
     <string name="refresh">refresh</string>
-    <string name="no_possible_contacts">You have no contacts which can be added to your emergency list</string>
+    <string name="no_possible_contacts">You have no contacts that can be added to your emergency list</string>
 </resources>

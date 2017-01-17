@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--
-    TODO: use grid layout
--->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/contact_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -34,7 +30,6 @@
             android:layout_below="@id/separator"
             android:layout_margin="@dimen/standard_elem_margin"
             android:gravity="center_horizontal"
-            android:text="Slava Petrochenko"
             android:textSize="@dimen/text_size_large" />
 
         <ImageButton
@@ -44,8 +39,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/separator"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_clear_black_24dp"
-            android:padding="@dimen/standard_elem_padding"/>
+            android:padding="@dimen/standard_elem_padding"
+            android:src="@drawable/ic_clear_black_24dp" />
 
         <TextView
             android:id="@+id/status_tv"
@@ -53,12 +48,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/username_tv"
             android:gravity="center_horizontal"
-            android:text="Driver"
             android:textSize="@dimen/text_size_medium" />
 
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/contact_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
@@ -108,5 +103,4 @@
             android:text="@string/call" />
 
     </RelativeLayout>
-
 </LinearLayout>
