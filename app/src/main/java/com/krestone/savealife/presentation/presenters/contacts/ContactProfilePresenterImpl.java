@@ -41,6 +41,11 @@ public class ContactProfilePresenterImpl<T extends ContactProfilePresenter.Conta
     }
 
     @Override
+    public void progressDialogCancel() {
+        someoneProfileInfoUseCase.unsubscribe();
+    }
+
+    @Override
     public void destroy() {
         view = null;
         someoneProfileInfoUseCase.unsubscribe();

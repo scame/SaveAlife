@@ -21,7 +21,8 @@
 
         <include
             android:id="@+id/filled_profile_ll"
-            layout="@layout/contact_profile_filled" />
+            layout="@layout/contact_profile_filled"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

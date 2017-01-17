@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments.contacts;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
     @Inject
     ContactProfilePresenter<ContactProfilePresenter.ContactProfileView> presenter;
 
+    private ProgressDialog progressDialog;
+
     private String parsedNumber;
 
     public static ContactProfileFragment newInstance(String contactNumber) {
@@ -90,15 +93,25 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
 
     private void instantiateFragment() {
         if (profileEntity == null) {
+            showProgressDialog();
             presenter.requestProfileInfo(parsedNumber);
         } else {
             displayProfileInfo(profileEntity);
         }
     }
 
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> presenter.progressDialogCancel());
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Fetching...");
+        progressDialog.show();
+    }
+
     @Override
     public void displayProfileInfo(SomeoneProfileEntity profileEntity) {
         checkVisibility();
+        progressDialog.dismiss();
 
         // TODO: handle profile image
         username.setText(profileEntity.getFirstName());
@@ -116,19 +129,22 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
 
     @OnClick(R.id.refresh_btn)
     public void onRefreshClick(View v) {
+        showProgressDialog();
         presenter.requestProfileInfo(parsedNumber);
     }
 
     @Override
     public void onError(String error) {
-        if (error.equals(getString(R.string.internet_connection_check))) {
+        progressDialog.dismiss();
+
+        if (error.equals(getString(R.string.internet_connection_check))
+                && notFilledProfileLl.getVisibility() == View.GONE) {
             filledProfileLl.setVisibility(View.GONE);
             notFilledProfileLl.setVisibility(View.VISIBLE);
         } else {
-            Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     protected void inject() {

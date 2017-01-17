@@ -14,4 +14,6 @@ public interface ContactProfilePresenter<T> extends Presenter<T> {
     }
 
     void requestProfileInfo(String phoneNumber);
+
+    void progressDialogCancel();
 }
