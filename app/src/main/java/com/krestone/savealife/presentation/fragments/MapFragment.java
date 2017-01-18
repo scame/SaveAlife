@@ -14,7 +14,7 @@ import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.map.MapObject;
 import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
-import com.krestone.savealife.presentation.presenters.MapPresenter;
+import com.krestone.savealife.presentation.presenters.map.MapPresenter;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;

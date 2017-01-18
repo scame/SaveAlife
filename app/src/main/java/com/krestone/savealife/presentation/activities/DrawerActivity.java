@@ -24,12 +24,14 @@ import com.krestone.savealife.presentation.di.components.ContactProfileComponent
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.components.MyProfileComponent;
+import com.krestone.savealife.presentation.di.components.SosWindowComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
+import com.krestone.savealife.presentation.di.modules.SosWindowModule;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
@@ -95,6 +97,8 @@ public class DrawerActivity extends AppCompatActivity implements
     private MyProfileComponent myProfileComponent;
 
     private ContactProfileComponent contactProfileComponent;
+
+    private SosWindowComponent sosWindowComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -301,6 +305,13 @@ public class DrawerActivity extends AppCompatActivity implements
             myProfileComponent = SaveAlifeApplication.getAppComponent().provideMyProfileComponent(new MyProfileModule());
         }
         return myProfileComponent;
+    }
+
+    public SosWindowComponent provideSosWindowComponent() {
+        if (sosWindowComponent == null) {
+            sosWindowComponent = SaveAlifeApplication.getAppComponent().provideSosWindowComponent(new SosWindowModule());
+        }
+        return sosWindowComponent;
     }
 
     @Override

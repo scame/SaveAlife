@@ -2,6 +2,7 @@ package com.krestone.savealife.data.rest;
 
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.entities.requests.HelpIntentRequest;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
@@ -70,4 +71,8 @@ public interface ServerApi {
     @POST("http://10.0.1.94:8080//updateProfile")
     Observable<ResponseBody> updateMyProfileInfo(@Header("x-auth-token") String token,
                                                  @Body UpdateMyProfileInfoRequest infoBody);
+
+    @POST("http://10.0.1.94:8080//helpRequest")
+    Observable<ResponseBody> helpIntentRequest(@Header("x-auth-token") String token,
+                                               @Body HelpIntentRequest helpIntentRequest);
 }

@@ -1,7 +1,8 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.map;
 
 
 import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
+import com.krestone.savealife.presentation.presenters.Presenter;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.commons.models.Position;

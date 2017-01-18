@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.presenters;
+package com.krestone.savealife.presentation.presenters.map;
 
 
 import android.location.Location;

@@ -12,8 +12,8 @@ import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
 import com.krestone.savealife.domain.usecases.map.GetHumanReadableAddressUseCase;
 import com.krestone.savealife.domain.usecases.map.GetRouteUseCase;
 import com.krestone.savealife.presentation.di.PerActivity;
-import com.krestone.savealife.presentation.presenters.MapPresenter;
-import com.krestone.savealife.presentation.presenters.MapPresenterImp;
+import com.krestone.savealife.presentation.presenters.map.MapPresenter;
+import com.krestone.savealife.presentation.presenters.map.MapPresenterImp;
 
 import dagger.Module;
 import dagger.Provides;

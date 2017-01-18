@@ -12,11 +12,16 @@ import android.widget.TextView;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.map.MapObject;
+import com.krestone.savealife.presentation.activities.DrawerActivity;
+import com.krestone.savealife.presentation.presenters.map.SosWindowPresenter;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SosWindowFragment extends AbstractFragment {
+public class SosWindowFragment extends AbstractFragment implements SosWindowPresenter.SosWindowView {
 
     @BindView(R.id.address_tv)
     TextView addressTv;
@@ -29,6 +34,9 @@ public class SosWindowFragment extends AbstractFragment {
 
     @BindView(R.id.help_btn)
     Button helpButton;
+
+    @Inject
+    SosWindowPresenter<SosWindowPresenter.SosWindowView> presenter;
 
     public static SosWindowFragment newInstance(MapObject mapObject) {
         SosWindowFragment sosWindowFragment = new SosWindowFragment();
@@ -45,12 +53,16 @@ public class SosWindowFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        presenter.setView(this);
+
         return fragmentView;
     }
 
     @Override
     protected void inject() {
-
+        if (getActivity() instanceof DrawerActivity) {
+            ((DrawerActivity) getActivity()).provideSosWindowComponent().inject(this);
+        }
     }
 
     @OnClick(R.id.dismiss_window_btn)
@@ -61,5 +73,15 @@ public class SosWindowFragment extends AbstractFragment {
     @Override
     protected int getFragmentLayout() {
         return R.layout.sos_window;
+    }
+
+    @Override
+    public void onHelpPressed(PolylineOptions polyline) {
+
+    }
+
+    @Override
+    public void onError(String error) {
+
     }
 }

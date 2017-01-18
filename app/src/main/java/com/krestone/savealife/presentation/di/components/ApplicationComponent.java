@@ -16,6 +16,7 @@ import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.SignInModule;
+import com.krestone.savealife.presentation.di.modules.SosWindowModule;
 import com.krestone.savealife.presentation.di.modules.VerificationModule;
 
 import javax.inject.Singleton;
@@ -50,4 +51,6 @@ public interface ApplicationComponent {
     SyncManagerComponent provideSyncManagerComponent(SyncManagerModule syncManagerModule);
 
     ContactProfileComponent provideContactProfileComponent(ContactProfileModule profileModule);
+
+    SosWindowComponent provideSosWindowComponent(SosWindowModule sosWindowModule);
 }
