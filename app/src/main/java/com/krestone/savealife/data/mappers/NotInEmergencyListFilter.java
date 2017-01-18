@@ -14,7 +14,7 @@ public class NotInEmergencyListFilter {
 
         for (ContactModel emergencyContact : emergencyContacts.getContacts()) {
             for (ContactModel localContact : queriedContacts) {
-                if (emergencyContact.getPhoneNumber().equals(localContact.getPhoneNumber())) {
+                if (emergencyContact.getNumber().equals(localContact.getNumber())) {
                     contactsCopy.remove(localContact);
                 }
             }

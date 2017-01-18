@@ -88,7 +88,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
         List<ContactModel> detailedContacts = queryContacts();
 
         for (ContactModel contactModel : detailedContacts) {
-            numbers.add(contactModel.getPhoneNumber());
+            numbers.add(contactModel.getNumber());
         }
         return new ContactsNumbersHolder(numbers);
     }

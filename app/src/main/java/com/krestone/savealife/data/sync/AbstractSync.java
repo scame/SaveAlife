@@ -25,7 +25,8 @@ public abstract class AbstractSync {
                     .andThen(post())
                     .andThen(get())
                     .andThen(sendCompletedEvent())
-                    .doOnError(throwable -> Log.i("onxSyncError", throwable.getLocalizedMessage()));
+                    .doOnError(throwable -> Log.i("onxSyncError", throwable.getLocalizedMessage()))
+                    .await();
         } else {
             sendCompletedEvent();
         }

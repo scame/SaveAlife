@@ -4,7 +4,6 @@ package com.krestone.savealife.presentation.fragments.contacts;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,16 +83,20 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
         presenter.setView(this);
         parseArgs();
 
-        instantiateFragment();
-
         return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchData();
     }
 
     private void parseArgs() {
         this.parsedNumber = getArguments().getString(ContactProfileFragment.class.getCanonicalName(), "");
     }
 
-    private void instantiateFragment() {
+    private void fetchData() {
         if (profileEntity == null) {
             showProgressDialog();
             presenter.requestProfileInfo(parsedNumber);

@@ -40,7 +40,7 @@ public class ContactProfilePresenterImpl<T extends ContactProfilePresenter.Conta
     @Override
     public void removeContact(String phoneNumber) {
         ContactModel contactModel = new ContactModel();
-        contactModel.setPhoneNumber(phoneNumber);
+        contactModel.setNumber(phoneNumber);
 
         deleteFromEmergencyListUseCase.setContacts(Collections.singletonList(contactModel));
         deleteFromEmergencyListUseCase.executeCompletable(

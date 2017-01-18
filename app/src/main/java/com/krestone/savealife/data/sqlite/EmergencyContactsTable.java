@@ -40,8 +40,8 @@ public class EmergencyContactsTable {
             ContentValues cv = new ContentValues();
 
             for (ContactModel contact : contacts) {
-                cv.put(KEY_CONTACT_NAME, contact.getName());
-                cv.put(KEY_CONTACT_NUMBER, contact.getPhoneNumber());
+                cv.put(KEY_CONTACT_NAME, contact.getFirstName());
+                cv.put(KEY_CONTACT_NUMBER, contact.getNumber());
 
                 if (contact.getThumbnailUri() == null) {
                     cv.put(KEY_PROFILE_IMAGE_URI, "");
@@ -63,7 +63,7 @@ public class EmergencyContactsTable {
                 }
 
                 int rows = db.update(TABLE_CONTACTS, cv,
-                        KEY_CONTACT_NUMBER + " = ?", new String[] {contact.getPhoneNumber()});
+                        KEY_CONTACT_NUMBER + " = ?", new String[] {contact.getNumber()});
 
                 if (rows != 1) {
                     db.insert(TABLE_CONTACTS, null, cv);
@@ -104,8 +104,8 @@ public class EmergencyContactsTable {
             if (cursor.moveToFirst()) {
                 do {
                     ContactModel contactModel = new ContactModel();
-                    contactModel.setName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
-                    contactModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
+                    contactModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NAME)));
+                    contactModel.setNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                     contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
                     contactModel.setDataState(DataStates.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_DATA_STATE))));
                     contactModel.setInAppState(InAppContact.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP))));
@@ -138,7 +138,7 @@ public class EmergencyContactsTable {
         db.beginTransaction();
         try {
             for (ContactModel contact : contacts) {
-                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getPhoneNumber()});
+                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getNumber()});
             }
             db.setTransactionSuccessful();
         } finally {
@@ -155,7 +155,7 @@ public class EmergencyContactsTable {
         for (ContactModel contactModel : contacts) {
             contentValues.put(KEY_DATA_STATE, dataState.ordinal());
             db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
-                    new String[]{contactModel.getPhoneNumber()});
+                    new String[]{contactModel.getNumber()});
         }
         return Completable.complete();
     }

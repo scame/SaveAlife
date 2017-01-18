@@ -48,13 +48,12 @@ public class AddToEmergencyListFragment extends AbstractFragment implements AddT
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
         presenter.setView(this);
-        instantiateFragment();
         swipeView.setOnRefreshListener(() -> presenter.requestContacts());
 
         return fragmentView;
     }
 
-    private void instantiateFragment() {
+    private void fetchData() {
         if (contacts == null) {
             presenter.requestContacts();
         } else {
@@ -66,6 +65,12 @@ public class AddToEmergencyListFragment extends AbstractFragment implements AddT
         if (getActivity() instanceof DrawerActivity) {
             ((DrawerActivity) getActivity()).provideContactsComponent().inject(this);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchData();
     }
 
     @Override

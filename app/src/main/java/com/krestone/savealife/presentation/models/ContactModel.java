@@ -18,7 +18,7 @@ public class ContactModel implements Parcelable {
     // used only for current user profile (otherwise - null)
     private String lastName;
 
-    private String phoneNumber;
+    private String number;
 
     private String thumbnailUri;
 
@@ -33,7 +33,7 @@ public class ContactModel implements Parcelable {
     public ContactModel(ContactModel contactModel) {
         this.id = contactModel.getId();
         this.firstName = contactModel.getFirstName();
-        this.phoneNumber = contactModel.getPhoneNumber();
+        this.number = contactModel.getNumber();
         this.thumbnailUri = contactModel.getThumbnailUri();
         this.inAppState = contactModel.getInAppState();
         this.dataState = contactModel.getDataState();
@@ -43,7 +43,7 @@ public class ContactModel implements Parcelable {
         this.id = id;
         this.firstName = name;
         this.thumbnailUri = thumbnailUri;
-        this.phoneNumber = phoneNumber;
+        this.number = phoneNumber;
     }
 
     public ContactModel(String id, @NonNull String firstName, @NonNull String lastName,
@@ -52,7 +52,7 @@ public class ContactModel implements Parcelable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.thumbnailUri = thumbnailUri;
-        this.phoneNumber = phoneNumber;
+        this.number = phoneNumber;
     }
 
 
@@ -60,12 +60,8 @@ public class ContactModel implements Parcelable {
         return id;
     }
 
-    public String getName() {
-        return firstName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNumber() {
+        return number;
     }
 
     public String getThumbnailUri() {
@@ -81,12 +77,8 @@ public class ContactModel implements Parcelable {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.firstName = name;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     @NonNull
@@ -141,7 +133,7 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
-        dest.writeString(this.phoneNumber);
+        dest.writeString(this.number);
         dest.writeString(this.thumbnailUri);
         dest.writeValue(this.status);
         dest.writeInt(this.inAppState == null ? -1 : this.inAppState.ordinal());
@@ -152,7 +144,7 @@ public class ContactModel implements Parcelable {
         this.id = in.readString();
         this.firstName = in.readString();
         this.lastName = in.readString();
-        this.phoneNumber = in.readString();
+        this.number = in.readString();
         this.thumbnailUri = in.readString();
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
         int tmpInAppState = in.readInt();

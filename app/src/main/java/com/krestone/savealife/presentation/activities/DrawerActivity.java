@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.activities;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,14 +30,14 @@ import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
-import com.krestone.savealife.presentation.fragments.contacts.AddToEmergencyListFragment;
 import com.krestone.savealife.presentation.fragments.ChatsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
-import com.krestone.savealife.presentation.fragments.contacts.ContactProfileFragment;
-import com.krestone.savealife.presentation.fragments.contacts.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
+import com.krestone.savealife.presentation.fragments.contacts.AddToEmergencyListFragment;
+import com.krestone.savealife.presentation.fragments.contacts.ContactProfileFragment;
+import com.krestone.savealife.presentation.fragments.contacts.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.presenters.DrawerActivityPresenter;
 import com.krestone.savealife.util.InvitationUtil;
 
@@ -124,10 +125,9 @@ public class DrawerActivity extends AppCompatActivity implements
 
     @Override
     public void startEntryProcess() {
-        goNormal();/*
         Intent entryIntent = new Intent(this, RegistrationActivity.class);
         startActivity(entryIntent);
-        finish();*/
+        finish();
     }
 
     @Override

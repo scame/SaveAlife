@@ -40,7 +40,8 @@ public class NetworkingModule {
                 .addInterceptor(chain -> {
                     Request request = chain.request();
                     Response response = chain.proceed(request);
-                    Log.i("onxBodyAndUrl", bodyToString(request) + " " + request.url() + " " + response.code());
+                    Log.i("onxBodyAndUrl", bodyToString(request) + " " + request.url() +
+                            " " + response.code() + " " + request.headers().toString());
                     return response;
                 })
                 .build();

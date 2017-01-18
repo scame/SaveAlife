@@ -39,7 +39,7 @@ public class AddToEmergencyViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindHolder(List<ContactModel> contacts, int position) {
-        contactName.setText(contacts.get(position).getName());
+        contactName.setText(contacts.get(position).getFirstName());
         handleProfileImage(contacts, position);
     }
 

@@ -21,7 +21,7 @@ public class ContactsNumbersHolder {
     public static ContactsNumbersHolder fromContacts(List<ContactModel> contacts) {
         List<String> numbers = new ArrayList<>();
         for (ContactModel contact : contacts) {
-            numbers.add(contact.getPhoneNumber());
+            numbers.add(contact.getNumber());
         }
         return new ContactsNumbersHolder(numbers);
     }

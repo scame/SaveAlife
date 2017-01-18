@@ -3,6 +3,7 @@ package com.krestone.savealife.presentation.presenters.contacts;
 
 import android.util.Log;
 
+import com.krestone.savealife.data.sync.states.DataStates;
 import com.krestone.savealife.domain.usecases.contacts.AddToEmergencyListUseCase;
 import com.krestone.savealife.domain.usecases.contacts.GetContactsNotInEmergencyList;
 import com.krestone.savealife.presentation.models.ContactModel;
@@ -30,6 +31,8 @@ public class AddToEmergencyListPresenterImp<T extends AddToEmergencyListPresente
 
     @Override
     public void addToEmergencyList(ContactModel contactModel) {
+        contactModel.setDataState(DataStates.NEW);
+
         addToEmergencyListUseCase.setContactModel(contactModel);
         addToEmergencyListUseCase.executeCompletable(
                 () -> Log.i("onxAddToEmrg", "success"),

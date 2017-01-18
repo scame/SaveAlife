@@ -13,7 +13,7 @@ import java.util.List;
 
 import rx.Completable;
 
-
+// TODO: 1/18/17 rewrite in asynchronous manner
 public class EmergencyContactsSync extends AbstractSync {
 
     private ContactsRepository contactsRepository;
@@ -30,23 +30,26 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        return handleRemovedContacts().andThen(handleNewContacts());
+        handleRemovedContacts().andThen(handleNewContacts()).await();
+        return Completable.complete();
     }
 
     private Completable handleRemovedContacts() {
         List<ContactModel> removedContacts = getContactsByState(DataStates.REMOVED);
 
-        return contactsRepository
+        contactsRepository
                 .deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(removedContacts))
-                .andThen(contactsRepository.deleteFromEmergencyListLocal(removedContacts));
+                .andThen(contactsRepository.deleteFromEmergencyListLocal(removedContacts)).await();
+        return Completable.complete();
     }
 
     private Completable handleNewContacts() {
         List<ContactModel> newContacts = getContactsByState(DataStates.NEW);
 
-        return contactsRepository
+        contactsRepository
                 .addToEmergencyList(newContacts)
-                .andThen(contactsRepository.updateDataState(newContacts, DataStates.UP_TO_DATE));
+                .andThen(contactsRepository.updateDataState(newContacts, DataStates.UP_TO_DATE)).await();
+        return Completable.complete();
     }
 
     private List<ContactModel> getContactsByState(DataStates state) {
@@ -63,8 +66,9 @@ public class EmergencyContactsSync extends AbstractSync {
                 .toBlocking().value()
                 .getContacts();
 
-        return contactsRepository
+        contactsRepository
                 .cleanLocalContactsList()
-                .andThen(contactsRepository.addOrUpdateEmergencyContacts(freshContacts));
+                .andThen(contactsRepository.addOrUpdateEmergencyContacts(freshContacts)).await();
+        return Completable.complete();
     }
 }

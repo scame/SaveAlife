@@ -81,7 +81,6 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         swipeView.setOnRefreshListener(() -> SyncService.requestSync(SyncType.CONTACTS, getContext()));
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
-        instantiateFragment();
         createReceiver();
 
         return fragmentView;
@@ -99,6 +98,8 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @Override
     public void onStart() {
         super.onStart();
+        fetchData();
+
         LocalBroadcastManager.getInstance(getContext())
                 .registerReceiver(receiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
     }
@@ -109,7 +110,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 
-    private void instantiateFragment() {
+    private void fetchData() {
         if (contacts == null) {
             emergencyPresenter.requestEmergencyContacts();
         } else {
@@ -133,7 +134,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         this.contacts = new ArrayList<>(contacts);
 
         contactsAdapter = new EmergencyContactsAdapter(this.contacts, getContext(), adapterPosition ->
-                emergencyListener.onContactProfileClick(contacts.get(adapterPosition).getPhoneNumber()),
+                emergencyListener.onContactProfileClick(contacts.get(adapterPosition).getNumber()),
                 v -> InvitationUtil.showInviteWindow(getContext(), ""));
 
         contactsRv.setLayoutManager(new LinearLayoutManager(getContext()));
