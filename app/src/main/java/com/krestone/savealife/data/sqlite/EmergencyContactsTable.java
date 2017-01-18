@@ -147,13 +147,13 @@ public class EmergencyContactsTable {
         return Completable.complete();
     }
 
-    public Completable updateDataState(List<ContactModel> contacts) {
+    public Completable updateDataState(List<ContactModel> contacts, DataStates dataState) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues(contacts.size());
 
         for (ContactModel contactModel : contacts) {
-            contentValues.put(KEY_DATA_STATE, contactModel.getDataState().ordinal());
+            contentValues.put(KEY_DATA_STATE, dataState.ordinal());
             db.update(TABLE_CONTACTS, contentValues, KEY_CONTACT_NUMBER + " = ?",
                     new String[]{contactModel.getPhoneNumber()});
         }

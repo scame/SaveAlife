@@ -4,6 +4,7 @@ package com.krestone.savealife.presentation.fragments.contacts;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,8 +82,9 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
         presenter.setView(this);
-        instantiateFragment();
         parseArgs();
+
+        instantiateFragment();
 
         return fragmentView;
     }
@@ -131,6 +133,12 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
     public void onRefreshClick(View v) {
         showProgressDialog();
         presenter.requestProfileInfo(parsedNumber);
+    }
+
+    @OnClick(R.id.remove_contact_btn)
+    public void onRemoveContactClick(View v) {
+        presenter.removeContact(parsedNumber);
+        removeContactBtn.setImageDrawable(null);
     }
 
     @Override

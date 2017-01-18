@@ -57,7 +57,7 @@ public class ContactsRepositoryImp implements ContactsRepository {
 
     @Override
     public Completable updateDataState(List<ContactModel> contacts, DataStates dataState) {
-        return Completable.fromCallable(() -> emergencyContactsTable.updateDataState(contacts));
+        return Completable.fromCallable(() -> emergencyContactsTable.updateDataState(contacts, dataState));
     }
 
     @Override
