@@ -126,7 +126,8 @@ public class SignInFragment extends Fragment implements SignInPresenter.SignInVi
     }
 
     private void setupSignInText() {
-        String formattedText = getString(R.string.sign_in_text, profileEntity.getFirstName());
+        String formattedText = getString(R.string.sign_in_text, profileEntity.getFirstName() +
+                " " + profileEntity.getLastName());
         signInText.setText(formattedText);
     }
 

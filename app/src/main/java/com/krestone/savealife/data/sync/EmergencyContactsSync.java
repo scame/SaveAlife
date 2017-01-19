@@ -37,19 +37,19 @@ public class EmergencyContactsSync extends AbstractSync {
     private Completable handleRemovedContacts() {
         List<ContactModel> removedContacts = getContactsByState(DataStates.REMOVED);
 
-        contactsRepository
+        Throwable throwable = contactsRepository
                 .deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(removedContacts))
-                .andThen(contactsRepository.deleteFromEmergencyListLocal(removedContacts)).await();
-        return Completable.complete();
+                .andThen(contactsRepository.deleteFromEmergencyListLocal(removedContacts)).get();
+        return completeWithErrorCheck(throwable);
     }
 
     private Completable handleNewContacts() {
         List<ContactModel> newContacts = getContactsByState(DataStates.NEW);
 
-        contactsRepository
+        Throwable throwable = contactsRepository
                 .addToEmergencyList(newContacts)
-                .andThen(contactsRepository.updateDataState(newContacts, DataStates.UP_TO_DATE)).await();
-        return Completable.complete();
+                .andThen(contactsRepository.updateDataState(newContacts, DataStates.UP_TO_DATE)).get();
+        return completeWithErrorCheck(throwable);
     }
 
     private List<ContactModel> getContactsByState(DataStates state) {
@@ -66,9 +66,9 @@ public class EmergencyContactsSync extends AbstractSync {
                 .toBlocking().value()
                 .getContacts();
 
-        contactsRepository
+        Throwable throwable = contactsRepository
                 .cleanLocalContactsList()
-                .andThen(contactsRepository.addOrUpdateEmergencyContacts(freshContacts)).await();
-        return Completable.complete();
+                .andThen(contactsRepository.addOrUpdateEmergencyContacts(freshContacts)).get();
+        return completeWithErrorCheck(throwable);
     }
 }

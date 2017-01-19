@@ -91,4 +91,9 @@ public class DashboardFragment extends Fragment {
         sosText.setText(getString(R.string.sos_inactive_text));
         rootContainer.setBackgroundColor(getResources().getColor(android.R.color.background_light));
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }

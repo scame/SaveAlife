@@ -84,4 +84,10 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
     public void onError(String error) {
 
     }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
+    }
 }

@@ -20,7 +20,6 @@ import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.sync.events.BroadcastsMeta;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
-import com.krestone.savealife.presentation.fragments.AbstractFragment;
 import com.krestone.savealife.presentation.presenters.MyProfilePresenter;
 import com.krestone.savealife.presentation.receivers.SyncEventReceiver;
 
@@ -160,5 +159,11 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     @Override
     public void onSignOut() {
         myProfileListener.onSignOutClick();
+    }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
     }
 }

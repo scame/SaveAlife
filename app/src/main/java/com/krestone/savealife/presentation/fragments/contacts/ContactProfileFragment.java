@@ -173,4 +173,10 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
     public void onCallClick(View v) {
         // TODO: handle on call click
     }
+
+    @Override
+    public void onDestroyView() {
+        presenter.destroy();
+        super.onDestroyView();
+    }
 }

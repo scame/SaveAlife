@@ -16,6 +16,16 @@ public class SomeoneProfileEntity implements Parcelable {
 
     private String medicalQualification = "";
 
+    private boolean isInApp;
+
+    public boolean isInApp() {
+        return isInApp;
+    }
+
+    public void setInApp(boolean inApp) {
+        isInApp = inApp;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -69,6 +79,7 @@ public class SomeoneProfileEntity implements Parcelable {
         dest.writeString(this.lastName);
         dest.writeString(this.role);
         dest.writeString(this.medicalQualification);
+        dest.writeByte(this.isInApp ? (byte) 1 : (byte) 0);
     }
 
     public SomeoneProfileEntity() {
@@ -80,6 +91,7 @@ public class SomeoneProfileEntity implements Parcelable {
         this.lastName = in.readString();
         this.role = in.readString();
         this.medicalQualification = in.readString();
+        this.isInApp = in.readByte() != 0;
     }
 
     public static final Creator<SomeoneProfileEntity> CREATOR = new Creator<SomeoneProfileEntity>() {

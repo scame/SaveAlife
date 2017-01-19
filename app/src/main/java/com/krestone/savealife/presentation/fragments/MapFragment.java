@@ -306,10 +306,10 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
         mapView.onDestroy();
         mapPresenter.destroy();
+        super.onDestroyView();
     }
 
     @Override

@@ -32,6 +32,13 @@ public abstract class AbstractSync {
         }
     }
 
+    Completable completeWithErrorCheck(Throwable throwable) {
+        if (throwable != null) {
+            return Completable.error(throwable);
+        }
+        return Completable.complete();
+    }
+
     private Completable sendInProgressEvent() {
         return SyncEvent.send(getSyncType(), SyncStatus.IN_PROGRESS, context);
     }

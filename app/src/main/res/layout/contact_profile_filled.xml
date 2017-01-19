@@ -82,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_elem_margin"
-        android:text="@string/medical_skills" />
+        android:text="Med skills" />
 
     <TextView
         android:id="@+id/skills_tv"

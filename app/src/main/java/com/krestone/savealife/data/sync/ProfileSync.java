@@ -26,14 +26,15 @@ public class ProfileSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        profileRepository.updateMyProfileInfo().await();
-        return Completable.complete();
+        Throwable throwable = profileRepository.updateMyProfileInfo().get();
+        return completeWithErrorCheck(throwable);
     }
 
     @Override
     protected Completable get() {
         MyProfileInfoEntity profileInfo = profileRepository.getMyProfileInfo().toBlocking().value();
-        profileRepository.updateMyProfileInfoLocal(new UpdateMyProfileInfoRequest(profileInfo)).await();
-        return Completable.complete();
+        Throwable throwable = profileRepository
+                .updateMyProfileInfoLocal(new UpdateMyProfileInfoRequest(profileInfo)).get();
+        return completeWithErrorCheck(throwable);
     }
 }
