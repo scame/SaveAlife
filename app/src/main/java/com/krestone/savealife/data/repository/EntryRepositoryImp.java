@@ -14,6 +14,8 @@ import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 
+import java.io.IOException;
+
 import okhttp3.ResponseBody;
 import rx.Completable;
 import rx.Single;
@@ -32,9 +34,15 @@ public class EntryRepositoryImp implements EntryRepository {
 
     @Override
     public Single<String> getAuthToken(String password, String phoneNumber) {
-        return serverApi.getAuthToken(encodeEntryData(password, phoneNumber))
-                .map(response -> response.headers().get("x-auth-token"))
-                .toSingle();
+        return serverApi.getAuthToken(encodeEntryData(password, phoneNumber)).toSingle()
+                .map(response -> {
+                    try {
+                        return response.errorBody() == null ? response.headers().get("x-auth-token")
+                                                            : response.errorBody().string();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private String encodeEntryData(String password, String phoneNumber) {
@@ -90,20 +98,12 @@ public class EntryRepositoryImp implements EntryRepository {
         return Single.just(sharedPrefs.getBoolean(getString(R.string.isLoggedIn), false));
     }
 
-    // FIXME: server's response 401 should be automatically propagated to onError callback
+
     @Override
     public Single<Boolean> signIn(String password, SomeoneProfileEntity profileEntity) {
         return getAuthToken(password, profileEntity.getPhoneNumber())
-                .map(token -> {
-                    if (token != null) {
-                        cacheEntryInfo(password, profileEntity.getFirstName(), profileEntity.getLastName(),
-                                profileEntity.getPhoneNumber(), profileEntity.getMedicalQualification());
-                        cacheAuthToken(token);
-
-                        return true;
-                    }
-                    return false;
-                });
+                .onErrorReturn(throwable -> "")
+                .map(token -> !token.equals(""));
     }
 
     @Override
