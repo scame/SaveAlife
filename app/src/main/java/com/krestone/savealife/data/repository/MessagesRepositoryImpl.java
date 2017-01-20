@@ -7,7 +7,6 @@ import com.krestone.savealife.data.entities.requests.HelpIntentRequest;
 import com.krestone.savealife.data.entities.requests.SosEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.util.PrefsUtil;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import rx.Completable;
 
@@ -33,7 +32,7 @@ public class MessagesRepositoryImpl implements MessagesRepository {
     }
 
     @Override
-    public Completable sendHelpIntent(LatLng origin, LatLng dest, String number) {
+    public Completable sendHelpIntent(String number) {
         return serverApi.helpIntentRequest(PrefsUtil.getAuthToken(context), new HelpIntentRequest(number))
                 .toCompletable();
     }

@@ -12,5 +12,7 @@ public interface MapboxRepository {
 
     Single<RouteModel> getRoute(LatLng origin, LatLng dest);
 
+    Single<RouteModel> getRouteImplicitly(LatLng targetLatLng);
+
     Single<AddressModel> getHumanReadableAddress(Position position);
 }

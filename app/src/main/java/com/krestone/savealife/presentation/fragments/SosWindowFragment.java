@@ -9,17 +9,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.data.entities.responses.map.MapObject;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
 import com.krestone.savealife.presentation.presenters.map.SosWindowPresenter;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 
 public class SosWindowFragment extends AbstractFragment implements SosWindowPresenter.SosWindowView {
 
@@ -38,6 +41,14 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
     @Inject
     SosWindowPresenter<SosWindowPresenter.SosWindowView> presenter;
 
+    @State
+    MapObject mapObject;
+
+    public interface SosWindowListener {
+
+        void onHelpRouteBuilt(PolylineOptions polyline);
+    }
+
     public static SosWindowFragment newInstance(MapObject mapObject) {
         SosWindowFragment sosWindowFragment = new SosWindowFragment();
         Bundle args = new Bundle();
@@ -53,9 +64,14 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        parseArgs();
         presenter.setView(this);
 
         return fragmentView;
+    }
+
+    private void parseArgs() {
+        this.mapObject = getArguments().getParcelable(SosWindowFragment.class.getCanonicalName());
     }
 
     @Override
@@ -77,12 +93,13 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
 
     @Override
     public void onHelpPressed(PolylineOptions polyline) {
-
+        LatLng targetLatLng = new LatLng(mapObject.getLatitude(), mapObject.getLongitude());
+        presenter.requestDesireToHelp(targetLatLng, mapObject.getPhoneNumber());
     }
 
     @Override
     public void onError(String error) {
-
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -18,10 +18,10 @@ public class SosWindowPresenterImpl<T extends SosWindowPresenter.SosWindowView> 
     }
 
     @Override
-    public void requestDesireToHelp(LatLng origin, LatLng dest, String number) {
+    public void requestDesireToHelp(LatLng targetLatLng, String number) {
         if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
             helpUseCase.setPhoneNumber(number);
-            helpUseCase.setEndpoints(origin, dest);
+            helpUseCase.setTargetLatLng(targetLatLng);
             requestDesireToHelp();
         } else if (view != null) {
             view.onError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));

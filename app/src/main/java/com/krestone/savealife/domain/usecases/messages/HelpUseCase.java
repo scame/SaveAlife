@@ -13,9 +13,7 @@ import rx.Single;
 
 public class HelpUseCase extends UseCaseSingle<RouteModel> {
 
-    private LatLng origin;
-
-    private LatLng dest;
+    private LatLng targetLatLng;
 
     private String phoneNumber;
 
@@ -33,22 +31,17 @@ public class HelpUseCase extends UseCaseSingle<RouteModel> {
 
     @Override
     protected Single<RouteModel> getUseCaseSingle() {
-        return messagesRepository.sendHelpIntent(origin, dest, phoneNumber)
-                .toSingle(() -> mapboxRepository.getRoute(origin, dest))
+        return messagesRepository.sendHelpIntent(phoneNumber)
+                .toSingle(() -> mapboxRepository.getRouteImplicitly(targetLatLng))
                 .flatMap(routeModelSingle -> routeModelSingle);
     }
 
-    public LatLng getOrigin() {
-        return origin;
+    public LatLng getTargetLatLng() {
+        return targetLatLng;
     }
 
-    public LatLng getDest() {
-        return dest;
-    }
-
-    public void setEndpoints(LatLng origin, LatLng dest) {
-        this.origin = origin;
-        this.dest = dest;
+    public void setTargetLatLng(LatLng targetLatLng) {
+        this.targetLatLng = targetLatLng;
     }
 
     public void setPhoneNumber(String phoneNumber) {

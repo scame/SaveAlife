@@ -54,6 +54,8 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     private Polyline routePolyline;
 
+    private Polyline helpPolyline;
+
     private Marker currentLocationMarker;
 
     private Marker destinationMarker;
@@ -285,6 +287,13 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         IconFactory iconFactory = IconFactory.getInstance(getContext());
         Drawable iconDrawable = ContextCompat.getDrawable(getContext(), drawableId);
         return iconFactory.fromDrawable(iconDrawable);
+    }
+
+    public void onHelpRouteBuilt(PolylineOptions helpRoute) {
+        if (helpPolyline != null) {
+            helpPolyline.remove();
+        }
+        helpPolyline = mapboxMap.addPolyline(helpRoute);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.krestone.savealife.data.mappers.RouteModelMapper;
 import com.krestone.savealife.data.rest.MapboxApi;
 import com.krestone.savealife.presentation.models.AddressModel;
 import com.krestone.savealife.presentation.models.RouteModel;
+import com.krestone.savealife.util.PrefsUtil;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
@@ -42,6 +43,13 @@ public class MapboxRepositoryImpl implements MapboxRepository {
     @Override
     public Single<RouteModel> getRoute(LatLng origin, LatLng dest) {
         return mapboxApi.getRoute(PROFILE_TYPE, formatCoordinates(origin, dest),
+                context.getString(R.string.default_access_token))
+                .map(routeModelMapper::convert).toSingle();
+    }
+
+    @Override
+    public Single<RouteModel> getRouteImplicitly(LatLng targetLatLng) {
+        return mapboxApi.getRoute(PROFILE_TYPE, formatCoordinates(PrefsUtil.getLatestLatLng(context), targetLatLng),
                 context.getString(R.string.default_access_token))
                 .map(routeModelMapper::convert).toSingle();
     }

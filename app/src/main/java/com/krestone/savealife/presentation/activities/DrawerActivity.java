@@ -39,11 +39,13 @@ import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
 import com.krestone.savealife.presentation.fragments.SettingsFragment;
+import com.krestone.savealife.presentation.fragments.SosWindowFragment;
 import com.krestone.savealife.presentation.fragments.contacts.AddToEmergencyListFragment;
 import com.krestone.savealife.presentation.fragments.contacts.ContactProfileFragment;
 import com.krestone.savealife.presentation.fragments.contacts.EmergencyContactsFragment;
 import com.krestone.savealife.presentation.presenters.DrawerActivityPresenter;
 import com.krestone.savealife.util.InvitationUtil;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 
 import javax.inject.Inject;
 
@@ -52,7 +54,8 @@ import butterknife.ButterKnife;
 
 public class DrawerActivity extends AppCompatActivity implements
         EmergencyContactsFragment.EmergencyListener, DashboardFragment.DashboardListener,
-        DrawerActivityPresenter.DrawerView, MyProfileFragment.MyProfileListener {
+        DrawerActivityPresenter.DrawerView, MyProfileFragment.MyProfileListener,
+        SosWindowFragment.SosWindowListener {
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
@@ -227,6 +230,14 @@ public class DrawerActivity extends AppCompatActivity implements
         drawerLayout.closeDrawers();
 
         return true;
+    }
+
+    @Override
+    public void onHelpRouteBuilt(PolylineOptions helpRoute) {
+        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MAP_FRAG_TAG);
+        if (mapFragment != null) {
+            mapFragment.onHelpRouteBuilt(helpRoute);
+        }
     }
 
     @Override

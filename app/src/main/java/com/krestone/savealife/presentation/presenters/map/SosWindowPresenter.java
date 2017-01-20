@@ -14,5 +14,5 @@ public interface SosWindowPresenter<T> extends Presenter<T> {
         void onError(String error);
     }
 
-    void requestDesireToHelp(LatLng origin, LatLng dest, String number);
+    void requestDesireToHelp(LatLng targetLatLng, String number);
 }

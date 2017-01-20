@@ -1,9 +1,12 @@
 package com.krestone.savealife.presentation.presenters;
 
 
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.data.entities.requests.SosEntity;
 import com.krestone.savealife.domain.usecases.messages.StartSosUseCase;
 import com.krestone.savealife.domain.usecases.messages.StopSosUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 
 public class DashboardPresenterImpl<T extends DashboardPresenter.DashboardView> implements DashboardPresenter<T> {
 
@@ -20,7 +23,15 @@ public class DashboardPresenterImpl<T extends DashboardPresenter.DashboardView> 
 
     @Override
     public void startSos() {
-        startSosUseCase.setSosEntity(new SosEntity("", 0.1));
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            startSosUseCase.setSosEntity(new SosEntity("", 0.1));
+            startSosCompletable();
+        } else if (view != null) {
+            view.onError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void startSosCompletable() {
         startSosUseCase.executeCompletable(() -> {
             if (view != null) view.onStartSosCompleted();
         }, throwable -> {
@@ -30,7 +41,15 @@ public class DashboardPresenterImpl<T extends DashboardPresenter.DashboardView> 
 
     @Override
     public void stopSos() {
-        stopSosUseCase.setSosEntity(new SosEntity("", 0.1));
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            stopSosUseCase.setSosEntity(new SosEntity("", 0.1));
+            stopSosCompletable();
+        } else if (view != null) {
+            view.onError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void stopSosCompletable() {
         stopSosUseCase.executeCompletable(() -> {
             if (view != null) view.onStopSosCompleted();
         }, throwable -> {
