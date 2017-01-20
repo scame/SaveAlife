@@ -9,6 +9,7 @@ import com.krestone.savealife.data.di.SyncManagerModule;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
 import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
+import com.krestone.savealife.presentation.di.modules.DashboardModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
@@ -42,7 +43,7 @@ public interface ApplicationComponent {
 
     PersonalInfoComponent providePersonalInfoComponent(PersonalInfoModule personalInfoModule);
 
-    DrawerComponent provideDashboardComponent(DrawerModule drawerModule);
+    DrawerComponent provideDrawerComponent(DrawerModule drawerModule);
 
     MyProfileComponent provideMyProfileComponent(MyProfileModule myProfileModule);
 
@@ -53,4 +54,6 @@ public interface ApplicationComponent {
     ContactProfileComponent provideContactProfileComponent(ContactProfileModule profileModule);
 
     SosWindowComponent provideSosWindowComponent(SosWindowModule sosWindowModule);
+
+    DashboardComponent provideDashboardComponent(DashboardModule dashboardModule);
 }

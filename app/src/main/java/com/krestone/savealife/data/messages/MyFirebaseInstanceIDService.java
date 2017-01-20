@@ -1,9 +1,12 @@
 package com.krestone.savealife.data.messages;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.krestone.savealife.R;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
@@ -14,10 +17,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "Refreshed token: " + refreshedToken);
 
-        sendRegistrationToServer(refreshedToken);
+        cacheToken(refreshedToken);
     }
 
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+    private void cacheToken(String token) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString(getString(R.string.firebase_token), token).apply();
     }
 }

@@ -15,7 +15,8 @@ public class StartSosUseCase extends UseCaseCompletable {
 
     private SosEntity sosEntity;
 
-    public StartSosUseCase(SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public StartSosUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
+                           MessagesRepository messagesRepository) {
         super(subscribeOn, observeOn);
         this.messagesRepository = messagesRepository;
     }

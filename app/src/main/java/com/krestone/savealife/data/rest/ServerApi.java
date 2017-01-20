@@ -60,7 +60,8 @@ public interface ServerApi {
                                                        @Header("x-auth-token") String token);
 
     @GET("http://10.0.1.94:8080//signIn")
-    Observable<Response<ResponseBody>> getAuthToken(@Header("Authorization") String encodedEntryData);
+    Observable<Response<ResponseBody>> getAuthToken(@Header("Authorization") String encodedEntryData,
+                                                    @Header("firebaseToken") String firebaseToken);
 
     @GET("http://10.0.1.94:8080//profileInfo")
     Observable<SomeoneProfileEntity> getSomeoneProfileInfo(@Header("x-auth-token") String token,
@@ -77,11 +78,11 @@ public interface ServerApi {
     Observable<ResponseBody> helpIntentRequest(@Header("x-auth-token") String token,
                                                @Body HelpIntentRequest helpIntentRequest);
 
-    @POST("http://10.0.1.94:8080//startSos")
+    @POST("http://10.0.1.94:8080//sos/start")
     Observable<ResponseBody> startSos(@Header("x-auth-token") String token,
                                       @Body SosEntity sosEntity);
 
-    @POST("http://10.0.1.94:8080//stopSos")
+    @POST("http://10.0.1.94:8080//sos/stop")
     Observable<ResponseBody> stopSos(@Header("x-auth-token") String token,
                                      @Body SosEntity sosEntity);
 }

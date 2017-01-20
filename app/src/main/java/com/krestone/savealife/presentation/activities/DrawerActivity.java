@@ -12,23 +12,23 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
 import com.krestone.savealife.presentation.di.components.ContactProfileComponent;
+import com.krestone.savealife.presentation.di.components.DashboardComponent;
 import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.components.MyProfileComponent;
 import com.krestone.savealife.presentation.di.components.SosWindowComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
+import com.krestone.savealife.presentation.di.modules.DashboardModule;
 import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
@@ -102,12 +102,13 @@ public class DrawerActivity extends AppCompatActivity implements
 
     private SosWindowComponent sosWindowComponent;
 
+    private DashboardComponent dashboardComponent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_activity);
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.i("onxToken", token);
+
         inject();
         presenter.setView(this);
         presenter.checkLoginStatus();
@@ -127,7 +128,7 @@ public class DrawerActivity extends AppCompatActivity implements
     }
 
     private void inject() {
-        SaveAlifeApplication.getAppComponent().provideDashboardComponent(new DrawerModule()).inject(this);
+        SaveAlifeApplication.getAppComponent().provideDrawerComponent(new DrawerModule()).inject(this);
     }
 
     @Override
@@ -271,6 +272,14 @@ public class DrawerActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.drawer_activity_fl, fragment, fragmentTag)
                 .commit();
+    }
+
+    public DashboardComponent provideDashboardComponent() {
+        if (dashboardComponent == null) {
+            dashboardComponent = SaveAlifeApplication.getAppComponent()
+                    .provideDashboardComponent(new DashboardModule());
+        }
+        return dashboardComponent;
     }
 
     public ContactProfileComponent provideContactProfileComponent() {

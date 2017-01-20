@@ -13,4 +13,9 @@ public class PrefsUtil {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPrefs.getString(context.getString(R.string.auth_token), "");
     }
+
+    public static String getFirebaseToken(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.firebase_token), "");
+    }
 }

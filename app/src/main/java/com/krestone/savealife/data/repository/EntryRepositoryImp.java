@@ -13,6 +13,7 @@ import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.util.PrefsUtil;
 
 import java.io.IOException;
 
@@ -34,7 +35,8 @@ public class EntryRepositoryImp implements EntryRepository {
 
     @Override
     public Single<String> getAuthToken(String password, String phoneNumber) {
-        return serverApi.getAuthToken(encodeEntryData(password, phoneNumber)).toSingle()
+        return serverApi.getAuthToken(encodeEntryData(password, phoneNumber), PrefsUtil.getFirebaseToken(context))
+                .toSingle()
                 .map(response -> {
                     try {
                         return response.errorBody() == null ? response.headers().get("x-auth-token")
@@ -103,7 +105,15 @@ public class EntryRepositoryImp implements EntryRepository {
     public Single<Boolean> signIn(String password, SomeoneProfileEntity profileEntity) {
         return getAuthToken(password, profileEntity.getPhoneNumber())
                 .onErrorReturn(throwable -> "")
-                .map(token -> !token.equals(""));
+                .map(token -> {
+                    if (!token.equals("")) {
+                        cacheAuthToken(token);
+                        cacheEntryInfo(password, profileEntity.getFirstName(), profileEntity.getLastName(),
+                                profileEntity.getPhoneNumber(), profileEntity.getMedicalQualification());
+                        return true;
+                    }
+                    return false;
+                });
     }
 
     @Override

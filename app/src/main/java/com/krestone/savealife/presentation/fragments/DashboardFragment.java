@@ -4,7 +4,6 @@ package com.krestone.savealife.presentation.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.activities.DrawerActivity;
+import com.krestone.savealife.presentation.presenters.DashboardPresenter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends AbstractFragment implements DashboardPresenter.DashboardView {
 
     @BindView(R.id.root_dashboard_container)
     RelativeLayout rootContainer;
@@ -44,7 +47,11 @@ public class DashboardFragment extends Fragment {
     @BindView(R.id.event_details_btn)
     Button eventDetailsBtn;
 
+    @Inject
+    DashboardPresenter<DashboardPresenter.DashboardView> presenter;
+
     private DashboardListener dashboardListener;
+
 
     public interface DashboardListener {
 
@@ -62,19 +69,47 @@ public class DashboardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.dashboard_layout, container, false);
-        ButterKnife.bind(this, fragmentView);
+        View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
+
         mapButton.setOnClickListener(v -> dashboardListener.onOpenMapClick());
+        presenter.setView(this);
 
         return fragmentView;
     }
 
+    @Override
+    protected void inject() {
+        if (getActivity() instanceof DrawerActivity) {
+            ((DrawerActivity) getActivity()).provideDashboardComponent().inject(this);
+        }
+    }
+
+    @Override
+    public void onStartSosCompleted() {
+        initActiveSosState();
+    }
+
+    @Override
+    public void onStopSosCompleted() {
+        initInactiveSosState();
+    }
+
+    @Override
+    public void onError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.dashboard_layout;
+    }
+
     @OnClick(R.id.sos_btn)
-    public void onClick(View view) {
+    public void onSosButtonClick(View v) {
         if (sosButton.getTag() == null) {
-            initActiveSosState();
+            presenter.startSos();
         } else {
-            initInactiveSosState();
+            presenter.stopSos();
         }
     }
 
@@ -94,6 +129,7 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        presenter.destroy();
         super.onDestroyView();
     }
 }
