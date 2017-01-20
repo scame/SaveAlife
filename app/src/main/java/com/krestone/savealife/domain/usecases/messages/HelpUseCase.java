@@ -1,8 +1,8 @@
-package com.krestone.savealife.domain.usecases.map;
+package com.krestone.savealife.domain.usecases.messages;
 
 
-import com.krestone.savealife.data.repository.MapObjectsRepository;
 import com.krestone.savealife.data.repository.MapboxRepository;
+import com.krestone.savealife.data.repository.MessagesRepository;
 import com.krestone.savealife.domain.schedulers.ObserveOn;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 import com.krestone.savealife.domain.usecases.base.UseCaseSingle;
@@ -19,21 +19,21 @@ public class HelpUseCase extends UseCaseSingle<RouteModel> {
 
     private String phoneNumber;
 
-    private MapObjectsRepository mapObjectsRepository;
-
     private MapboxRepository mapboxRepository;
 
+    private MessagesRepository messagesRepository;
+
     public HelpUseCase(SubscribeOn subscribeOn, ObserveOn observeOn,
-                       MapObjectsRepository mapObjectsRepository,
-                       MapboxRepository mapboxRepository) {
+                       MapboxRepository mapboxRepository,
+                       MessagesRepository messagesRepository) {
         super(subscribeOn, observeOn);
-        this.mapObjectsRepository = mapObjectsRepository;
         this.mapboxRepository = mapboxRepository;
+        this.messagesRepository = messagesRepository;
     }
 
     @Override
     protected Single<RouteModel> getUseCaseSingle() {
-        return mapObjectsRepository.postHelpRequest(origin, dest, phoneNumber)
+        return messagesRepository.sendHelpIntent(origin, dest, phoneNumber)
                 .toSingle(() -> mapboxRepository.getRoute(origin, dest))
                 .flatMap(routeModelSingle -> routeModelSingle);
     }

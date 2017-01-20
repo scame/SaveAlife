@@ -6,16 +6,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.krestone.savealife.R;
-import com.krestone.savealife.data.entities.requests.HelpIntentRequest;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
 import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.util.PrefsUtil;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.concurrent.TimeUnit;
 
-import rx.Completable;
 import rx.Observable;
 
 public class MapObjectsRepositoryImpl implements MapObjectsRepository {
@@ -46,12 +43,6 @@ public class MapObjectsRepositoryImpl implements MapObjectsRepository {
         double latitude = sharedPrefs.getFloat(context.getString(R.string.latitude_key), (float) 0.0);
         double longitude = sharedPrefs.getFloat(context.getString(R.string.longitude_key), (float) 0.0);
         return new MapObjectsRequest(latitude, longitude, updateArea);
-    }
-
-    @Override
-    public Completable postHelpRequest(LatLng origin, LatLng dest, String number) {
-        return serverApi.helpIntentRequest(PrefsUtil.getAuthToken(context), new HelpIntentRequest(number))
-                .toCompletable();
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.krestone.savealife.data.repository.MapObjectsRepository;
 import com.krestone.savealife.data.repository.MapObjectsRepositoryImpl;
 import com.krestone.savealife.data.repository.MapboxRepository;
 import com.krestone.savealife.data.repository.MapboxRepositoryImpl;
+import com.krestone.savealife.data.repository.MessagesRepository;
+import com.krestone.savealife.data.repository.MessagesRepositoryImpl;
 import com.krestone.savealife.data.repository.ProfileRepository;
 import com.krestone.savealife.data.repository.ProfileRepositoryImpl;
 import com.krestone.savealife.data.rest.MapboxApi;
@@ -71,5 +73,11 @@ public class RepositoriesModule {
     @Singleton
     MapboxRepository provideMapboxRepository(MapboxApi mapboxApi, Context context, RouteModelMapper mapper) {
         return new MapboxRepositoryImpl(mapboxApi, mapper, context);
+    }
+
+    @Provides
+    @Singleton
+    MessagesRepository provideMessagesRepository(ServerApi serverApi, Context context) {
+        return new MessagesRepositoryImpl(serverApi, context);
     }
 }

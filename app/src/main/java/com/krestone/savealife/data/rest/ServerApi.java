@@ -7,6 +7,7 @@ import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
 import com.krestone.savealife.data.entities.requests.PhoneNumberHolder;
+import com.krestone.savealife.data.entities.requests.SosEntity;
 import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
 import com.krestone.savealife.data.entities.requests.VerificationHolder;
 import com.krestone.savealife.data.entities.responses.ContactsHolder;
@@ -75,4 +76,12 @@ public interface ServerApi {
     @POST("http://10.0.1.94:8080//helpRequest")
     Observable<ResponseBody> helpIntentRequest(@Header("x-auth-token") String token,
                                                @Body HelpIntentRequest helpIntentRequest);
+
+    @POST("http://10.0.1.94:8080//startSos")
+    Observable<ResponseBody> startSos(@Header("x-auth-token") String token,
+                                      @Body SosEntity sosEntity);
+
+    @POST("http://10.0.1.94:8080//stopSos")
+    Observable<ResponseBody> stopSos(@Header("x-auth-token") String token,
+                                     @Body SosEntity sosEntity);
 }

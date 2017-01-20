@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.presenters.map;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
-import com.krestone.savealife.domain.usecases.map.HelpUseCase;
+import com.krestone.savealife.domain.usecases.messages.HelpUseCase;
 import com.krestone.savealife.util.ConnectivityUtil;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
