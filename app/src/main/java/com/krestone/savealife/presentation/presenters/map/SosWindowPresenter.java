@@ -14,5 +14,5 @@ public interface SosWindowPresenter<T> extends Presenter<T> {
         void onError(String error);
     }
 
-    void requestDesireToHelp(LatLng targetLatLng, String number);
+    void promoteHelpIntent(LatLng targetLatLng, String number, boolean isHelp);
 }

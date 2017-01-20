@@ -2,8 +2,10 @@ package com.krestone.savealife.data.repository;
 
 
 import com.krestone.savealife.data.entities.requests.SosEntity;
+import com.krestone.savealife.data.entities.responses.map.HelpIntentState;
 
 import rx.Completable;
+import rx.Single;
 
 public interface MessagesRepository {
 
@@ -11,5 +13,5 @@ public interface MessagesRepository {
 
     Completable sendStopSosMessage(SosEntity sosEntity);
 
-    Completable sendHelpIntent(String number);
+    Single<HelpIntentState> sendHelpIntent(String number, boolean isHelp);
 }

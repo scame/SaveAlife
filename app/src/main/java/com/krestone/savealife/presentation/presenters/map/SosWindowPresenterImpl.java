@@ -3,7 +3,7 @@ package com.krestone.savealife.presentation.presenters.map;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
-import com.krestone.savealife.domain.usecases.messages.HelpUseCase;
+import com.krestone.savealife.domain.usecases.messages.StartHelpUseCase;
 import com.krestone.savealife.util.ConnectivityUtil;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
@@ -11,26 +11,25 @@ public class SosWindowPresenterImpl<T extends SosWindowPresenter.SosWindowView> 
 
     private T view;
 
-    private HelpUseCase helpUseCase;
+    private StartHelpUseCase startHelpUseCase;
 
-    public SosWindowPresenterImpl(HelpUseCase helpUseCase) {
-        this.helpUseCase = helpUseCase;
+    public SosWindowPresenterImpl(StartHelpUseCase startHelpUseCase) {
+        this.startHelpUseCase = startHelpUseCase;
     }
 
-    @Override
-    public void requestDesireToHelp(LatLng targetLatLng, String number) {
+    public void promoteHelpIntent(LatLng targetLatLng, String number, boolean isHelp) {
         if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
-            helpUseCase.setPhoneNumber(number);
-            helpUseCase.setTargetLatLng(targetLatLng);
-            requestDesireToHelp();
+            startHelpUseCase.setPhoneNumber(number);
+            startHelpUseCase.setTargetLatLng(targetLatLng);
+            promoteHelpIntent();
         } else if (view != null) {
             view.onError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
         }
     }
 
-    private void requestDesireToHelp() {
-        helpUseCase.executeSingle(routeModel -> {
-            if (view != null) view.onHelpPressed(routeModel.getPolyline());
+    private void promoteHelpIntent() {
+        startHelpUseCase.executeSingle(helpIntentWrapper -> {
+            if (view != null) view.onHelpPressed(helpIntentWrapper.getRouteModel().getPolyline());
         }, throwable -> {
             if (view != null) view.onError(throwable.getLocalizedMessage());
         });
@@ -44,6 +43,6 @@ public class SosWindowPresenterImpl<T extends SosWindowPresenter.SosWindowView> 
     @Override
     public void destroy() {
         view = null;
-        helpUseCase.unsubscribe();
+        startHelpUseCase.unsubscribe();
     }
 }

@@ -19,6 +19,8 @@ public interface MapPresenter<T> extends Presenter<T> {
 
         void displayRoute(PolylineOptions polylineOptions);
 
+        void onStopHelping();
+
         void onError(String error);
     }
 
@@ -31,4 +33,6 @@ public interface MapPresenter<T> extends Presenter<T> {
     void requestHumanReadableAddress(Position position);
 
     void requestRoute(LatLng origin, LatLng dest);
+
+    void requestStopHelping(String phoneNumber);
 }

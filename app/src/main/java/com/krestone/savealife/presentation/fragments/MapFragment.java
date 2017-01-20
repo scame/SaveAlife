@@ -4,6 +4,7 @@ package com.krestone.savealife.presentation.fragments;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import icepick.State;
 
 public class MapFragment extends AbstractFragment implements MapPresenter.MapView {
@@ -44,17 +46,22 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     @Inject
     MapPresenter<MapPresenter.MapView> mapPresenter;
 
+    @BindView(R.id.stop_helping_fab)
+    FloatingActionButton helpFab;
+
     @BindView(R.id.mapView)
     MapView mapView;
 
     @BindView(R.id.autocomplete_view)
     GeocoderAutoCompleteView autocompleteView;
 
+    private Polyline helpPolyline;
+
+    private String targetPhoneNumber;
+
     private MapboxMap mapboxMap;
 
     private Polyline routePolyline;
-
-    private Polyline helpPolyline;
 
     private Marker currentLocationMarker;
 
@@ -289,11 +296,29 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
         return iconFactory.fromDrawable(iconDrawable);
     }
 
-    public void onHelpRouteBuilt(PolylineOptions helpRoute) {
+    @OnClick(R.id.stop_helping_fab)
+    void onStopHelpingClick(View v) {
+        if (targetPhoneNumber != null) {
+            mapPresenter.requestStopHelping(targetPhoneNumber);
+        }
+    }
+
+    @Override
+    public void onStopHelping() {
+        if (helpPolyline != null) {
+            helpPolyline.remove();
+            helpFab.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void onHelpRouteBuilt(PolylineOptions helpRoute, String targetPhoneNumber) {
         if (helpPolyline != null) {
             helpPolyline.remove();
         }
+        this.targetPhoneNumber = targetPhoneNumber;
         helpPolyline = mapboxMap.addPolyline(helpRoute);
+
+        helpFab.setVisibility(View.VISIBLE);
     }
 
     @Override

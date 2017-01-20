@@ -233,10 +233,10 @@ public class DrawerActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onHelpRouteBuilt(PolylineOptions helpRoute) {
+    public void onHelpRouteBuilt(PolylineOptions helpRoute, String targetPhoneNumber) {
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MAP_FRAG_TAG);
         if (mapFragment != null) {
-            mapFragment.onHelpRouteBuilt(helpRoute);
+            mapFragment.onHelpRouteBuilt(helpRoute, targetPhoneNumber);
         }
     }
 

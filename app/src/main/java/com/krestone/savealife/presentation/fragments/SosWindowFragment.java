@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -44,9 +45,11 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
     @State
     MapObject mapObject;
 
+    private SosWindowListener sosWindowListener;
+
     public interface SosWindowListener {
 
-        void onHelpRouteBuilt(PolylineOptions polyline);
+        void onHelpRouteBuilt(PolylineOptions polyline, String targetPhoneNumber);
     }
 
     public static SosWindowFragment newInstance(MapObject mapObject) {
@@ -57,6 +60,14 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
         sosWindowFragment.setArguments(args);
 
         return sosWindowFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof SosWindowListener) {
+            sosWindowListener = (SosWindowListener) getActivity();
+        }
     }
 
     @Nullable
@@ -86,6 +97,13 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
         getFragmentManager().popBackStack();
     }
 
+
+    @OnClick(R.id.help_btn)
+    public void onHelpBtnClick(View v) {
+        LatLng targetLatLng = new LatLng(mapObject.getLatitude(), mapObject.getLongitude());
+        presenter.promoteHelpIntent(targetLatLng, mapObject.getPhoneNumber(), true);
+    }
+
     @Override
     protected int getFragmentLayout() {
         return R.layout.sos_window;
@@ -93,8 +111,7 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
 
     @Override
     public void onHelpPressed(PolylineOptions polyline) {
-        LatLng targetLatLng = new LatLng(mapObject.getLatitude(), mapObject.getLongitude());
-        presenter.requestDesireToHelp(targetLatLng, mapObject.getPhoneNumber());
+        sosWindowListener.onHelpRouteBuilt(polyline, mapObject.getPhoneNumber());
     }
 
     @Override

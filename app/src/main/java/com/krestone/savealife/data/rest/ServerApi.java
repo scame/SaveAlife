@@ -2,7 +2,6 @@ package com.krestone.savealife.data.rest;
 
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
-import com.krestone.savealife.data.entities.requests.HelpIntentRequest;
 import com.krestone.savealife.data.entities.requests.LocationHolder;
 import com.krestone.savealife.data.entities.requests.MapObjectsRequest;
 import com.krestone.savealife.data.entities.requests.PersonalInfoHolder;
@@ -14,6 +13,7 @@ import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.entities.responses.PhoneNumberResponse;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
+import com.krestone.savealife.data.entities.responses.map.HelpIntentState;
 import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 
 import okhttp3.ResponseBody;
@@ -22,6 +22,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface ServerApi {
@@ -74,9 +75,10 @@ public interface ServerApi {
     Observable<ResponseBody> updateMyProfileInfo(@Header("x-auth-token") String token,
                                                  @Body UpdateMyProfileInfoRequest infoBody);
 
-    @POST("http://10.0.1.94:8080//helpRequest")
-    Observable<ResponseBody> helpIntentRequest(@Header("x-auth-token") String token,
-                                               @Body HelpIntentRequest helpIntentRequest);
+    @GET("http://10.0.1.94:8080//sos/acceptHelp")
+    Observable<HelpIntentState> helpIntentRequest(@Header("x-auth-token") String token,
+                                                  @Header("suffererNumber") String number,
+                                                  @Query("isHelp") Boolean isHelp);
 
     @POST("http://10.0.1.94:8080//sos/start")
     Observable<ResponseBody> startSos(@Header("x-auth-token") String token,

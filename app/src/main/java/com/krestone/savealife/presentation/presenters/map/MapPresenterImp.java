@@ -4,6 +4,8 @@ package com.krestone.savealife.presentation.presenters.map;
 import android.location.Location;
 import android.util.Log;
 
+import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.data.entities.responses.map.MapObjectsEntity;
 import com.krestone.savealife.domain.usecases.GetMapObjectsUseCase;
 import com.krestone.savealife.domain.usecases.LastKnownLocationUseCase;
@@ -11,6 +13,8 @@ import com.krestone.savealife.domain.usecases.LocationUpdatesUseCase;
 import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 import com.krestone.savealife.domain.usecases.map.GetHumanReadableAddressUseCase;
 import com.krestone.savealife.domain.usecases.map.GetRouteUseCase;
+import com.krestone.savealife.domain.usecases.messages.StopHelpUseCase;
+import com.krestone.savealife.util.ConnectivityUtil;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.commons.models.Position;
 
@@ -30,18 +34,22 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
 
     private GetRouteUseCase getRouteUseCase;
 
+    private StopHelpUseCase stopHelpUseCase;
+
     private T view;
 
     public MapPresenterImp(LastKnownLocationUseCase lastKnownLocationUseCase,
                            LocationUpdatesUseCase locationUpdatesUseCase,
                            GetMapObjectsUseCase mapObjectsUseCase,
                            GetHumanReadableAddressUseCase getHumanReadableAddressUseCase,
-                           GetRouteUseCase getRouteUseCase) {
+                           GetRouteUseCase getRouteUseCase,
+                           StopHelpUseCase stopHelpUseCase) {
         this.lastKnownLocationUseCase = lastKnownLocationUseCase;
         this.locationUpdatesUseCase = locationUpdatesUseCase;
         this.mapObjectsUseCase = mapObjectsUseCase;
         this.getHumanReadableAddressUseCase = getHumanReadableAddressUseCase;
         this.getRouteUseCase = getRouteUseCase;
+        this.stopHelpUseCase = stopHelpUseCase;
     }
 
     @Override
@@ -85,6 +93,28 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
         }, throwable -> {
             if (view != null) {
                 view.onError(throwable.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void requestStopHelping(String phoneNumber) {
+        if (ConnectivityUtil.isNetworkOn(SaveAlifeApplication.application)) {
+            stopHelpUseCase.setPhoneNumber(phoneNumber);
+            requestStopHelping();
+        } else if (view != null) {
+            view.onError(SaveAlifeApplication.application.getString(R.string.internet_connection_check));
+        }
+    }
+
+    private void requestStopHelping() {
+        stopHelpUseCase.executeCompletable(() -> {
+            if (view != null) {
+                view.onStopHelping();
+            }
+        }, throwable -> {
+            if (view != null) {
+                view.onError(throwable.toString());
             }
         });
     }
