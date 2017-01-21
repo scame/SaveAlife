@@ -9,6 +9,7 @@ import com.krestone.savealife.data.mappers.HelpIntentMessageMapper;
 import com.krestone.savealife.data.mappers.SosMessageMapper;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.MessagesTable;
+import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
 import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 import com.krestone.savealife.util.PrefsUtil;
@@ -78,9 +79,9 @@ public class MessagesRepositoryImpl implements MessagesRepository {
     }
 
     @Override
-    public Single<Object> parseFirebaseMessage(Map<String, String> messageData) {
+    public Single<AbstractMessage> parseFirebaseMessage(Map<String, String> messageData) {
         int mType = Integer.valueOf(messageData.get(MessagesTable.KEY_MESSAGE_TYPE));
-        Object parsedMessage = null;
+        AbstractMessage parsedMessage = null;
 
         if (mType == MESSAGE_TYPE_INTENT_START || mType == MESSAGE_TYPE_INTENT_STOP) {
             parsedMessage = sosMessageMapper.convert(messageData);

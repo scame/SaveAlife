@@ -1,7 +1,7 @@
 package com.krestone.savealife.data.sqlite.models;
 
 
-public class HelpIntentMessageModel {
+public class HelpIntentMessageModel extends AbstractMessage {
 
     private String firstName;
 
@@ -71,5 +71,10 @@ public class HelpIntentMessageModel {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    @Override
+    public int getMessageType() {
+        return AbstractMessage.HELP_INTENT_MESSAGE;
     }
 }

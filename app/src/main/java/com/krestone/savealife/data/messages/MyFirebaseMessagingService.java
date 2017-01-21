@@ -14,6 +14,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
 import com.krestone.savealife.data.repository.MessagesRepository;
+import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
 import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
@@ -42,11 +43,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getData().size() > 0) {
             messagesRepository.parseFirebaseMessage(remoteMessage.getData())
-                    .subscribe(o -> {
-                        if (o instanceof SosMessageModel) {
-                            showSosNotification((SosMessageModel) o);
-                        } else if (o instanceof HelpIntentMessageModel) {
-                            showHelpIntentNotification((HelpIntentMessageModel) o);
+                    .subscribe(message -> {
+                        if (message.getMessageType() == AbstractMessage.SOS_MESSAGE) {
+                            showSosNotification((SosMessageModel) message);
+                        } else if (message.getMessageType() == AbstractMessage.HELP_INTENT_MESSAGE) {
+                            showHelpIntentNotification((HelpIntentMessageModel) message);
                         }
                     }, throwable -> Log.i("onxMessageErr", throwable.getLocalizedMessage()));
 

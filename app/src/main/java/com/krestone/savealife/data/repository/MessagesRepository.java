@@ -3,6 +3,7 @@ package com.krestone.savealife.data.repository;
 
 import com.krestone.savealife.data.entities.requests.SosEntity;
 import com.krestone.savealife.data.entities.responses.map.HelpIntentState;
+import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 
 import java.util.Map;
 
@@ -19,5 +20,5 @@ public interface MessagesRepository {
 
     Completable saveFirebaseMessage(Map<String, String> messageData);
 
-    Single<Object> parseFirebaseMessage(Map<String, String> messageData);
+    Single<AbstractMessage> parseFirebaseMessage(Map<String, String> messageData);
 }

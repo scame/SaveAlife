@@ -2,7 +2,7 @@ package com.krestone.savealife.data.sqlite.models;
 
 
 
-public class SosMessageModel {
+public class SosMessageModel extends AbstractMessage {
 
     private double latitude;
 
@@ -92,5 +92,10 @@ public class SosMessageModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public int getMessageType() {
+        return AbstractMessage.SOS_MESSAGE;
     }
 }
