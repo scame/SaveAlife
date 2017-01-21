@@ -11,6 +11,7 @@ import com.krestone.savealife.data.rest.ServerApi;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -33,17 +34,12 @@ public class NetworkingModule {
 
     @Singleton
     @Provides
-    OkHttpClient provideOkHttp(HttpLoggingInterceptor loggingInterceptor) {
+    OkHttpClient provideOkHttp(HttpLoggingInterceptor loggingInterceptor,
+                               @Named("requestLog") okhttp3.Interceptor requestLog) {
         return new OkHttpClient.Builder()
                 .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(chain -> {
-                    Request request = chain.request();
-                    Response response = chain.proceed(request);
-                    Log.i("onxBodyAndUrl", bodyToString(request) + " " + request.url() +
-                            " " + response.code() + " " + request.headers().toString());
-                    return response;
-                })
+                .addInterceptor(requestLog)
                 .build();
     }
 
@@ -91,6 +87,20 @@ public class NetworkingModule {
 
         return interceptor;
     }
+
+    @Singleton
+    @Provides
+    @Named("requestLog")
+    okhttp3.Interceptor provideRequestLogInterceptor() {
+        return chain -> {
+            Request request = chain.request();
+            Response response = chain.proceed(request);
+            Log.i("onxRequestLog", bodyToString(request) + " " + request.url() +
+                    " " + response.code() + " " + request.headers().toString());
+            return response;
+        };
+    }
+
 
     @Singleton
     @Provides
