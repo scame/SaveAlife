@@ -12,11 +12,28 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.krestone.savealife.R;
+import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.repository.MessagesRepository;
+import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
+import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 import com.krestone.savealife.presentation.activities.DrawerActivity;
+
+import javax.inject.Inject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+
+    @Inject
+    MessagesRepository messagesRepository;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SaveAlifeApplication.getAppComponent().inject(this);
+    }
+
+    /** runs in the background, so it's safe to use blocking operations */
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -24,13 +41,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getData().size() > 0) {
-            Log.i(TAG, "Message data payload: " + remoteMessage.getData());
-        }
+            messagesRepository.parseFirebaseMessage(remoteMessage.getData())
+                    .subscribe(o -> {
+                        if (o instanceof SosMessageModel) {
+                            showSosNotification((SosMessageModel) o);
+                        } else if (o instanceof HelpIntentMessageModel) {
+                            showHelpIntentNotification((HelpIntentMessageModel) o);
+                        }
+                    }, throwable -> Log.i("onxMessageErr", throwable.getLocalizedMessage()));
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.i(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            messagesRepository.saveFirebaseMessage(remoteMessage.getData()).await();
         }
+    }
+
+    private void showSosNotification(SosMessageModel sosMessageModel) {
+
+    }
+
+    private void showHelpIntentNotification(HelpIntentMessageModel helpIntentMessageModel) {
+
     }
 
     private void sendNotification(String messageBody) {

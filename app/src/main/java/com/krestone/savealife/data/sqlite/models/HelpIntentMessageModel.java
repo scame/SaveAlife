@@ -1,7 +1,7 @@
 package com.krestone.savealife.data.sqlite.models;
 
 
-public class HelpIntentModel {
+public class HelpIntentMessageModel {
 
     private String firstName;
 

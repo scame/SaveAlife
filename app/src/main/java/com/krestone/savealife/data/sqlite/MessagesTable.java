@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.krestone.savealife.data.sqlite.models.HelpIntentModel;
-import com.krestone.savealife.data.sqlite.models.SosModel;
+import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
+import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,20 +23,20 @@ public class MessagesTable {
     static final String TABLE_MESSAGES = "tableMessages";
 
     /** common fields*/
-    static final String KEY_MESSAGE_ID = "messageId";
-    static final String KEY_FIRST_NAME = "firstName";
-    static final String KEY_LAST_NAME = "lastName";
-    static final String KEY_MESSAGE_TYPE = "messageType";
-    static final String KEY_PHONE_NUMBER = "phoneNumber";
-    static final String KEY_TIME = "time";
+    public static final String KEY_MESSAGE_ID = "messageId";
+    public static final String KEY_FIRST_NAME = "firstName";
+    public static final String KEY_LAST_NAME = "lastName";
+    public static final String KEY_MESSAGE_TYPE = "messageType";
+    public static final String KEY_PHONE_NUMBER = "phoneNumber";
+    public static final String KEY_TIME = "time";
 
     /** sos specific fields*/
-    static final String KEY_LATITUDE = "latitude";
-    static final String KEY_LONGITUDE = "longitude";
-    static final String KEY_MESSAGE_TEXT = "messageText";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
+    public static final String KEY_MESSAGE_TEXT = "message";
 
     /** help intent specific fields*/
-    static final String KEY_DISTANCE = "distance";
+    public static final String KEY_DISTANCE = "distance";
 
     private SQLiteOpenHelper helper;
 
@@ -81,58 +81,56 @@ public class MessagesTable {
         return messages;
     }
 
-    private SosModel parseSosModel(Cursor cursor, int messageType) {
-        SosModel sosModel = new SosModel();
+    private SosMessageModel parseSosModel(Cursor cursor, int messageType) {
+        SosMessageModel sosMessageModel = new SosMessageModel();
 
-        sosModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)));
-        sosModel.setLastName(cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)));
-        sosModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
-        sosModel.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
-        sosModel.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
-        sosModel.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
-        sosModel.setMessage(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_TEXT)));
+        sosMessageModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)));
+        sosMessageModel.setLastName(cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)));
+        sosMessageModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
+        sosMessageModel.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
+        sosMessageModel.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
+        sosMessageModel.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
+        sosMessageModel.setMessage(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_TEXT)));
 
         if (messageType == MESSAGE_TYPE_SOS_START) {
-            sosModel.setStart(true);
-        } else {
-            sosModel.setStart(false);
+            sosMessageModel.setStart(true);
         }
-        return sosModel;
+
+        return sosMessageModel;
     }
 
-    private HelpIntentModel parseHelpIntentModel(Cursor cursor, int messageType) {
-        HelpIntentModel helpIntentModel = new HelpIntentModel();
+    private HelpIntentMessageModel parseHelpIntentModel(Cursor cursor, int messageType) {
+        HelpIntentMessageModel helpIntentMessageModel = new HelpIntentMessageModel();
 
-        helpIntentModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)));
-        helpIntentModel.setLastName(cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)));
-        helpIntentModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
-        helpIntentModel.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
-        helpIntentModel.setDistance(cursor.getDouble(cursor.getColumnIndex(KEY_DISTANCE)));
+        helpIntentMessageModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)));
+        helpIntentMessageModel.setLastName(cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)));
+        helpIntentMessageModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
+        helpIntentMessageModel.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
+        helpIntentMessageModel.setDistance(cursor.getDouble(cursor.getColumnIndex(KEY_DISTANCE)));
 
         if (messageType == MESSAGE_TYPE_INTENT_START) {
-            helpIntentModel.setStart(true);
-        } else {
-            helpIntentModel.setStart(false);
+            helpIntentMessageModel.setStart(true);
         }
-        return helpIntentModel;
+
+        return helpIntentMessageModel;
     }
 
-    private void addSosMessages(List<SosModel> sosMessages) {
+    public void addSosMessages(List<SosMessageModel> sosMessages) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
 
-            for (SosModel sosModel : sosMessages) {
-                contentValues.put(KEY_FIRST_NAME, sosModel.getFirstName());
-                contentValues.put(KEY_LAST_NAME, sosModel.getLastName());
-                contentValues.put(KEY_MESSAGE_TYPE, sosModel.getGlobalMessageType());
-                contentValues.put(KEY_PHONE_NUMBER, sosModel.getPhoneNumber());
-                contentValues.put(KEY_TIME, sosModel.getTime());
-                contentValues.put(KEY_LATITUDE, sosModel.getLatitude());
-                contentValues.put(KEY_LONGITUDE, sosModel.getLongitude());
-                contentValues.put(KEY_MESSAGE_TEXT, sosModel.getMessage());
+            for (SosMessageModel sosMessageModel : sosMessages) {
+                contentValues.put(KEY_FIRST_NAME, sosMessageModel.getFirstName());
+                contentValues.put(KEY_LAST_NAME, sosMessageModel.getLastName());
+                contentValues.put(KEY_MESSAGE_TYPE, sosMessageModel.getGlobalMessageType());
+                contentValues.put(KEY_PHONE_NUMBER, sosMessageModel.getPhoneNumber());
+                contentValues.put(KEY_TIME, sosMessageModel.getTime());
+                contentValues.put(KEY_LATITUDE, sosMessageModel.getLatitude());
+                contentValues.put(KEY_LONGITUDE, sosMessageModel.getLongitude());
+                contentValues.put(KEY_MESSAGE_TEXT, sosMessageModel.getMessage());
 
                 db.insert(TABLE_MESSAGES, null, contentValues);
                 db.setTransactionSuccessful();
@@ -142,20 +140,20 @@ public class MessagesTable {
         }
     }
 
-    private void addHelpIntentMessages(List<HelpIntentModel> helpIntentMessages) {
+    public void addHelpIntentMessages(List<HelpIntentMessageModel> helpIntentMessages) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         db.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
 
-            for (HelpIntentModel helpIntentModel : helpIntentMessages) {
-                contentValues.put(KEY_FIRST_NAME, helpIntentModel.getFirstName());
-                contentValues.put(KEY_LAST_NAME, helpIntentModel.getLastName());
-                contentValues.put(KEY_MESSAGE_TYPE, helpIntentModel.getGlobalMessageType());
-                contentValues.put(KEY_PHONE_NUMBER, helpIntentModel.getPhoneNumber());
-                contentValues.put(KEY_TIME, helpIntentModel.getTime());
-                contentValues.put(KEY_DISTANCE, helpIntentModel.getDistance());
+            for (HelpIntentMessageModel helpIntentMessageModel : helpIntentMessages) {
+                contentValues.put(KEY_FIRST_NAME, helpIntentMessageModel.getFirstName());
+                contentValues.put(KEY_LAST_NAME, helpIntentMessageModel.getLastName());
+                contentValues.put(KEY_MESSAGE_TYPE, helpIntentMessageModel.getGlobalMessageType());
+                contentValues.put(KEY_PHONE_NUMBER, helpIntentMessageModel.getPhoneNumber());
+                contentValues.put(KEY_TIME, helpIntentMessageModel.getTime());
+                contentValues.put(KEY_DISTANCE, helpIntentMessageModel.getDistance());
 
                 db.insert(TABLE_MESSAGES, null, contentValues);
                 db.setTransactionSuccessful();

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
+import com.krestone.savealife.data.sqlite.MessagesTable;
 import com.krestone.savealife.data.sqlite.SaveAlifeDatabaseHelper;
 
 import javax.inject.Singleton;
@@ -32,5 +33,11 @@ public class DataModule {
     @Singleton
     EmergencyContactsTable provideEmergencyContactsTable(SaveAlifeDatabaseHelper helper) {
         return new EmergencyContactsTable(helper);
+    }
+
+    @Provides
+    @Singleton
+    MessagesTable provideMessagesTable(SaveAlifeDatabaseHelper helper) {
+        return new MessagesTable(helper);
     }
 }

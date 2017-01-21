@@ -2,7 +2,7 @@ package com.krestone.savealife.data.sqlite.models;
 
 
 
-public class SosModel {
+public class SosMessageModel {
 
     private double latitude;
 

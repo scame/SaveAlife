@@ -4,8 +4,10 @@ package com.krestone.savealife.data.di;
 import android.content.Context;
 
 import com.google.android.gms.location.LocationRequest;
+import com.krestone.savealife.data.mappers.HelpIntentMessageMapper;
 import com.krestone.savealife.data.mappers.NotInEmergencyListFilter;
 import com.krestone.savealife.data.mappers.RouteModelMapper;
+import com.krestone.savealife.data.mappers.SosMessageMapper;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.repository.ContactsRepositoryImp;
 import com.krestone.savealife.data.repository.EntryRepository;
@@ -23,6 +25,7 @@ import com.krestone.savealife.data.repository.ProfileRepositoryImpl;
 import com.krestone.savealife.data.rest.MapboxApi;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
+import com.krestone.savealife.data.sqlite.MessagesTable;
 import com.krestone.savealife.domain.schedulers.SubscribeOn;
 
 import javax.inject.Singleton;
@@ -77,7 +80,11 @@ public class RepositoriesModule {
 
     @Provides
     @Singleton
-    MessagesRepository provideMessagesRepository(ServerApi serverApi, Context context) {
-        return new MessagesRepositoryImpl(serverApi, context);
+    MessagesRepository provideMessagesRepository(ServerApi serverApi, Context context,
+                                                 MessagesTable messagesTable,
+                                                 HelpIntentMessageMapper helpIntentMessageMapper,
+                                                 SosMessageMapper sosMessageMapper) {
+        return new MessagesRepositoryImpl(serverApi, context, messagesTable,
+                helpIntentMessageMapper, sosMessageMapper);
     }
 }
