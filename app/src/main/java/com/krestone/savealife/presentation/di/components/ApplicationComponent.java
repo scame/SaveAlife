@@ -16,6 +16,7 @@ import com.krestone.savealife.presentation.di.modules.DrawerModule;
 import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
+import com.krestone.savealife.presentation.di.modules.NotificationsModule;
 import com.krestone.savealife.presentation.di.modules.PersonalInfoModule;
 import com.krestone.savealife.presentation.di.modules.RegistrationNumberModule;
 import com.krestone.savealife.presentation.di.modules.SignInModule;
@@ -62,4 +63,6 @@ public interface ApplicationComponent {
     SosWindowComponent provideSosWindowComponent(SosWindowModule sosWindowModule);
 
     DashboardComponent provideDashboardComponent(DashboardModule dashboardModule);
+
+    NotificationsComponent provideNotificationsComponent(NotificationsModule notificationsModule);
 }

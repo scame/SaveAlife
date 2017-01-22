@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
 import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 
@@ -44,8 +45,8 @@ public class MessagesTable {
         this.helper = helper;
     }
 
-    public List<Object> getAllRecords() {
-        List<Object> messages = Collections.emptyList();
+    public List<AbstractMessage> getAllRecords() {
+        List<AbstractMessage> messages = Collections.emptyList();
 
         String selectQuery = String.format("SELECT * FROM %S", TABLE_MESSAGES);
 
@@ -63,8 +64,8 @@ public class MessagesTable {
         return messages;
     }
 
-    private List<Object> parseCursor(Cursor cursor) {
-        List<Object> messages = new ArrayList<>();
+    private List<AbstractMessage> parseCursor(Cursor cursor) {
+        List<AbstractMessage> messages = new ArrayList<>();
 
         int messageTypeIndex = cursor.getColumnIndex(KEY_MESSAGE_TYPE);
 

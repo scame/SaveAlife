@@ -5,6 +5,7 @@ import com.krestone.savealife.data.entities.requests.SosEntity;
 import com.krestone.savealife.data.entities.responses.map.HelpIntentState;
 import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Completable;
@@ -21,4 +22,6 @@ public interface MessagesRepository {
     Completable saveFirebaseMessage(Map<String, String> messageData);
 
     Single<AbstractMessage> parseFirebaseMessage(Map<String, String> messageData);
+
+    Single<List<AbstractMessage>> getAllMessages();
 }

@@ -15,6 +15,7 @@ import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 import com.krestone.savealife.util.PrefsUtil;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import rx.Completable;
@@ -90,5 +91,10 @@ public class MessagesRepositoryImpl implements MessagesRepository {
         }
 
         return Single.just(parsedMessage);
+    }
+
+    @Override
+    public Single<List<AbstractMessage>> getAllMessages() {
+        return Single.defer(() -> Single.just(messagesTable.getAllRecords()));
     }
 }
