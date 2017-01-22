@@ -4,6 +4,7 @@ package com.krestone.savealife.data.di;
 import android.content.Context;
 
 import com.google.android.gms.location.LocationRequest;
+import com.krestone.savealife.data.messages.NotificationsHandler;
 
 import javax.inject.Singleton;
 
@@ -26,5 +27,11 @@ public class MiscellaneousModule {
     @Singleton
     ReactiveLocationProvider provideReactiveLocationProvider(Context context) {
         return new ReactiveLocationProvider(context);
+    }
+
+    @Provides
+    @Singleton
+    NotificationsHandler provideNotificationsHandler(Context context) {
+        return new NotificationsHandler(context);
     }
 }
