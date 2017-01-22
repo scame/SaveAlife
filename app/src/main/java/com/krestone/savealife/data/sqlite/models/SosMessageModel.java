@@ -1,6 +1,7 @@
 package com.krestone.savealife.data.sqlite.models;
 
 
+import android.os.Parcel;
 
 public class SosMessageModel extends AbstractMessage {
 
@@ -98,4 +99,50 @@ public class SosMessageModel extends AbstractMessage {
     public int getMessageType() {
         return AbstractMessage.SOS_MESSAGE;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.latitude);
+        dest.writeDouble(this.longitude);
+        dest.writeString(this.message);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.time);
+        dest.writeString(this.phoneNumber);
+        dest.writeByte(this.isStart ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.globalMessageType);
+    }
+
+    public SosMessageModel() {
+    }
+
+    protected SosMessageModel(Parcel in) {
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
+        this.message = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.time = in.readString();
+        this.phoneNumber = in.readString();
+        this.isStart = in.readByte() != 0;
+        this.globalMessageType = in.readInt();
+    }
+
+    public static final Creator<SosMessageModel> CREATOR = new Creator<SosMessageModel>() {
+        @Override
+        public SosMessageModel createFromParcel(Parcel source) {
+            return new SosMessageModel(source);
+        }
+
+        @Override
+        public SosMessageModel[] newArray(int size) {
+            return new SosMessageModel[size];
+        }
+    };
 }

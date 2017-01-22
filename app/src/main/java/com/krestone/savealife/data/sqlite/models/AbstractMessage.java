@@ -1,8 +1,9 @@
 package com.krestone.savealife.data.sqlite.models;
 
 
+import android.os.Parcelable;
 
-public abstract class AbstractMessage {
+public abstract class AbstractMessage implements Parcelable {
 
     public static final int HELP_INTENT_MESSAGE = 0;
 

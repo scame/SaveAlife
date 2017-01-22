@@ -35,7 +35,7 @@ import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.di.modules.SosWindowModule;
-import com.krestone.savealife.presentation.fragments.ChatsFragment;
+import com.krestone.savealife.presentation.fragments.NotificationsFragment;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
 import com.krestone.savealife.presentation.fragments.MyProfileFragment;
@@ -60,7 +60,7 @@ public class DrawerActivity extends AppCompatActivity implements
 
     private static final String DASHBOARD_FRAG_TAG = "dashboardFragment";
     private static final String MAP_FRAG_TAG = "mapFragment";
-    private static final String CHATS_FRAG_TAG = "chatsFragment";
+    private static final String NOTIF_FRAG_TAG = "chatsFragment";
     private static final String ADD_TO_CONTACTS_FRAG_TAG = "contactsFragment";
     private static final String EMERGENCY_CONTACTS_TAG = "emergencyContacts";
     private static final String MY_PROFILE_TAG = "myProfile";
@@ -136,7 +136,7 @@ public class DrawerActivity extends AppCompatActivity implements
             String targetNumber = extras.getString(NotificationsHandler.SOS_NUMBER_EXTRA, "");
             replaceFragment(MAP_FRAG_TAG, MapFragment.fromNotification(targetNumber));
         } else if (messageType == NotificationsHandler.HELP_INTENT_MESSAGE_ID) {
-            replaceFragment(CHATS_FRAG_TAG, new ChatsFragment());
+            replaceFragment(NOTIF_FRAG_TAG, new NotificationsFragment());
         }
     }
 
@@ -225,8 +225,8 @@ public class DrawerActivity extends AppCompatActivity implements
             case R.id.map_drawer_item:
                 replaceFragment(MAP_FRAG_TAG, new MapFragment());
                 break;
-            case R.id.chats_drawer_item:
-                replaceFragment(CHATS_FRAG_TAG, new ChatsFragment());
+            case R.id.notif_drawer_item:
+                replaceFragment(NOTIF_FRAG_TAG, new NotificationsFragment());
                 break;
             case R.id.contacts_drawer_item:
                 replaceFragment(EMERGENCY_CONTACTS_TAG, new EmergencyContactsFragment());

@@ -11,7 +11,7 @@
             android:id="@+id/map_drawer_item"
             android:title="@string/map_item" />
         <item
-            android:id="@+id/chats_drawer_item"
+            android:id="@+id/notif_drawer_item"
             android:title="@string/chats_item" />
 
         <item
