@@ -47,12 +47,12 @@ public class NotificationsHandler {
         showNotification(SOS_MESSAGE_ID, sosNotification);
     }
 
-    private String formatSosMessageContent(SosMessageModel sosMessageModel) {
+    public String formatSosMessageContent(SosMessageModel sosMessageModel) {
         return sosMessageModel.getGlobalMessageType() == MessagesTable.MESSAGE_TYPE_SOS_START ?
                 "Needs a help" : "Doesn't need a help anymore";
     }
 
-    private String formatSosMessageTitle(SosMessageModel sosMessageModel) {
+    public String formatSosMessageTitle(SosMessageModel sosMessageModel) {
         return "SAL: " + sosMessageModel.getFirstName() + " " + sosMessageModel.getLastName() + " "
                 + " " + sosMessageModel.getPhoneNumber();
     }
@@ -73,12 +73,12 @@ public class NotificationsHandler {
         showNotification(HELP_INTENT_MESSAGE_ID, helpIntentNotif);
     }
 
-    private String formatIntentMessageTitle(HelpIntentMessageModel helpIntentMessage) {
+    public String formatIntentMessageTitle(HelpIntentMessageModel helpIntentMessage) {
         return "SAL: " + helpIntentMessage.getFirstName() + " " + helpIntentMessage.getLastName() + " "
                 + " " + helpIntentMessage.getPhoneNumber();
     }
 
-    private String formatIntentMessageContent(HelpIntentMessageModel helpIntentMessage) {
+    public String formatIntentMessageContent(HelpIntentMessageModel helpIntentMessage) {
         return helpIntentMessage.getGlobalMessageType() == MessagesTable.MESSAGE_TYPE_INTENT_START ?
                 "Is going to help (" + helpIntentMessage.getDistance() + " from you)" : "Decided not to help";
     }
