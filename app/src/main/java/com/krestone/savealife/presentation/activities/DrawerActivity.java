@@ -128,6 +128,8 @@ public class DrawerActivity extends AppCompatActivity implements
 
     private void checkIfNotificationIntent() {
         Bundle extras = getIntent().getExtras();
+        if (extras == null) return;
+
         int messageType = extras.getInt(NotificationsHandler.MESSAGE_EXTRA, -1);
 
         if (messageType == NotificationsHandler.SOS_MESSAGE_ID) {

@@ -4,6 +4,7 @@ package com.krestone.savealife.data.sync;
 import android.content.Context;
 
 import com.krestone.savealife.data.entities.requests.ContactsNumbersHolder;
+import com.krestone.savealife.data.entities.responses.ContactsHolder;
 import com.krestone.savealife.data.repository.ContactsRepository;
 import com.krestone.savealife.data.sync.events.SyncType;
 import com.krestone.savealife.data.sync.states.DataStates;
@@ -12,8 +13,9 @@ import com.krestone.savealife.presentation.models.ContactModel;
 import java.util.List;
 
 import rx.Completable;
+import rx.Single;
 
-// TODO: 1/18/17 rewrite in asynchronous manner
+
 public class EmergencyContactsSync extends AbstractSync {
 
     private ContactsRepository contactsRepository;
@@ -30,45 +32,38 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        handleRemovedContacts().andThen(handleNewContacts()).await();
-        return Completable.complete();
+        return handleRemovedContacts().andThen(handleNewContacts());
     }
 
     private Completable handleRemovedContacts() {
-        List<ContactModel> removedContacts = getContactsByState(DataStates.REMOVED);
-
-        Throwable throwable = contactsRepository
-                .deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(removedContacts))
-                .andThen(contactsRepository.deleteFromEmergencyListLocal(removedContacts)).get();
-        return completeWithErrorCheck(throwable);
+        return getContactsByState(DataStates.REMOVED)
+                .doOnEach(notification -> {
+                    List<ContactModel> contacts = notification.getValue().getContacts();
+                    contactsRepository.deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(contacts));
+                    contactsRepository.deleteFromEmergencyListLocal(contacts);
+                }).toCompletable();
     }
 
     private Completable handleNewContacts() {
-        List<ContactModel> newContacts = getContactsByState(DataStates.NEW);
-
-        Throwable throwable = contactsRepository
-                .addToEmergencyList(newContacts)
-                .andThen(contactsRepository.updateDataState(newContacts, DataStates.UP_TO_DATE)).get();
-        return completeWithErrorCheck(throwable);
+        return getContactsByState(DataStates.NEW)
+                .doOnEach(notification -> {
+                    List<ContactModel> contacts = notification.getValue().getContacts();
+                    contactsRepository.addToEmergencyList(contacts);
+                    contactsRepository.updateDataState(contacts, DataStates.UP_TO_DATE);
+                }).toCompletable();
     }
 
-    private List<ContactModel> getContactsByState(DataStates state) {
-        return contactsRepository
-                .getEmergencyContactsLocalByState(state)
-                .toBlocking().value()
-                .getContacts();
+    private Single<ContactsHolder> getContactsByState(DataStates state) {
+        return contactsRepository.getEmergencyContactsLocalByState(state);
     }
 
     @Override
     protected Completable get() {
-        List<ContactModel> freshContacts = contactsRepository
-                .getEmergencyContacts()
-                .toBlocking().value()
-                .getContacts();
-
-        Throwable throwable = contactsRepository
-                .cleanLocalContactsList()
-                .andThen(contactsRepository.addOrUpdateEmergencyContacts(freshContacts)).get();
-        return completeWithErrorCheck(throwable);
+        return contactsRepository.cleanLocalContactsList()
+                .toSingle(() -> contactsRepository.getEmergencyContacts())
+                .flatMap(contactsHolderSingle -> contactsHolderSingle)
+                .map(ContactsHolder::getContacts)
+                .map(contactModels -> contactsRepository.addOrUpdateEmergencyContacts(contactModels))
+                .toCompletable();
     }
 }

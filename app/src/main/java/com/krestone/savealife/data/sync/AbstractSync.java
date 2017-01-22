@@ -21,14 +21,14 @@ public abstract class AbstractSync {
 
     void sync() {
         if (ConnectivityUtil.isNetworkOn(context)) {
-            sendInProgressEvent()
-                    .andThen(post())
-                    .andThen(get())
-                    .andThen(sendCompletedEvent())
+            Completable.fromCallable(() -> sendInProgressEvent()
+                            .andThen(post())
+                            .andThen(get())
+                            .andThen(sendCompletedEvent()))
                     .doOnError(throwable -> Log.i("onxSyncError", throwable.getLocalizedMessage()))
                     .await();
         } else {
-            sendCompletedEvent();
+             sendCompletedEvent();
         }
     }
 
@@ -50,5 +50,6 @@ public abstract class AbstractSync {
     protected abstract SyncType getSyncType();
 
     protected abstract Completable post();
+
     protected abstract Completable get();
 }

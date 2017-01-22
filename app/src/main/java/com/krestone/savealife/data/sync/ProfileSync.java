@@ -4,7 +4,6 @@ package com.krestone.savealife.data.sync;
 import android.content.Context;
 
 import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
-import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.repository.ProfileRepository;
 import com.krestone.savealife.data.sync.events.SyncType;
 
@@ -26,15 +25,14 @@ public class ProfileSync extends AbstractSync {
 
     @Override
     protected Completable post() {
-        Throwable throwable = profileRepository.updateMyProfileInfo().get();
-        return completeWithErrorCheck(throwable);
+        return profileRepository.updateMyProfileInfo();
     }
 
     @Override
     protected Completable get() {
-        MyProfileInfoEntity profileInfo = profileRepository.getMyProfileInfo().toBlocking().value();
-        Throwable throwable = profileRepository
-                .updateMyProfileInfoLocal(new UpdateMyProfileInfoRequest(profileInfo)).get();
-        return completeWithErrorCheck(throwable);
+        return profileRepository.getMyProfileInfo()
+                .map(profileInfo -> profileRepository.updateMyProfileInfoLocal(
+                        new UpdateMyProfileInfoRequest(profileInfo))
+                ).toCompletable();
     }
 }
