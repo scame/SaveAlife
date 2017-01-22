@@ -6,6 +6,7 @@ import com.krestone.savealife.data.di.DataModule;
 import com.krestone.savealife.data.di.NetworkingModule;
 import com.krestone.savealife.data.di.SyncManagerComponent;
 import com.krestone.savealife.data.di.SyncManagerModule;
+import com.krestone.savealife.data.messages.MyFirebaseInstanceIDService;
 import com.krestone.savealife.data.messages.MyFirebaseMessagingService;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ApplicationModule;
@@ -33,6 +34,8 @@ public interface ApplicationComponent {
     void inject(LocationService locationService);
 
     void inject(MyFirebaseMessagingService myFirebaseMessagingService);
+
+    void inject(MyFirebaseInstanceIDService myFirebaseInstanceIDService);
 
     MapComponent provideMapComponent(MapModule mapModule);
 

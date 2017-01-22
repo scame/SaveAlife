@@ -87,4 +87,7 @@ public interface ServerApi {
     @POST("sos/stop")
     Observable<ResponseBody> stopSos(@Header("x-auth-token") String token,
                                      @Body SosEntity sosEntity);
+    @POST("updateFbToken")
+    Observable<ResponseBody> updateFirebaseToken(@Header("x-auth-token") String token,
+                                                 @Header("firebaseToken") String fbToken);
 }

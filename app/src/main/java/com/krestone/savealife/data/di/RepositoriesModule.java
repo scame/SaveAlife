@@ -22,6 +22,8 @@ import com.krestone.savealife.data.repository.MessagesRepository;
 import com.krestone.savealife.data.repository.MessagesRepositoryImpl;
 import com.krestone.savealife.data.repository.ProfileRepository;
 import com.krestone.savealife.data.repository.ProfileRepositoryImpl;
+import com.krestone.savealife.data.repository.TokensRepository;
+import com.krestone.savealife.data.repository.TokensRepositoryImpl;
 import com.krestone.savealife.data.rest.MapboxApi;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sqlite.EmergencyContactsTable;
@@ -86,5 +88,11 @@ public class RepositoriesModule {
                                                  SosMessageMapper sosMessageMapper) {
         return new MessagesRepositoryImpl(serverApi, context, messagesTable,
                 helpIntentMessageMapper, sosMessageMapper);
+    }
+
+    @Provides
+    @Singleton
+    TokensRepository provideTokensRepository(ServerApi serverApi, Context context) {
+        return new TokensRepositoryImpl(serverApi, context);
     }
 }
