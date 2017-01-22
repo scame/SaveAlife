@@ -28,63 +28,63 @@ import rx.Observable;
 public interface ServerApi {
 
 
-    @POST("http://10.0.1.94:8080/contactsInApp")
+    @POST("contactsInApp")
     Observable<ContactsHolder> getContactsInApp(@Body ContactsNumbersHolder numbersHolder,
                                                 @Header("x-auth-token") String tokenHeader);
 
-    @POST("http://10.0.1.94:8080/deleteFromEmergencyList")
+    @POST("deleteFromEmergencyList")
     Observable<ResponseBody> deleteContactsFromEmergencyList(@Body ContactsNumbersHolder numbersHolder,
                                                              @Header("x-auth-token") String token);
 
-    @GET("http://10.0.1.94:8080/getEmergencyList")
+    @GET("getEmergencyList")
     Observable<ContactsHolder> getEmergencyContacts(@Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080/addToEmergencyList")
+    @POST("addToEmergencyList")
     Observable<ResponseBody> addToEmergencyList(@Body ContactsHolder contactsHolder,
                                                 @Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080/signUp")
+    @POST("signUp")
     Observable<PhoneNumberResponse> sendRegistrationNumber(@Body PhoneNumberHolder phoneNumber);
 
-    @POST("http://10.0.1.94:8080/confirmSignUp")
+    @POST("confirmSignUp")
     Observable<ResponseBody> sendVerificationCode(@Body VerificationHolder verificationHolder);
 
-    @POST("http://10.0.1.94:8080/fillProfile")
+    @POST("fillProfile")
     Observable<ResponseBody> sendPersonalInfo(@Body PersonalInfoHolder personalInfoHolder);
 
-    @POST("http://10.0.1.94:8080//updateCoordinates")
+    @POST("updateCoordinates")
     Observable<ResponseBody> sendLocation(@Body LocationHolder locationHolder,
                                           @Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080//objectsInArea")
+    @POST("objectsInArea")
     Observable<MapObjectsEntity> sendMapObjectsRequest(@Body MapObjectsRequest mapObjectsRequest,
                                                        @Header("x-auth-token") String token);
 
-    @GET("http://10.0.1.94:8080//signIn")
+    @GET("signIn")
     Observable<Response<ResponseBody>> getAuthToken(@Header("Authorization") String encodedEntryData,
                                                     @Header("firebaseToken") String firebaseToken);
 
-    @GET("http://10.0.1.94:8080//profileInfo")
+    @GET("profileInfo")
     Observable<SomeoneProfileEntity> getSomeoneProfileInfo(@Header("x-auth-token") String token,
                                                            @Header("phoneNumber") String phoneNumber);
 
-    @GET("http://10.0.1.94:8080//myProfileInfo")
+    @GET("myProfileInfo")
     Observable<MyProfileInfoEntity> getMyProfileInfo(@Header("x-auth-token") String token);
 
-    @POST("http://10.0.1.94:8080//updateProfile")
+    @POST("updateProfile")
     Observable<ResponseBody> updateMyProfileInfo(@Header("x-auth-token") String token,
                                                  @Body UpdateMyProfileInfoRequest infoBody);
 
-    @GET("http://10.0.1.94:8080//sos/acceptHelp")
+    @GET("sos/acceptHelp")
     Observable<HelpIntentState> helpIntentRequest(@Header("x-auth-token") String token,
                                                   @Header("suffererNumber") String number,
                                                   @Query("isHelp") Boolean isHelp);
 
-    @POST("http://10.0.1.94:8080//sos/start")
+    @POST("sos/start")
     Observable<ResponseBody> startSos(@Header("x-auth-token") String token,
                                       @Body SosEntity sosEntity);
 
-    @POST("http://10.0.1.94:8080//sos/stop")
+    @POST("sos/stop")
     Observable<ResponseBody> stopSos(@Header("x-auth-token") String token,
                                      @Body SosEntity sosEntity);
 }

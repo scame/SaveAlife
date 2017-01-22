@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.messages.NotificationsHandler;
 import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
 import com.krestone.savealife.presentation.di.components.ContactProfileComponent;
 import com.krestone.savealife.presentation.di.components.DashboardComponent;
@@ -113,6 +114,7 @@ public class DrawerActivity extends AppCompatActivity implements
         setContentView(R.layout.drawer_activity);
 
         inject();
+        checkIfNotificationIntent();
         presenter.setView(this);
         presenter.checkLoginStatus();
 
@@ -122,6 +124,18 @@ public class DrawerActivity extends AppCompatActivity implements
 
         bindHeaderViews();
         configureHeaderView();
+    }
+
+    private void checkIfNotificationIntent() {
+        Bundle extras = getIntent().getExtras();
+        int messageType = extras.getInt(NotificationsHandler.MESSAGE_EXTRA, -1);
+
+        if (messageType == NotificationsHandler.SOS_MESSAGE_ID) {
+            String targetNumber = extras.getString(NotificationsHandler.SOS_NUMBER_EXTRA, "");
+            replaceFragment(MAP_FRAG_TAG, MapFragment.fromNotification(targetNumber));
+        } else if (messageType == NotificationsHandler.HELP_INTENT_MESSAGE_ID) {
+            replaceFragment(CHATS_FRAG_TAG, new ChatsFragment());
+        }
     }
 
     @Override

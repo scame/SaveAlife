@@ -78,6 +78,15 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     @State
     MapObjectsEntity mapObjectsEntity;
 
+    public static MapFragment fromNotification(String number) {
+        MapFragment mapFragment = new MapFragment();
+
+        Bundle args = new Bundle();
+        args.putString(MapFragment.class.getCanonicalName(), number);
+        mapFragment.setArguments(args);
+
+        return mapFragment;
+    }
 
     @Nullable
     @Override
