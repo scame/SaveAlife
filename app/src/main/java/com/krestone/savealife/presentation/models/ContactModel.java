@@ -124,6 +124,20 @@ public class ContactModel implements Parcelable {
 
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ContactModel) {
+            ContactModel contact = (ContactModel) obj;
+            return this.number.equals(contact.getNumber());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return number.hashCode();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

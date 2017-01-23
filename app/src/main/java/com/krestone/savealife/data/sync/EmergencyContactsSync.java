@@ -44,6 +44,7 @@ public class EmergencyContactsSync extends AbstractSync {
                 }).toCompletable();
     }
 
+
     private Completable handleNewContacts() {
         return getContactsByState(DataStates.NEW)
                 .doOnEach(notification -> {
@@ -59,10 +60,11 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable get() {
-        return Single.just(contactsRepository.cleanLocalContactsList())
-                .flatMap(completable -> contactsRepository.getEmergencyContacts())
+
+        return contactsRepository.getEmergencyContacts()
                 .doOnEach(notification -> {
                     List<ContactModel> contacts = notification.getValue().getContacts();
+                    contactsRepository.cleanLocalContactsList().await();
                     contactsRepository.addOrUpdateEmergencyContacts(contacts).await();
                 }).toCompletable();
     }

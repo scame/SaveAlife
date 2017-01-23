@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -160,7 +161,7 @@ public class DrawerActivity extends AppCompatActivity implements
     public void startEntryProcess() {
         Intent entryIntent = new Intent(this, RegistrationActivity.class);
         startActivity(entryIntent);
-        finish();
+        ActivityCompat.finishAffinity(this);
     }
 
     @Override

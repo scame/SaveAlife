@@ -4,6 +4,7 @@ package com.krestone.savealife.presentation.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -94,11 +95,13 @@ public class RegistrationActivity extends AppCompatActivity implements
     @Override
     public void onSignIn() {
         startActivity(new Intent(this, DrawerActivity.class));
+        ActivityCompat.finishAffinity(this);
     }
 
     @Override
     public void onSignUpClick() {
         startActivity(new Intent(this, DrawerActivity.class));
+        ActivityCompat.finishAffinity(this);
     }
 
     private void replaceFragment(String tag, Fragment fragment) {

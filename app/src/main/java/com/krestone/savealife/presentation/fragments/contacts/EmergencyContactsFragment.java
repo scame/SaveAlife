@@ -58,6 +58,8 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
 
     private SyncEventReceiver receiver;
 
+    private boolean firstVisit;
+
     public interface EmergencyListener {
 
         void onAddToEmergencyListClick();
@@ -73,6 +75,12 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.firstVisit = true;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,6 +90,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         addFab.setOnClickListener(v -> emergencyListener.onAddToEmergencyListClick());
         emergencyPresenter.setView(this);
         createReceiver();
+        initFragment();
 
         return fragmentView;
     }
@@ -98,8 +107,13 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
     @Override
     public void onStart() {
         super.onStart();
-        fetchData();
 
+        if (firstVisit) {
+            initFragment();
+            this.firstVisit = false;
+        } else {
+            emergencyPresenter.requestEmergencyContacts();
+        }
         LocalBroadcastManager.getInstance(getContext())
                 .registerReceiver(receiver, new IntentFilter(BroadcastsMeta.SYNC_RESPONSE));
     }
@@ -110,7 +124,7 @@ public class EmergencyContactsFragment extends AbstractFragment implements Emerg
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 
-    private void fetchData() {
+    private void initFragment() {
         if (contacts == null) {
             emergencyPresenter.requestEmergencyContacts();
         } else {

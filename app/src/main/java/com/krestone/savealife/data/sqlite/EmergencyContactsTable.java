@@ -138,7 +138,7 @@ public class EmergencyContactsTable {
         db.beginTransaction();
         try {
             for (ContactModel contact : contacts) {
-                db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getNumber()});
+                 db.delete(TABLE_CONTACTS, KEY_CONTACT_NUMBER + " = ?", new String[]{contact.getNumber()});
             }
             db.setTransactionSuccessful();
         } finally {

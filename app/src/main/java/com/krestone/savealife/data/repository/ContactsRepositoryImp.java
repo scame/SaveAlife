@@ -161,6 +161,10 @@ public class ContactsRepositoryImp implements ContactsRepository {
             cursor.close();
         }
 
-        return contacts;
+        return eliminateDuplicates(contacts);
+    }
+
+    private List<ContactModel> eliminateDuplicates(List<ContactModel> contacts) {
+        return rx.Observable.from(contacts).distinct().toList().toBlocking().first();
     }
 }

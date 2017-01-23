@@ -10,8 +10,13 @@ import com.krestone.savealife.data.entities.requests.UpdateMyProfileInfoRequest;
 import com.krestone.savealife.data.entities.responses.MyProfileInfoEntity;
 import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
+import com.krestone.savealife.data.sync.SyncService;
+import com.krestone.savealife.data.sync.events.SyncType;
+
+import java.util.concurrent.TimeUnit;
 
 import rx.Completable;
+import rx.Observable;
 import rx.Single;
 
 public class ProfileRepositoryImpl implements ProfileRepository {
@@ -27,7 +32,9 @@ public class ProfileRepositoryImpl implements ProfileRepository {
 
     @Override
     public Single<SomeoneProfileEntity> getSomeoneProfileInfo(String phoneNumber) {
-        return serverApi.getSomeoneProfileInfo(getAuthToken(), phoneNumber).toSingle();
+        return serverApi.getSomeoneProfileInfo(getAuthToken(), phoneNumber).toSingle()
+                .doOnError(throwable -> SyncService.requestSync(SyncType.CONTACTS, context))
+                .retryWhen(errors -> errors.flatMap(error -> Observable.timer(2, TimeUnit.SECONDS)));
     }
 
     @Override
