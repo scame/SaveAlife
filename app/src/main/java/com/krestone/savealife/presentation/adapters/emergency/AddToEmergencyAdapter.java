@@ -55,11 +55,17 @@ public class AddToEmergencyAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return contacts == null ? 1 : contacts.size();
+        if (contacts == null || contacts.size() == 0) {
+            return 1;
+        }
+        return contacts.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return contacts.size() == 0 ? VIEW_TYPE_EMPTY : VIEW_TYPE_NORMAL;
+        if (contacts == null || contacts.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        }
+        return VIEW_TYPE_NORMAL;
     }
 }

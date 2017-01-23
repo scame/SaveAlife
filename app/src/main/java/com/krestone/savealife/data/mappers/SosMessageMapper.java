@@ -21,10 +21,6 @@ public class SosMessageMapper {
         message.setLongitude(Double.valueOf(messageData.get(MessagesTable.KEY_LONGITUDE)));
         message.setGlobalMessageType(messageType);
 
-        if (messageType == MessagesTable.MESSAGE_TYPE_INTENT_START) {
-            message.setStart(true);
-        }
-
         return message;
     }
 }

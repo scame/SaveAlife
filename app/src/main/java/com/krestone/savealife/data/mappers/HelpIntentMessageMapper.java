@@ -19,10 +19,6 @@ public class HelpIntentMessageMapper {
         message.setTime(messageData.get(MessagesTable.KEY_TIME));
         message.setGlobalMessageType(messageType);
 
-        if (messageType == MessagesTable.MESSAGE_TYPE_INTENT_START) {
-            message.setStart(true);
-        }
-
         return message;
     }
 }

@@ -19,8 +19,6 @@ public class SosMessageModel extends AbstractMessage {
 
     private String phoneNumber;
 
-    private boolean isStart;
-
     private int globalMessageType;
 
     public int getGlobalMessageType() {
@@ -29,14 +27,6 @@ public class SosMessageModel extends AbstractMessage {
 
     public void setGlobalMessageType(int globalMessageType) {
         this.globalMessageType = globalMessageType;
-    }
-
-    public boolean isStart() {
-        return isStart;
-    }
-
-    public void setStart(boolean start) {
-        isStart = start;
     }
 
     public double getLatitude() {
@@ -115,7 +105,6 @@ public class SosMessageModel extends AbstractMessage {
         dest.writeString(this.lastName);
         dest.writeString(this.time);
         dest.writeString(this.phoneNumber);
-        dest.writeByte(this.isStart ? (byte) 1 : (byte) 0);
         dest.writeInt(this.globalMessageType);
     }
 
@@ -130,7 +119,6 @@ public class SosMessageModel extends AbstractMessage {
         this.lastName = in.readString();
         this.time = in.readString();
         this.phoneNumber = in.readString();
-        this.isStart = in.readByte() != 0;
         this.globalMessageType = in.readInt();
     }
 

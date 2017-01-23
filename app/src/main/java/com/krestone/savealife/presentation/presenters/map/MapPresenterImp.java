@@ -130,6 +130,8 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
         lastKnownLocationUseCase.unsubscribe();
         locationUpdatesUseCase.unsubscribe();
         getRouteUseCase.unsubscribe();
+        stopHelpUseCase.unsubscribe();
+        mapObjectsUseCase.unsubscribe();
         view = null;
     }
 

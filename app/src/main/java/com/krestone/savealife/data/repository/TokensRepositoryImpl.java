@@ -29,7 +29,7 @@ public class TokensRepositoryImpl implements TokensRepository {
                     .doOnNext(responseBody -> cacheNewToken(firebaseToken))
                     .toCompletable();
         }
-        return Completable.complete();
+        return cacheNewToken(firebaseToken);
     }
 
     private boolean needsRefresh() {

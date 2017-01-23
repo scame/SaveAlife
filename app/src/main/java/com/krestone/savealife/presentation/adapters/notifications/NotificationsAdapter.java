@@ -74,6 +74,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return messages == null ? 1 : messages.size() + 1;
+        if (messages == null || messages.size() == 0) {
+            return 1;
+        }
+        return messages.size();
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SaveAlife</string>
+    <string name="app_name">SaveaLife</string>
     <string name="facebook_app_id">259962217739741</string>
     <string name="dashboard_item">Dashboard</string>
     <string name="map_item">Map</string>
@@ -12,7 +12,7 @@
 
     <string name="autocomplete_hint">Search Location</string>
 
-    <string name="savealife_welcome">Welcome to SaveAlife!</string>
+    <string name="savealife_welcome">Welcome to SaveaLife!</string>
     <string name="continue_btn_text">Continue</string>
     <string name="phone_number_hint">Phone number</string>
     <string name="code_failure_text">DIDN\'T GET IT?</string>
@@ -23,7 +23,7 @@
     <string name="first_name_hint">Your first name</string>
     <string name="last_name_hint">Your last name</string>
     <string name="sign_up_btn_text">Sign up</string>
-    <string name="sign_up_bottom_text">By signing up you agree to SaveAlife\'s Terms of Use</string>
+    <string name="sign_up_bottom_text">By signing up you agree to SaveaLife\'s Terms of Use</string>
     <string name="sos_inactive_text">In case of danger press this button to report your location</string>
     <string name="sos_active_text">Your signal is visible now. You\'ll get help soon</string>
     <string name="driver_mode">Driver mode</string>

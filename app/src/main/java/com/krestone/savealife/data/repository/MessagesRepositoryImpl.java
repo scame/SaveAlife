@@ -69,11 +69,11 @@ public class MessagesRepositoryImpl implements MessagesRepository {
         int mType = Integer.valueOf(messageData.get(MessagesTable.KEY_MESSAGE_TYPE));
 
         if (mType == MESSAGE_TYPE_INTENT_START || mType == MESSAGE_TYPE_INTENT_STOP) {
-            SosMessageModel sosMessage = sosMessageMapper.convert(messageData);
-            messagesTable.addSosMessages(Collections.singletonList(sosMessage));
-        } else if (mType == MESSAGE_TYPE_SOS_START || mType == MESSAGE_TYPE_SOS_STOP) {
             HelpIntentMessageModel helpIntentMessage = helpIntentMessageMapper.convert(messageData);
             messagesTable.addHelpIntentMessages(Collections.singletonList(helpIntentMessage));
+        } else if (mType == MESSAGE_TYPE_SOS_START || mType == MESSAGE_TYPE_SOS_STOP) {
+            SosMessageModel sosMessage = sosMessageMapper.convert(messageData);
+            messagesTable.addSosMessages(Collections.singletonList(sosMessage));
         }
 
         return Completable.complete();
@@ -85,9 +85,9 @@ public class MessagesRepositoryImpl implements MessagesRepository {
         AbstractMessage parsedMessage = null;
 
         if (mType == MESSAGE_TYPE_INTENT_START || mType == MESSAGE_TYPE_INTENT_STOP) {
-            parsedMessage = sosMessageMapper.convert(messageData);
-        } else if (mType == MESSAGE_TYPE_SOS_START || mType == MESSAGE_TYPE_SOS_STOP) {
             parsedMessage = helpIntentMessageMapper.convert(messageData);
+        } else if (mType == MESSAGE_TYPE_SOS_START || mType == MESSAGE_TYPE_SOS_STOP) {
+            parsedMessage = sosMessageMapper.convert(messageData);
         }
 
         return Single.just(parsedMessage);

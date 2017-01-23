@@ -15,8 +15,6 @@ public class HelpIntentMessageModel extends AbstractMessage {
 
     private double distance;
 
-    private boolean isStart;
-
     private int globalMessageType;
 
     public int getGlobalMessageType() {
@@ -25,14 +23,6 @@ public class HelpIntentMessageModel extends AbstractMessage {
 
     public void setGlobalMessageType(int globalMessageType) {
         this.globalMessageType = globalMessageType;
-    }
-
-    public boolean isStart() {
-        return isStart;
-    }
-
-    public void setStart(boolean start) {
-        isStart = start;
     }
 
     public String getFirstName() {
@@ -93,7 +83,6 @@ public class HelpIntentMessageModel extends AbstractMessage {
         dest.writeString(this.time);
         dest.writeString(this.phoneNumber);
         dest.writeDouble(this.distance);
-        dest.writeByte(this.isStart ? (byte) 1 : (byte) 0);
         dest.writeInt(this.globalMessageType);
     }
 
@@ -106,7 +95,6 @@ public class HelpIntentMessageModel extends AbstractMessage {
         this.time = in.readString();
         this.phoneNumber = in.readString();
         this.distance = in.readDouble();
-        this.isStart = in.readByte() != 0;
         this.globalMessageType = in.readInt();
     }
 

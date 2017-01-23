@@ -84,7 +84,6 @@ public class MessagesTable {
 
     private SosMessageModel parseSosModel(Cursor cursor, int messageType) {
         SosMessageModel sosMessageModel = new SosMessageModel();
-
         sosMessageModel.setFirstName(cursor.getString(cursor.getColumnIndex(KEY_FIRST_NAME)));
         sosMessageModel.setLastName(cursor.getString(cursor.getColumnIndex(KEY_LAST_NAME)));
         sosMessageModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
@@ -92,10 +91,7 @@ public class MessagesTable {
         sosMessageModel.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
         sosMessageModel.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
         sosMessageModel.setMessage(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_TEXT)));
-
-        if (messageType == MESSAGE_TYPE_SOS_START) {
-            sosMessageModel.setStart(true);
-        }
+        sosMessageModel.setGlobalMessageType(messageType);
 
         return sosMessageModel;
     }
@@ -108,10 +104,7 @@ public class MessagesTable {
         helpIntentMessageModel.setPhoneNumber(cursor.getString(cursor.getColumnIndex(KEY_PHONE_NUMBER)));
         helpIntentMessageModel.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
         helpIntentMessageModel.setDistance(cursor.getDouble(cursor.getColumnIndex(KEY_DISTANCE)));
-
-        if (messageType == MESSAGE_TYPE_INTENT_START) {
-            helpIntentMessageModel.setStart(true);
-        }
+        helpIntentMessageModel.setGlobalMessageType(messageType);
 
         return helpIntentMessageModel;
     }

@@ -69,7 +69,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (contacts.size() == 0) {
+        if (contacts == null || contacts.size() == 0) {
             return VIEW_TYPE_EMPTY;
         }
         return position == contacts.size() ? VIEW_TYPE_INVITE : VIEW_TYPE_CONTACT;

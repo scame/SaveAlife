@@ -60,7 +60,9 @@ public class LocationService extends Service {
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responseBody -> Log.i("onxNext", "sent"),
-                            throwable -> Log.i("onxLocationErr", throwable.getLocalizedMessage())
+                            throwable -> {
+                                if (throwable != null) Log.i("onxLocationErr", throwable.getLocalizedMessage());
+                            }
                     );
         }
 

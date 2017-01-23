@@ -22,7 +22,6 @@ public abstract class UseCaseStream<T> extends UseCase<T> {
             observable = getUseCaseObservable()
                     .subscribeOn(subscribeOn.getScheduler())
                     .observeOn(observeOn.getScheduler())
-                    .cache()
                     .doOnError((t) -> observable = null)
                     .doOnCompleted(() -> observable = null);
         }
