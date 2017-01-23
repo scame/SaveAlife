@@ -3,6 +3,7 @@ package com.krestone.savealife.presentation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,9 @@ import icepick.State;
 
 public class NotificationsFragment extends AbstractFragment implements NotificationsPresenter.NotificationsView {
 
+    @BindView(R.id.refresh_notifications_view)
+    SwipeRefreshLayout refreshView;
+
     @BindView(R.id.notifications_rv)
     RecyclerView notificationsRv;
 
@@ -46,6 +50,7 @@ public class NotificationsFragment extends AbstractFragment implements Notificat
         View fragmentView = super.onCreateView(inflater, container, savedInstanceState);
 
         notificationsPresenter.setView(this);
+        refreshView.setOnRefreshListener(() -> notificationsPresenter.requestMessages());
         instantiateFragment();
 
         return fragmentView;
@@ -81,6 +86,8 @@ public class NotificationsFragment extends AbstractFragment implements Notificat
         notificationsRv.addItemDecoration(new DividerItemDecoration(getContext()));
         notificationsRv.setHasFixedSize(true);
         notificationsRv.setAdapter(adapter);
+
+        if (refreshView.isRefreshing()) refreshView.setRefreshing(false);
     }
 
     @Override

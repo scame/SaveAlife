@@ -12,7 +12,7 @@
             android:title="@string/map_item" />
         <item
             android:id="@+id/notif_drawer_item"
-            android:title="@string/chats_item" />
+            android:title="@string/notifications_item" />
 
         <item
             android:id="@+id/contacts_drawer_item"

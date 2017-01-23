@@ -1,4 +1,4 @@
-package com.krestone.savealife.presentation.adapters.emergency;
+package com.krestone.savealife.presentation.adapters;
 
 
 import android.support.v7.widget.RecyclerView;

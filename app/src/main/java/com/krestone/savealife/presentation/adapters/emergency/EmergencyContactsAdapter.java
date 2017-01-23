@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.krestone.savealife.R;
+import com.krestone.savealife.presentation.adapters.EmptyViewHolder;
 import com.krestone.savealife.presentation.adapters.ListItemClickListener;
 import com.krestone.savealife.presentation.models.ContactModel;
 

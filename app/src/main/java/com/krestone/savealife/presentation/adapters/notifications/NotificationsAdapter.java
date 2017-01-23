@@ -12,6 +12,7 @@ import com.krestone.savealife.data.messages.NotificationsHandler;
 import com.krestone.savealife.data.sqlite.models.AbstractMessage;
 import com.krestone.savealife.data.sqlite.models.HelpIntentMessageModel;
 import com.krestone.savealife.data.sqlite.models.SosMessageModel;
+import com.krestone.savealife.presentation.adapters.EmptyViewHolder;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private static final int VIEW_TYPE_SOS_MSG = 0;
     private static final int VIEW_TYPE_HELP_INTENT_MSG = 1;
+    private static final int VIEW_TYPE_EMPTY = 2;
 
     private NotificationsHandler notificationsHandler;
 
@@ -44,6 +46,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else if (viewType == VIEW_TYPE_HELP_INTENT_MSG) {
             View itemView = inflater.inflate(R.layout.notification_item, parent, false);
             viewHolder = new HelpIntentViewHolder(notificationsHandler, context, itemView);
+        } else if (viewType == VIEW_TYPE_EMPTY) {
+            View itemView = inflater.inflate(R.layout.empty_notifications_rv, parent, false);
+            viewHolder = new EmptyViewHolder(itemView);
         }
         return viewHolder;
     }
@@ -57,7 +62,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position) instanceof SosMessageModel) {
+        if (messages == null || messages.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        } else if (messages.get(position) instanceof SosMessageModel) {
             return VIEW_TYPE_SOS_MSG;
         } else if (messages.get(position) instanceof HelpIntentMessageModel) {
             return VIEW_TYPE_HELP_INTENT_MSG;
@@ -67,6 +74,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return messages == null ? 0 : messages.size();
+        return messages == null ? 1 : messages.size() + 1;
     }
 }

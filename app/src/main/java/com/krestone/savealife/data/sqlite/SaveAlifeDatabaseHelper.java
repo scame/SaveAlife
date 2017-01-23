@@ -15,6 +15,8 @@ import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_IS_I
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.KEY_PROFILE_IMAGE_URI;
 import static com.krestone.savealife.data.sqlite.EmergencyContactsTable.TABLE_CONTACTS;
 
+import static com.krestone.savealife.data.sqlite.MessagesTable.*;
+
 public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "saveAlifeDatabase";
@@ -43,7 +45,15 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS +
+        String CREATE_CONTACTS_TABLE = getContactsTableCreateStatement();
+        String CREATE_MESSAGES_TABLE = getMessagesTableCreateStatement();
+
+        db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL(CREATE_MESSAGES_TABLE);
+    }
+
+    private String getContactsTableCreateStatement() {
+        return "CREATE TABLE " + TABLE_CONTACTS +
                 "(" +
                 KEY_CONTACT_ID + " INTEGER PRIMARY KEY," +
                 KEY_CONTACT_NAME + " TEXT," +
@@ -52,14 +62,29 @@ public class SaveAlifeDatabaseHelper extends SQLiteOpenHelper {
                 KEY_DATA_STATE + " INTEGER," +
                 KEY_IS_IN_APP + " INTEGER" +
                 ")";
+    }
 
-        db.execSQL(CREATE_CONTACTS_TABLE);
+    private String getMessagesTableCreateStatement() {
+        return "CREATE TABLE " + TABLE_MESSAGES +
+                "(" +
+                KEY_MESSAGE_ID + " INTEGER PRIMARY KEY," +
+                KEY_FIRST_NAME + " TEXT," +
+                KEY_LAST_NAME + " TEXT," +
+                KEY_MESSAGE_TYPE + " INTEGER," +
+                KEY_PHONE_NUMBER + " TEXT," +
+                KEY_TIME + " TEXT," +
+                KEY_LATITUDE + " REAL," +
+                KEY_LONGITUDE + " REAL," +
+                KEY_MESSAGE_TEXT + " TEXT," +
+                KEY_DISTANCE + " REAL" +
+                ")";
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
             onCreate(db);
         }
     }
