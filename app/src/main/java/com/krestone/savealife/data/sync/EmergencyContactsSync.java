@@ -39,8 +39,8 @@ public class EmergencyContactsSync extends AbstractSync {
         return getContactsByState(DataStates.REMOVED)
                 .doOnEach(notification -> {
                     List<ContactModel> contacts = notification.getValue().getContacts();
-                    contactsRepository.deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(contacts));
-                    contactsRepository.deleteFromEmergencyListLocal(contacts);
+                    contactsRepository.deleteFromEmergencyList(ContactsNumbersHolder.fromContacts(contacts)).await();
+                    contactsRepository.deleteFromEmergencyListLocal(contacts).await();
                 }).toCompletable();
     }
 
@@ -48,8 +48,8 @@ public class EmergencyContactsSync extends AbstractSync {
         return getContactsByState(DataStates.NEW)
                 .doOnEach(notification -> {
                     List<ContactModel> contacts = notification.getValue().getContacts();
-                    contactsRepository.addToEmergencyList(contacts);
-                    contactsRepository.updateDataState(contacts, DataStates.UP_TO_DATE);
+                    contactsRepository.addToEmergencyList(contacts).await();
+                    contactsRepository.updateDataState(contacts, DataStates.UP_TO_DATE).await();
                 }).toCompletable();
     }
 
@@ -59,11 +59,11 @@ public class EmergencyContactsSync extends AbstractSync {
 
     @Override
     protected Completable get() {
-        return contactsRepository.cleanLocalContactsList()
-                .toSingle(() -> contactsRepository.getEmergencyContacts())
-                .flatMap(contactsHolderSingle -> contactsHolderSingle)
-                .map(ContactsHolder::getContacts)
-                .map(contactModels -> contactsRepository.addOrUpdateEmergencyContacts(contactModels))
-                .toCompletable();
+        return Single.just(contactsRepository.cleanLocalContactsList())
+                .flatMap(completable -> contactsRepository.getEmergencyContacts())
+                .doOnEach(notification -> {
+                    List<ContactModel> contacts = notification.getValue().getContacts();
+                    contactsRepository.addOrUpdateEmergencyContacts(contacts).await();
+                }).toCompletable();
     }
 }

@@ -2,7 +2,6 @@ package com.krestone.savealife.data.sync;
 
 
 import android.content.Context;
-import android.util.Log;
 
 import com.krestone.savealife.data.sync.events.SyncEvent;
 import com.krestone.savealife.data.sync.events.SyncStatus;
@@ -21,22 +20,12 @@ public abstract class AbstractSync {
 
     void sync() {
         if (ConnectivityUtil.isNetworkOn(context)) {
-            Completable.fromCallable(() -> sendInProgressEvent()
-                            .andThen(post())
-                            .andThen(get())
-                            .andThen(sendCompletedEvent()))
-                    .doOnError(throwable -> Log.i("onxSyncError", throwable.getLocalizedMessage()))
-                    .await();
-        } else {
-             sendCompletedEvent();
+            Completable.defer(() -> sendInProgressEvent()
+                    .andThen(post())
+                    .andThen(get())
+                    .andThen(sendCompletedEvent()))
+                    .subscribe(this::sendCompletedEvent, throwable -> sendCompletedEvent());
         }
-    }
-
-    Completable completeWithErrorCheck(Throwable throwable) {
-        if (throwable != null) {
-            return Completable.error(throwable);
-        }
-        return Completable.complete();
     }
 
     private Completable sendInProgressEvent() {
