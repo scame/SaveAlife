@@ -28,7 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkingModule {
 
-    private static final String BASE_URL = "http://37.139.22.28:8080/sv/";
+    //private static final String BASE_URL = "http://37.139.22.28:8080/sv/";
+    private static final String BASE_URL = "http://10.0.1.94:8080/";
 
     private static final int READ_TIMEOUT = 10;
 

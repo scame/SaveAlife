@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,8 +58,6 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     private Polyline helpPolyline;
 
-    private String targetPhoneNumber;
-
     private MapboxMap mapboxMap;
 
     private Polyline routePolyline;
@@ -67,6 +66,8 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     private Marker destinationMarker;
 
+    private ProgressDialog progressDialog;
+
     private final Map<Marker, MapObject> mapObjectsMap = new HashMap<>();
 
     @State
@@ -74,6 +75,12 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     @State
     LatLng destinationPosition;
+
+    @State
+    MapObject mappedObject;
+
+    @State
+    PolylineOptions helpPolylineOpt;
 
     @State
     MapObjectsEntity mapObjectsEntity;
@@ -138,10 +145,23 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
             }
             if (destinationPosition != null) {
                 updateDestinationPoint(destinationPosition);
+            } else if (mappedObject != null && helpPolylineOpt != null) {
+                onHelpRouteBuilt(helpPolylineOpt, mappedObject);
             }
         });
     }
 
+
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> {
+            mapPresenter.progressDialogCancel();
+            helpFab.setVisibility(View.VISIBLE);
+        });
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Stopping...");
+        progressDialog.show();
+    }
 
     private void setupOnMarkerClickListener() {
         mapboxMap.setOnMarkerClickListener(marker -> {
@@ -189,6 +209,10 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     @Override
     public void onError(String error) {
+        if (helpPolylineOpt != null) {
+            helpFab.setVisibility(View.VISIBLE);
+            progressDialog.dismiss();
+        }
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
@@ -307,27 +331,41 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
     @OnClick(R.id.stop_helping_fab)
     void onStopHelpingClick(View v) {
-        if (targetPhoneNumber != null) {
-            mapPresenter.requestStopHelping(targetPhoneNumber);
+        if (this.mappedObject != null) {
+            showProgressDialog();
+            helpFab.setVisibility(View.GONE);
+            mapPresenter.requestStopHelping(this.mappedObject.getPhoneNumber());
         }
     }
 
     @Override
     public void onStopHelping() {
         if (helpPolyline != null) {
+            helpPolylineOpt = null;
             helpPolyline.remove();
-            helpFab.setVisibility(View.INVISIBLE);
+            progressDialog.dismiss();
         }
     }
 
-    public void onHelpRouteBuilt(PolylineOptions helpRoute, String targetPhoneNumber) {
+    public void onHelpRouteBuilt(PolylineOptions helpRoute, MapObject targetObj) {
+        this.helpPolylineOpt = helpRoute;
+        this.mappedObject = targetObj;
+
+        clearPlainRoute();
         if (helpPolyline != null) {
             helpPolyline.remove();
         }
-        this.targetPhoneNumber = targetPhoneNumber;
-        helpPolyline = mapboxMap.addPolyline(helpRoute);
 
+        helpPolyline = mapboxMap.addPolyline(helpRoute);
         helpFab.setVisibility(View.VISIBLE);
+    }
+
+    private void clearPlainRoute() {
+        if (routePolyline != null && destinationPosition != null && destinationMarker != null) {
+            routePolyline.remove();
+            destinationPosition = null;
+            destinationMarker = null;
+        }
     }
 
     @Override

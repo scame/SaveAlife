@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.krestone.savealife.R;
 import com.krestone.savealife.SaveAlifeApplication;
+import com.krestone.savealife.data.entities.responses.map.MapObject;
 import com.krestone.savealife.data.messages.NotificationsHandler;
 import com.krestone.savealife.presentation.di.components.AddToEmergencyListComponent;
 import com.krestone.savealife.presentation.di.components.ContactProfileComponent;
@@ -256,10 +257,11 @@ public class DrawerActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onHelpRouteBuilt(PolylineOptions helpRoute, String targetPhoneNumber) {
+    public void onHelpRouteBuilt(PolylineOptions helpRoute, MapObject targetObj) {
+        getSupportFragmentManager().popBackStack();
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MAP_FRAG_TAG);
         if (mapFragment != null) {
-            mapFragment.onHelpRouteBuilt(helpRoute, targetPhoneNumber);
+            mapFragment.onHelpRouteBuilt(helpRoute, targetObj);
         }
     }
 

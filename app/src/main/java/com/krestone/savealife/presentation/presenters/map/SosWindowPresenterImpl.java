@@ -36,6 +36,11 @@ public class SosWindowPresenterImpl<T extends SosWindowPresenter.SosWindowView> 
     }
 
     @Override
+    public void progressDialogCancel() {
+        startHelpUseCase.unsubscribe();
+    }
+
+    @Override
     public void setView(T view) {
         this.view = view;
     }

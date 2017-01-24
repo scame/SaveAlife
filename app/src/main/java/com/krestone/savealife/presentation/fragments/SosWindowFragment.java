@@ -1,6 +1,7 @@
 package com.krestone.savealife.presentation.fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,9 @@ import butterknife.OnClick;
 import icepick.State;
 
 public class SosWindowFragment extends AbstractFragment implements SosWindowPresenter.SosWindowView {
+
+    @BindView(R.id.sos_window_root)
+    LinearLayout sosWindowRoot;
 
     @BindView(R.id.address_tv)
     TextView addressTv;
@@ -47,9 +52,11 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
 
     private SosWindowListener sosWindowListener;
 
+    private ProgressDialog progressDialog;
+
     public interface SosWindowListener {
 
-        void onHelpRouteBuilt(PolylineOptions polyline, String targetPhoneNumber);
+        void onHelpRouteBuilt(PolylineOptions polyline, MapObject mappedObj);
     }
 
     public static SosWindowFragment newInstance(MapObject mapObject) {
@@ -100,6 +107,8 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
 
     @OnClick(R.id.help_btn)
     public void onHelpBtnClick(View v) {
+        showProgressDialog();
+        sosWindowRoot.setVisibility(View.GONE);
         LatLng targetLatLng = new LatLng(mapObject.getLatitude(), mapObject.getLongitude());
         presenter.promoteHelpIntent(targetLatLng, mapObject.getPhoneNumber(), true);
     }
@@ -111,12 +120,23 @@ public class SosWindowFragment extends AbstractFragment implements SosWindowPres
 
     @Override
     public void onHelpPressed(PolylineOptions polyline) {
-        sosWindowListener.onHelpRouteBuilt(polyline, mapObject.getPhoneNumber());
+        progressDialog.dismiss();
+        sosWindowListener.onHelpRouteBuilt(polyline, mapObject);
     }
 
     @Override
     public void onError(String error) {
+        progressDialog.dismiss();
+        sosWindowRoot.setVisibility(View.VISIBLE);
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnCancelListener(dialog -> presenter.progressDialogCancel());
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Building the route...");
+        progressDialog.show();
     }
 
     @Override

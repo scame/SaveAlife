@@ -57,6 +57,7 @@ public class LocationService extends Service {
         public void onNext(Location location) {
             super.onNext(location);
             locationRepository.sendLocationToServer(new LocationHolder(location.getLatitude(), location.getLongitude()))
+                    .retry(3)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responseBody -> Log.i("onxNext", "sent"),

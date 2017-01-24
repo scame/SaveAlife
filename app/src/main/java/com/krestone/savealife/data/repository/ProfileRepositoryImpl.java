@@ -12,6 +12,7 @@ import com.krestone.savealife.data.entities.responses.SomeoneProfileEntity;
 import com.krestone.savealife.data.rest.ServerApi;
 import com.krestone.savealife.data.sync.SyncService;
 import com.krestone.savealife.data.sync.events.SyncType;
+import com.krestone.savealife.util.PrefsUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,9 +33,10 @@ public class ProfileRepositoryImpl implements ProfileRepository {
 
     @Override
     public Single<SomeoneProfileEntity> getSomeoneProfileInfo(String phoneNumber) {
-        return serverApi.getSomeoneProfileInfo(getAuthToken(), phoneNumber).toSingle()
+        return serverApi.getSomeoneProfileInfo(PrefsUtil.getAuthToken(context), phoneNumber).toSingle()
                 .doOnError(throwable -> SyncService.requestSync(SyncType.CONTACTS, context))
-                .retryWhen(errors -> errors.flatMap(error -> Observable.timer(2, TimeUnit.SECONDS)));
+                .retryWhen(errors -> errors.zipWith(Observable.range(1, 3), (n, i) -> i)
+                        .flatMap(retryCount -> Observable.timer((long) Math.pow(1.25, retryCount), TimeUnit.SECONDS)));
     }
 
     @Override
@@ -64,7 +66,7 @@ public class ProfileRepositoryImpl implements ProfileRepository {
 
     @Override
     public Single<MyProfileInfoEntity> getMyProfileInfo() {
-        return serverApi.getMyProfileInfo(getAuthToken()).toSingle();
+        return serverApi.getMyProfileInfo(PrefsUtil.getAuthToken(context)).toSingle();
     }
 
     @Override
@@ -72,11 +74,6 @@ public class ProfileRepositoryImpl implements ProfileRepository {
         MyProfileInfoEntity profileInfo = getMyProfileInfoLocal().toBlocking().value();
         UpdateMyProfileInfoRequest request = new UpdateMyProfileInfoRequest(profileInfo);
 
-        return serverApi.updateMyProfileInfo(getAuthToken(), request).toCompletable();
-    }
-
-    private String getAuthToken() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPrefs.getString(context.getString(R.string.auth_token), "");
+        return serverApi.updateMyProfileInfo(PrefsUtil.getAuthToken(context), request).toCompletable();
     }
 }

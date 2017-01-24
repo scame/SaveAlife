@@ -35,4 +35,6 @@ public interface MapPresenter<T> extends Presenter<T> {
     void requestRoute(LatLng origin, LatLng dest);
 
     void requestStopHelping(String phoneNumber);
+
+    void progressDialogCancel();
 }

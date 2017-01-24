@@ -38,6 +38,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             messagesRepository.parseFirebaseMessage(remoteMessage.getData())
                     .subscribe(message -> {
+                        Log.i("onxMessage", remoteMessage.getData().toString());
                         if (message.getMessageType() == AbstractMessage.SOS_MESSAGE) {
                             notificationsHandler.showSosNotification((SosMessageModel) message);
                         } else if (message.getMessageType() == AbstractMessage.HELP_INTENT_MESSAGE) {

@@ -15,4 +15,6 @@ public interface SosWindowPresenter<T> extends Presenter<T> {
     }
 
     void promoteHelpIntent(LatLng targetLatLng, String number, boolean isHelp);
+
+    void progressDialogCancel();
 }

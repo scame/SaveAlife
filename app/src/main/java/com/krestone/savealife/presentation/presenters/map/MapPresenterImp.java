@@ -120,6 +120,11 @@ public class MapPresenterImp<T extends MapPresenter.MapView> implements MapPrese
     }
 
     @Override
+    public void progressDialogCancel() {
+        stopHelpUseCase.unsubscribe();
+    }
+
+    @Override
     public void setView(T view) {
         this.view = view;
     }
