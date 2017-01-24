@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.krestone.savealife.data.sync.states.DataStates;
-import com.krestone.savealife.data.sync.states.InAppContact;
 
 public class ContactModel implements Parcelable {
 
@@ -24,9 +23,9 @@ public class ContactModel implements Parcelable {
 
     private Integer status;
 
-    private InAppContact inAppState;
-
     private DataStates dataState;
+
+    private Boolean inApp;
 
     public ContactModel() { }
 
@@ -35,8 +34,8 @@ public class ContactModel implements Parcelable {
         this.firstName = contactModel.getFirstName();
         this.number = contactModel.getNumber();
         this.thumbnailUri = contactModel.getThumbnailUri();
-        this.inAppState = contactModel.getInAppState();
         this.dataState = contactModel.getDataState();
+        this.inApp = contactModel.getInApp();
     }
 
     public ContactModel(String id, @NonNull String name, String thumbnailUri, String phoneNumber) {
@@ -55,6 +54,14 @@ public class ContactModel implements Parcelable {
         this.number = phoneNumber;
     }
 
+
+    public Boolean getInApp() {
+        return inApp;
+    }
+
+    public void setInApp(Boolean inApp) {
+        this.inApp = inApp;
+    }
 
     public String getId() {
         return id;
@@ -114,15 +121,6 @@ public class ContactModel implements Parcelable {
         this.dataState = dataState;
     }
 
-    public InAppContact getInAppState() {
-        return inAppState;
-    }
-
-    public void setInAppState(InAppContact inAppState) {
-        this.inAppState = inAppState;
-    }
-
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ContactModel) {
@@ -137,6 +135,7 @@ public class ContactModel implements Parcelable {
         return number.hashCode();
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -150,8 +149,8 @@ public class ContactModel implements Parcelable {
         dest.writeString(this.number);
         dest.writeString(this.thumbnailUri);
         dest.writeValue(this.status);
-        dest.writeInt(this.inAppState == null ? -1 : this.inAppState.ordinal());
         dest.writeInt(this.dataState == null ? -1 : this.dataState.ordinal());
+        dest.writeValue(this.inApp);
     }
 
     protected ContactModel(Parcel in) {
@@ -161,10 +160,9 @@ public class ContactModel implements Parcelable {
         this.number = in.readString();
         this.thumbnailUri = in.readString();
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
-        int tmpInAppState = in.readInt();
-        this.inAppState = tmpInAppState == -1 ? null : InAppContact.values()[tmpInAppState];
         int tmpDataState = in.readInt();
         this.dataState = tmpDataState == -1 ? null : DataStates.values()[tmpDataState];
+        this.inApp = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 
     public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {

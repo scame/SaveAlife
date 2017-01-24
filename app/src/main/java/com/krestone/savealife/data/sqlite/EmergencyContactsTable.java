@@ -49,10 +49,12 @@ public class EmergencyContactsTable {
                     cv.put(KEY_PROFILE_IMAGE_URI, contact.getThumbnailUri());
                 }
 
-                if (contact.getInAppState() == null) {
+                // getInApp null means that a contact is from local db
+                if (contact.getInApp() == null) {
                     cv.put(KEY_IS_IN_APP, InAppContact.UNSPECIFIED.ordinal());
                 } else {
-                    cv.put(KEY_IS_IN_APP, contact.getInAppState().ordinal());
+                    cv.put(KEY_IS_IN_APP, contact.getInApp() ? InAppContact.TRUE.ordinal()
+                                                             : InAppContact.FALSE.ordinal());
                 }
 
                 // null data state is possible only in case of server's response
@@ -108,7 +110,16 @@ public class EmergencyContactsTable {
                     contactModel.setNumber(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NUMBER)));
                     contactModel.setThumbnailUri(cursor.getString(cursor.getColumnIndex(KEY_PROFILE_IMAGE_URI)));
                     contactModel.setDataState(DataStates.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_DATA_STATE))));
-                    contactModel.setInAppState(InAppContact.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP))));
+
+                    InAppContact inAppState = InAppContact.fromInteger(cursor.getInt(cursor.getColumnIndex(KEY_IS_IN_APP)));
+                    if (inAppState == InAppContact.UNSPECIFIED) {
+                        contactModel.setInApp(null);
+                    } else if (inAppState == InAppContact.TRUE) {
+                        contactModel.setInApp(true);
+                    } else if (inAppState == InAppContact.FALSE) {
+                        contactModel.setInApp(false);
+                    }
+
                     contacts.add(contactModel);
                 } while (cursor.moveToNext());
             }
