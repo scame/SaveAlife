@@ -175,8 +175,10 @@ public class DrawerActivity extends AppCompatActivity implements
         headerButton = ButterKnife.findById(navigationView.getHeaderView(0), R.id.header_button);
     }
 
+    // // FIXME: 1/25/17 use usecase
     private void configureHeaderView() {
-        usernameTv.setText("Slava Petrochenko");
+        String username = getString(R.string.firstName) + " " + getString(R.string.lastName);
+        usernameTv.setText(username);
         headerButton.setOnClickListener(v -> {
             getSupportFragmentManager().beginTransaction()
                     .addToBackStack(null)

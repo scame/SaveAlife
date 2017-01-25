@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:background="@color/colorPrimary">
 
-    <RelativeLayout
-        android:id="@+id/profile_img_container"
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:src="@drawable/placeholder" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/standard_elem_margin"
-            android:src="@drawable/my_photo" />
-    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/header_container"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/username_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/profile_img_container"
-        android:orientation="horizontal">
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/standard_elem_margin"
+        android:textSize="@dimen/text_size_medium" />
 
-        <TextView
-            android:id="@+id/username_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/standard_elem_margin"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_medium" />
-
-        <ImageButton
-            android:id="@+id/header_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/standard_elem_padding"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/header_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/standard_elem_padding"
+        android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
 
 </RelativeLayout>

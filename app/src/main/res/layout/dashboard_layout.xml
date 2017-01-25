@@ -38,6 +38,7 @@
         android:layout_above="@id/space_holder"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/standard_elem_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/placeholder" />
 
     <TextView

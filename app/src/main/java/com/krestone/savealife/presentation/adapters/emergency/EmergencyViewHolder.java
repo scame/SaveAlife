@@ -24,8 +24,8 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.contact_profile_image)
     ImageView contactImage;
 
-    @BindView(R.id.is_in_app)
-    TextView isInAppTv;
+    @BindView(R.id.is_in_app_iv)
+    ImageView isInAppTv;
 
     private Context context;
 
@@ -41,11 +41,11 @@ public class EmergencyViewHolder extends RecyclerView.ViewHolder {
         contactName.setText(item.getFirstName());
 
         if (item.getInApp() == null) {
-            isInAppTv.setText(context.getString(R.string.unspecified));
+            isInAppTv.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder));
         } else if (item.getInApp()) {
-            isInAppTv.setText(context.getString(R.string.in_app));
+            isInAppTv.setImageDrawable(context.getResources().getDrawable(R.drawable.green_background));
         } else if (!item.getInApp()) {
-            isInAppTv.setText(context.getString(R.string.not_in_app));
+            isInAppTv.setImageDrawable(context.getResources().getDrawable(R.drawable.red_background));
         }
     }
 }

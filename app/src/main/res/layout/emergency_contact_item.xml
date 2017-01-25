@@ -15,18 +15,17 @@
         android:id="@+id/contact_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_elem_margin"
-        android:layout_weight="3"
         android:layout_gravity="center_vertical"
-        android:text="Slava Petrochenko" />
-
-
-    <TextView
-        android:id="@+id/is_in_app"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_elem_margin"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical" />
+        android:layout_weight="3" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/is_in_app_iv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:padding="@dimen/standard_elem_padding"
+        android:src="@drawable/placeholder" />
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,11 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     @BindView(R.id.status_switch)
     Switch statusSwitch;
 
-    @BindView(R.id.profile_name)
-    TextView profileName;
+    @BindView(R.id.profile_first_name)
+    TextView profileFirstName;
+
+    @BindView(R.id.profile_last_name)
+    TextView profileLastName;
 
     @BindView(R.id.profile_number)
     TextView profileNumber;
@@ -142,8 +146,10 @@ public class MyProfileFragment extends AbstractFragment implements MyProfilePres
     public void displayMyProfileInfo(MyProfileInfoEntity profileInfo) {
         this.profileInfo = profileInfo;
 
-        profileName.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
+        profileFirstName.setText(profileInfo.getFirstName());
+        profileLastName.setText(profileInfo.getLastName());
         profileNumber.setText(profileInfo.getPhoneNumber());
+
         if (profileInfo.getRole().equals("driver")) {
             statusSwitch.setChecked(true);
         } else {

@@ -12,7 +12,7 @@
 
     <string name="autocomplete_hint">Search Location</string>
 
-    <string name="savealife_welcome">Welcome to SaveaLife!</string>
+    <string name="savealife_welcome">Welcome to SaveaLife! Help us help you.</string>
     <string name="continue_btn_text">Continue</string>
     <string name="phone_number_hint">Phone number</string>
     <string name="code_failure_text">DIDN\'T GET IT?</string>
@@ -43,7 +43,7 @@
     <string name="public_info">PUBLIC INFO</string>
     <string name="username">Name</string>
     <string name="phone">Phone</string>
-    <string name="private_info">Private info</string>
+    <string name="private_info">Private info [NOT IMPLEMENTED]</string>
     <string name="email">E-mail</string>
     <string name="sex">Sex</string>
     <string name="age">Age</string>
@@ -59,6 +59,8 @@
     <string name="name">name</string>
     <string name="firstName">firstName</string>
     <string name="lastName">lastName</string>
+    <string name="firstNameProfile">First name</string>
+    <string name="lastNameProfile">Last name</string>
     <string name="med_qualification">med_qualification</string>
     <string name="current_token">current_token</string>
     <string name="isLoggedIn">isLoggedIn</string>
@@ -69,7 +71,7 @@
 
     <string name="dont_match">Passwords don\'t match</string>
     <string name="forgot_my_password">forgot my password</string>
-    <string name="sign_in_text">Hello %s. Please, provide your password</string>
+    <string name="sign_in_text">Hello, %s. Please, provide your password</string>
     <string name="sign_in">sign in</string>
     <string name="new_account">register new account</string>
     <string name="invite_friends">Invite friends</string>

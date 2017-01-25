@@ -48,6 +48,7 @@ public class ProfileRepositoryImpl implements ProfileRepository {
         profileInfo.setLastName(sharedPrefs.getString(context.getString(R.string.lastName), ""));
         profileInfo.setMedicalQualification(sharedPrefs.getString(context.getString(R.string.med_qualification), ""));
         profileInfo.setRole(sharedPrefs.getString(context.getString(R.string.profile_role), ""));
+        profileInfo.setPhoneNumber(sharedPrefs.getString(context.getString(R.string.phone_number), ""));
 
         return Single.just(profileInfo);
     }
