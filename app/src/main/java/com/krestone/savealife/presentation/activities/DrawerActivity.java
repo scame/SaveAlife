@@ -31,6 +31,7 @@ import com.krestone.savealife.presentation.di.components.EmergencyComponent;
 import com.krestone.savealife.presentation.di.components.MapComponent;
 import com.krestone.savealife.presentation.di.components.MyProfileComponent;
 import com.krestone.savealife.presentation.di.components.NotificationsComponent;
+import com.krestone.savealife.presentation.di.components.SettingsComponent;
 import com.krestone.savealife.presentation.di.components.SosWindowComponent;
 import com.krestone.savealife.presentation.di.modules.AddToEmergencyListModule;
 import com.krestone.savealife.presentation.di.modules.ContactProfileModule;
@@ -40,6 +41,7 @@ import com.krestone.savealife.presentation.di.modules.EmergencyModule;
 import com.krestone.savealife.presentation.di.modules.MapModule;
 import com.krestone.savealife.presentation.di.modules.MyProfileModule;
 import com.krestone.savealife.presentation.di.modules.NotificationsModule;
+import com.krestone.savealife.presentation.di.modules.SettingsModule;
 import com.krestone.savealife.presentation.di.modules.SosWindowModule;
 import com.krestone.savealife.presentation.fragments.DashboardFragment;
 import com.krestone.savealife.presentation.fragments.MapFragment;
@@ -117,6 +119,8 @@ public class DrawerActivity extends AppCompatActivity implements
     private DashboardComponent dashboardComponent;
 
     private NotificationsComponent notificationsComponent;
+
+    private SettingsComponent settingsComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -374,6 +378,14 @@ public class DrawerActivity extends AppCompatActivity implements
                     .provideNotificationsComponent(new NotificationsModule());
         }
         return notificationsComponent;
+    }
+
+    public SettingsComponent provideSettingsComponent() {
+        if (settingsComponent == null) {
+            settingsComponent = SaveAlifeApplication.getAppComponent()
+                    .provideSettingsComponent(new SettingsModule());
+        }
+        return settingsComponent;
     }
 
     @Override

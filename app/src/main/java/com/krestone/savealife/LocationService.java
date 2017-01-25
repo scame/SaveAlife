@@ -2,6 +2,7 @@ package com.krestone.savealife;
 
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
@@ -14,16 +15,20 @@ import com.krestone.savealife.domain.usecases.base.DefaultSubscriber;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
+import rx.Completable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
+// FIXME: 1/25/17 if app process crash then we could get inconsistent static variable, should be read from prefs
 public class LocationService extends Service {
 
     @Inject
     LocationRepository locationRepository;
 
-    private Subscription subscription;
+    private static CompositeSubscription compositeSubscription = new CompositeSubscription();
+
+    private static boolean shouldGettingLocationUpdates = true;
 
     @Override
     public void onCreate() {
@@ -33,7 +38,10 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        subscription = locationRepository.startGettingLocationUpdates().subscribe(new LocationSubscriber());
+        if (shouldGettingLocationUpdates) {
+            compositeSubscription.add(locationRepository
+                    .startGettingLocationUpdates().subscribe(new LocationSubscriber()));
+        }
         return START_STICKY;
     }
 
@@ -45,10 +53,8 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
+        unsubscribe();
         super.onDestroy();
-        if (!subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
     }
 
     private final class LocationSubscriber extends DefaultSubscriber<Location> {
@@ -71,6 +77,31 @@ public class LocationService extends Service {
         public void onError(Throwable e) {
             super.onError(e);
             Log.i("onxLocationServiceErr", e.getLocalizedMessage());
+        }
+    }
+
+    public static Completable startGettingLocationUpdates(Context context) {
+        shouldGettingLocationUpdates = true;
+        Context appContext = context.getApplicationContext();
+        appContext.startService(new Intent(appContext, LocationService.class));
+
+        return Completable.complete();
+    }
+
+    public static Completable stopGettingLocationUpdates() {
+        shouldGettingLocationUpdates = false;
+
+        if (!compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.unsubscribe();
+            compositeSubscription = new CompositeSubscription();
+        }
+        return Completable.complete();
+    }
+
+    private static void unsubscribe() {
+        if (!compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.unsubscribe();
+            compositeSubscription = new CompositeSubscription();
         }
     }
 }

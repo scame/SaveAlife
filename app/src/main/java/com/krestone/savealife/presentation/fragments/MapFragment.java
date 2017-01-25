@@ -280,9 +280,9 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
     // TODO: add status icons
     private void handlePlainObject(MapObject mapObject) {
         if (mapObject.getRole().equals("driver")) {
-            addPlainObjectMarker(mapObject, getString(R.string.driver), R.drawable.ic_cancel_black_24dp);
+            addPlainObjectMarker(mapObject, getString(R.string.driver), R.drawable.driver);
         } else if (mapObject.getRole().equals("person")) {
-            addPlainObjectMarker(mapObject, getString(R.string.rambler), R.drawable.ic_arrow_back_black_24dp);
+            addPlainObjectMarker(mapObject, getString(R.string.rambler), R.drawable.rambler_m);
         } else if (mapObject.getRole().equals("ambulance")) {
             addPlainObjectMarker(mapObject, getString(R.string.ambulance), R.drawable.ic_near_me_black_24dp);
         }
@@ -303,7 +303,7 @@ public class MapFragment extends AbstractFragment implements MapPresenter.MapVie
 
 
     private void handleSosCase(MapObject mapObject) {
-        addSosObjectMarker(mapObject, R.drawable.ic_help_black_24dp);
+        addSosObjectMarker(mapObject, R.drawable.map_sos);
     }
 
     private void addSosObjectMarker(MapObject sosObject, int markerDrawable) {

@@ -12,9 +12,15 @@ import com.krestone.savealife.data.sqlite.models.SosMessageModel;
 
 import javax.inject.Inject;
 
+import rx.Completable;
+
+
+// FIXME: 1/25/17 if app process crash then we could get inconsistent static variable, should be read from prefs
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+
+    private static boolean isEnabled = true;
 
     @Inject
     MessagesRepository messagesRepository;
@@ -35,10 +41,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getData().size() > 0 && isEnabled) {
             messagesRepository.parseFirebaseMessage(remoteMessage.getData())
                     .subscribe(message -> {
-                        Log.i("onxMessage", remoteMessage.getData().toString());
                         if (message.getMessageType() == AbstractMessage.SOS_MESSAGE) {
                             notificationsHandler.showSosNotification((SosMessageModel) message);
                         } else if (message.getMessageType() == AbstractMessage.HELP_INTENT_MESSAGE) {
@@ -48,5 +53,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             messagesRepository.saveFirebaseMessage(remoteMessage.getData()).await();
         }
+    }
+
+    public static Completable changesMessagingServiceState(boolean isEnabled) {
+        MyFirebaseMessagingService.isEnabled = isEnabled;
+        return Completable.complete();
     }
 }

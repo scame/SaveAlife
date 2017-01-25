@@ -2,10 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreferenceCompat
+        android:key="location_prefs_key"
         android:defaultValue="true"
         android:title="Location"/>
 
     <SwitchPreferenceCompat
+        android:key="notifications_prefs_key"
         android:defaultValue="true"
         android:title="Notifications" />
 

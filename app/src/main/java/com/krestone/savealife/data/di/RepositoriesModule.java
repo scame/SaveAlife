@@ -22,6 +22,8 @@ import com.krestone.savealife.data.repository.MessagesRepository;
 import com.krestone.savealife.data.repository.MessagesRepositoryImpl;
 import com.krestone.savealife.data.repository.ProfileRepository;
 import com.krestone.savealife.data.repository.ProfileRepositoryImpl;
+import com.krestone.savealife.data.repository.SettingsRepository;
+import com.krestone.savealife.data.repository.SettingsRepositoryImpl;
 import com.krestone.savealife.data.repository.TokensRepository;
 import com.krestone.savealife.data.repository.TokensRepositoryImpl;
 import com.krestone.savealife.data.rest.MapboxApi;
@@ -94,5 +96,11 @@ public class RepositoriesModule {
     @Singleton
     TokensRepository provideTokensRepository(ServerApi serverApi, Context context) {
         return new TokensRepositoryImpl(serverApi, context);
+    }
+
+    @Provides
+    @Singleton
+    SettingsRepository provideSettingsRepository(Context context) {
+        return new SettingsRepositoryImpl(context);
     }
 }
