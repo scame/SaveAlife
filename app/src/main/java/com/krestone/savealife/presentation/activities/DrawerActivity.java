@@ -2,8 +2,10 @@ package com.krestone.savealife.presentation.activities;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -177,7 +179,9 @@ public class DrawerActivity extends AppCompatActivity implements
 
     // // FIXME: 1/25/17 use usecase
     private void configureHeaderView() {
-        String username = getString(R.string.firstName) + " " + getString(R.string.lastName);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = prefs.getString(getString(R.string.firstName), "") + " "
+                + prefs.getString(getString(R.string.lastName), "");
         usernameTv.setText(username);
         headerButton.setOnClickListener(v -> {
             getSupportFragmentManager().beginTransaction()

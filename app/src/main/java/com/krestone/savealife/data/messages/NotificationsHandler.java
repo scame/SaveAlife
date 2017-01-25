@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -38,12 +40,14 @@ public class NotificationsHandler {
 
         String contentTitle = formatSosMessageTitle(sosMessageModel);
         String contentText = formatSosMessageContent(sosMessageModel);
-        int smallIconId = R.drawable.ic_add_black_24dp;
+        int smallIconId = R.drawable.map_sos;
+        int largeIconId = R.drawable.map_sos;
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, SOS_MESSAGE_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Notification sosNotification = buildNotification(smallIconId, contentTitle, contentText, pendingIntent);
+        Notification sosNotification = buildNotification(smallIconId, contentTitle, contentText,
+                pendingIntent, largeIconId);
         showNotification(SOS_MESSAGE_ID, sosNotification);
     }
 
@@ -64,12 +68,14 @@ public class NotificationsHandler {
 
         String contentTitle = formatIntentMessageTitle(helpIntentMessageModel);
         String contentText = formatIntentMessageContent(helpIntentMessageModel);
-        int smallIconId = R.drawable.ic_add_black_24dp;
+        int smallIconId = R.mipmap.darkicon;
+        int largeIconId = R.mipmap.darkicon;
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, HELP_INTENT_MESSAGE_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Notification helpIntentNotif = buildNotification(smallIconId, contentTitle, contentText, pendingIntent);
+        Notification helpIntentNotif = buildNotification(smallIconId, contentTitle, contentText,
+                pendingIntent, largeIconId);
         showNotification(HELP_INTENT_MESSAGE_ID, helpIntentNotif);
     }
 
@@ -83,11 +89,14 @@ public class NotificationsHandler {
                 "Is going to help (" + helpIntentMessage.getDistance() + " from you)" : "Decided not to help";
     }
 
-    private Notification buildNotification(int smallIconId, String title, String text, PendingIntent pendingIntent) {
+    private Notification buildNotification(int smallIconId, String title, String text, PendingIntent pendingIntent,
+                                           int largeIconId) {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Bitmap largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), largeIconId);
 
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(smallIconId)
+                .setLargeIcon(largeIconBitmap)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setAutoCancel(true)

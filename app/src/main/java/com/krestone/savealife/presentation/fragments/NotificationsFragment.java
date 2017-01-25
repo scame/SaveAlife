@@ -51,6 +51,7 @@ public class NotificationsFragment extends AbstractFragment implements Notificat
 
         notificationsPresenter.setView(this);
         refreshView.setOnRefreshListener(() -> notificationsPresenter.requestMessages());
+        getActivity().setTitle("Notifications");
         instantiateFragment();
 
         return fragmentView;

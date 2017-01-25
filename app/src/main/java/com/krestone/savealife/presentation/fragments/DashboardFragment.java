@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import icepick.State;
 
 public class DashboardFragment extends AbstractFragment implements DashboardPresenter.DashboardView {
 
@@ -50,8 +51,10 @@ public class DashboardFragment extends AbstractFragment implements DashboardPres
     @Inject
     DashboardPresenter<DashboardPresenter.DashboardView> presenter;
 
-    private DashboardListener dashboardListener;
+    @State
+    boolean lastState;
 
+    private DashboardListener dashboardListener;
 
     public interface DashboardListener {
 
@@ -73,6 +76,8 @@ public class DashboardFragment extends AbstractFragment implements DashboardPres
 
         mapButton.setOnClickListener(v -> dashboardListener.onOpenMapClick());
         presenter.setView(this);
+        presenter.getMyProfileInfo();
+        driverModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> presenter.updateMyProfileInfo(isChecked));
 
         return fragmentView;
     }
@@ -97,6 +102,12 @@ public class DashboardFragment extends AbstractFragment implements DashboardPres
     @Override
     public void onError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayIsDriverState(boolean isDriver) {
+        this.lastState = isDriver;
+        driverModeSwitch.setChecked(isDriver);
     }
 
     @Override
