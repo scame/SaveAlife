@@ -2,7 +2,9 @@ package com.krestone.savealife.presentation.fragments;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,8 +80,27 @@ public class DashboardFragment extends AbstractFragment implements DashboardPres
         presenter.setView(this);
         presenter.getMyProfileInfo();
         driverModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> presenter.updateMyProfileInfo(isChecked));
+        restoreSosState(savedInstanceState);
 
         return fragmentView;
+    }
+
+    private void restoreSosState(Bundle savedInstanceState) {
+        boolean isActivated;
+        if (savedInstanceState != null) {
+            isActivated = savedInstanceState.getBoolean(getString(R.string.dashboard_is_activated));
+        } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            isActivated = prefs.getBoolean(getString(R.string.dashboard_is_activated), false);
+        }
+        if (isActivated) {
+            initActiveSosState();
+        }
+    }
+
+    private void persistSosState() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.edit().putBoolean(getString(R.string.dashboard_is_activated), sosButton.getTag() != null).apply();
     }
 
     @Override
@@ -139,7 +160,14 @@ public class DashboardFragment extends AbstractFragment implements DashboardPres
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(getString(R.string.dashboard_is_activated), sosButton.getTag() != null);
+    }
+
+    @Override
     public void onDestroyView() {
+        persistSosState();
         presenter.destroy();
         super.onDestroyView();
     }

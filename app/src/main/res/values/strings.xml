@@ -88,4 +88,6 @@
     <string name="no_possible_contacts">You have no contacts that can be added to your emergency list</string>
     <string name="firebase_token">firebaseToken</string>
     <string name="no_notifications">You have no notifications yet. Swipe to refresh.</string>
+
+    <string name="dashboard_is_activated">activated_key</string>
 </resources>
