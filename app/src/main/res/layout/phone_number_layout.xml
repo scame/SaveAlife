@@ -47,13 +47,12 @@
 
     <Button
         android:id="@+id/phone_number_btn"
+        style="@style/RoundedButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:layout_marginLeft="@dimen/standard_elem_margin"
-        android:layout_marginRight="@dimen/standard_elem_margin"
         android:layout_marginTop="@dimen/standard_elem_margin"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/blue_button"
         android:text="@string/continue_btn_text"
         android:textColor="@color/colorWhite" />
 

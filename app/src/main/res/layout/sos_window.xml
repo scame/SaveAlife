@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sos_window_root"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sos_window_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -40,8 +40,11 @@
 
         <Button
             android:id="@+id/help_btn"
+            style="@style/RoundedButtonStyle"
             android:layout_width="match_parent"
-            android:layout_margin="@dimen/standard_elem_margin"
+            android:layout_marginBottom="@dimen/standard_elem_margin"
+            android:layout_marginTop="@dimen/standard_elem_margin"
+            android:background="@drawable/green_button"
             android:text="@string/help"
             app:layout_columnSpan="2" />
 

@@ -78,9 +78,12 @@
 
     <Button
         android:id="@+id/sign_up_btn"
+        style="@style/RoundedButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/standard_elem_margin"
+        android:layout_marginBottom="@dimen/standard_elem_margin"
+        android:layout_marginTop="@dimen/standard_elem_margin"
+        android:background="@drawable/green_button"
         android:text="@string/sign_up_btn_text" />
 
     <TextView

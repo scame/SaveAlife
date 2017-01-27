@@ -25,4 +25,9 @@
         <item name="colorControlHighlight">@color/colorWhite</item>
     </style>
 
+    <style name="RoundedButtonStyle">
+        <item name="android:layout_marginLeft">@dimen/button_side_margin</item>
+        <item name="android:layout_marginRight">@dimen/button_side_margin</item>
+    </style>
+
 </resources>
