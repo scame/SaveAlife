@@ -4,7 +4,7 @@
     android:shape="rectangle">
     <corners android:radius="@dimen/button_corners" />
     <gradient
-        android:startColor="@color/bright_green"
-        android:endColor="@color/deep_green"
+        android:startColor="@color/brightGreen"
+        android:endColor="@color/deepGreen"
         android:angle="270"/>
 </shape>

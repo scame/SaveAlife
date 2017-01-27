@@ -54,8 +54,9 @@ public class RegistrationActivity extends AppCompatActivity implements
         setContentView(R.layout.registration_activity);
         ButterKnife.bind(this);
 
-        configureToolbar();
+        configureBackStackListener();
         configureDefaultFragment();
+        setSupportActionBar(toolbar);
     }
 
     private void configureDefaultFragment() {
@@ -64,15 +65,17 @@ public class RegistrationActivity extends AppCompatActivity implements
         }
     }
 
-    private void configureToolbar() {
-        setSupportActionBar(toolbar);
-
+    private void configureBackStackListener() {
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
                 toolbar.setNavigationOnClickListener(v -> onBackPressed());
             } else {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
             }
         });
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -66,6 +67,12 @@ public class PhoneNumberFragment extends Fragment implements RegistrationNumberP
         setupEditorActionListener();
 
         return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @OnClick(R.id.phone_number_btn)

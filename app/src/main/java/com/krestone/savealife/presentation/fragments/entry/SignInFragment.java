@@ -76,6 +76,7 @@ public class SignInFragment extends Fragment implements SignInPresenter.SignInVi
         setupSignInText();
         presenter.setView(this);
         setupEditorActionListener();
+        ((RegistrationActivity) getActivity()).getSupportActionBar().show();
 
         return fragmentView;
     }

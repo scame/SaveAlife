@@ -74,6 +74,7 @@ public class VerificationFragment extends Fragment implements VerificationPresen
         parsePhoneNumber();
         setupVerificationBtn();
         setupEditorActionListener();
+        ((RegistrationActivity) getActivity()).getSupportActionBar().show();
 
         return fragmentView;
     }

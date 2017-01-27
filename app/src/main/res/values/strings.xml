@@ -12,7 +12,7 @@
 
     <string name="autocomplete_hint">Search Location</string>
 
-    <string name="savealife_welcome">Welcome to SaveaLife! Help us help you.</string>
+    <string name="savealife_welcome">Welcome to SaveaLife! \nHelp us help you.</string>
     <string name="continue_btn_text">Continue</string>
     <string name="phone_number_hint">Phone number</string>
     <string name="code_failure_text">DIDN\'T GET IT?</string>

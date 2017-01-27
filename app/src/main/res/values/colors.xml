@@ -6,11 +6,17 @@
     <color name="colorAccent">#536DFE</color>
 
     <color name="brightBlue">#37afff</color>
+    <color name="deepBlue">#0087dc</color>
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="darkBlue1">#00325a</color>
     <color name="darkBlue2">#004173</color>
 
-    <color name="deep_green">#00a986</color>
-    <color name="bright_green">#00c8a0</color>
+    <color name="deepGreen">#00a986</color>
+    <color name="brightGreen">#00c8a0</color>
+
+    <color name="brightRed">#ff5a50</color>
+    <color name="deepRed">#d34040</color>
+
+    <color name="grayGreyBlue">#001e32</color>
 </resources>
