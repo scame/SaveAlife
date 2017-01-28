@@ -6,16 +6,20 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/dashboard_drawer_item"
+            android:icon="@drawable/dashboard"
             android:title="@string/dashboard_item" />
         <item
             android:id="@+id/map_drawer_item"
+            android:icon="@drawable/map"
             android:title="@string/map_item" />
         <item
             android:id="@+id/notif_drawer_item"
+            android:icon="@drawable/chats"
             android:title="@string/notifications_item" />
 
         <item
             android:id="@+id/contacts_drawer_item"
+            android:icon="@drawable/contacts"
             android:title="@string/contacts_item" />
 
         <group
@@ -24,10 +28,12 @@
 
             <item
                 android:id="@+id/invite_drawer_item"
+                android:icon="@drawable/invite"
                 android:title="@string/invite"/>
 
             <item
                 android:id="@+id/settings_drawer_item"
+                android:icon="@drawable/settings"
                 android:title="@string/settings_item" />
         </group>
 
