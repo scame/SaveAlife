@@ -2,6 +2,8 @@ package com.krestone.savealife.presentation.fragments.contacts;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -58,12 +60,13 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
     @State
     SomeoneProfileEntity profileEntity;
 
+    @State
+    String parsedNumber;
+
     @Inject
     ContactProfilePresenter<ContactProfilePresenter.ContactProfileView> presenter;
 
     private ProgressDialog progressDialog;
-
-    private String parsedNumber;
 
     public static ContactProfileFragment newInstance(String contactNumber) {
 
@@ -171,7 +174,8 @@ public class ContactProfileFragment extends AbstractFragment implements ContactP
 
     @OnClick(R.id.call_btn)
     public void onCallClick(View v) {
-        // TODO: handle on call click
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + parsedNumber));
+        startActivity(intent);
     }
 
     @Override
